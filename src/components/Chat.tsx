@@ -20,7 +20,7 @@ const Chat: React.FC = () => {
 
   const onSendMessage = async (event: React.MouseEvent<HTMLButtonElement>) => {
     if (chatHub?.state === HubConnectionState.Connected) {
-      chatHub?.send('SendMessageToMeeting', { message, login, id: '-1' });
+      chatHub?.invoke('SendMessageToMeeting', message, login, '-1');
     }
   }
 
@@ -39,10 +39,10 @@ const Chat: React.FC = () => {
             };
 
             setMessages(prev => {
-              return {
+              return [
                 ...prev,
                 message,
-              }
+              ]
             });
           })
         });
