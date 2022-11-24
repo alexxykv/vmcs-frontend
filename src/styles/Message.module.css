@@ -1,0 +1,20 @@
+.message {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.messageSender {
+  padding: 5px;
+}
+
+.messageSender::after {
+  padding: 0 2px;
+  content: ":";
+}
+
+.messageText {
+  padding: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

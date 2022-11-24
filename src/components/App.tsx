@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Chat from './Chat';
+import Meeting from './Meeting';
 
 
 const App: React.FC = () => {
   return (
-    <Chat />
+    <Meeting />
   );
 }
 

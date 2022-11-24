@@ -1,17 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import * as signalR from "@microsoft/signalr";
+import path from 'path';
+
+import { useHubConnection } from './useHubConnection';
+import { Endpoints } from '../enums/Endpoints';
 
 
-export const useHub = (connectionURL: string) => {
-  const [hubConnection, setHubConnection] = useState<signalR.HubConnection>();
+export function useHub<TypeHub>(
+  constructor: new (connection: signalR.HubConnection) => TypeHub,
+  endpoint: Endpoints): TypeHub {
+  const connectionURL = new URL(path.join(endpoint), process.env.REACT_APP_HOST_URL as string).toString();
+  const hubConnection = useHubConnection(connectionURL);
 
-  useEffect(() => {
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl(connectionURL)
-      .build();
+  const hub = useMemo(() => {
+    return new constructor(hubConnection)
+  }, [constructor, hubConnection]);
 
-    setHubConnection(connection);
-  }, [connectionURL]);
-
-  return [hubConnection]
+  return hub;
 }
