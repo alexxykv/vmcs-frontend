@@ -1,19 +1,19 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import { MessageProps } from '../interfaces/props';
 import { useHub } from '../hooks/useHub';
 import MeetingHub from '../hubs/MeetingHub';
 
-import Message from './Message';
-import cs from '../styles/Meeting.module.css';
+import Message from '../components/Message';
+import { ShortMessageData } from '../interfaces/dto';
+import { getRandomInt } from '../utils';
 
 
-const Meeting: React.FC = () => {
-  const meetingHub = useHub(MeetingHub, MeetingHub.Endpoint);
+const TestPage: React.FC = () => {
+  const hub = useHub(MeetingHub, MeetingHub.Endpoint);
 
   const [message, setMessage] = useState<string>('');
   const [login, setLogin] = useState<string>('');
-  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [messages, setMessages] = useState<Array<ShortMessageData>>([]);
 
   const changeMessageHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
@@ -29,35 +29,38 @@ const Meeting: React.FC = () => {
       login,
       '-1',
     ];
-    meetingHub.SendMessageToMeeting(data);
+    hub.SendMessageToMeeting(data);
   }
 
   useEffect(() => {
-    meetingHub.ReceiveMessage((login, text) => {
-      const message: MessageProps = {
-        login,
-        text,
-      };
-      setMessages(prev => {
-        return [
-          ...prev,
-          message,
-        ]
-      })
-    });
-  }, [meetingHub]);
+    hub.start().then(() => {
+      hub.ReceiveMessage((login, text) => {
+        const message: ShortMessageData = {
+          id: getRandomInt(0, 10 ** 9).toString(),
+          username: login,
+          text,
+        };
+        setMessages(prev => {
+          return [
+            ...prev,
+            message,
+          ]
+        });
+      });
+    }).catch(err => console.error(err.message));
+  }, [hub]);
 
   return (
     <>
-      <div className={cs.chat}>
-        <div className={cs.chatLogin}>
+      <div>
+        <div>
           <span>Login: </span>
           <input
             type="text"
             value={login}
             onChange={changeLoginHandler} />
         </div>
-        <div className={cs.chatInput}>
+        <div>
           <span>Message: </span>
           <input
             type="text"
@@ -65,7 +68,7 @@ const Meeting: React.FC = () => {
             onChange={changeMessageHandler}
           />
         </div>
-        <div className={cs.chatSubmit}>
+        <div>
           <button
             onClick={clickSendMessageHandler}
           >Send</button>
@@ -74,9 +77,9 @@ const Meeting: React.FC = () => {
 
       <div className='messageContainer'>
         {
-          messages.map((message, index) => {
+          messages.map((message) => {
             return (
-              <Message key={index} login={message.login} text={message.text} />
+              <Message key={message.id} shortMessage={message} />
             );
           })
         }
@@ -86,4 +89,4 @@ const Meeting: React.FC = () => {
 }
 
 
-export default Meeting;
+export default TestPage;

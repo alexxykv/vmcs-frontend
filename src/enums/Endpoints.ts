@@ -1,3 +1,4 @@
 export enum Endpoints {
-  MeetingHub = 'meetingHub'
+  MeetingHub = 'meetingHub',
+  ChatHub = 'chatHub',
 }

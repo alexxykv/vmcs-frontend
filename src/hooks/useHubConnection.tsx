@@ -7,6 +7,7 @@ export const useHubConnection = (connectionURL: string): signalR.HubConnection =
     return new signalR.HubConnectionBuilder()
       .withUrl(connectionURL)
       .withAutomaticReconnect()
+      // .configureLogging(signalR.LogLevel.None)
       .build();
   }, [connectionURL]);
 

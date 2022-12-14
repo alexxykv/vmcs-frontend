@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Meeting from './Meeting';
+import TestPage from './pages/TestPage';
 
 
 const App: React.FC = () => {
   return (
-    <Meeting />
+    <TestPage />
   );
 }
 
