@@ -3,7 +3,7 @@ import * as signalR from "@microsoft/signalr";
 import path from 'path';
 
 import { useHubConnection } from './useHubConnection';
-import { Endpoints } from '../enums/Endpoints';
+import Endpoints from '../enums/Endpoints';
 
 
 export function useHub<TypeHub>(

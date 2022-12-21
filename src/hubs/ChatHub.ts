@@ -1,10 +1,7 @@
-import { Endpoints } from "../enums/Endpoints";
 import Hub from "./Hub";
 
 
 export default class ChatHub extends Hub {
-  public static readonly enpoint = Endpoints.ChatHub;
-
   public async JoinChat(chatId: string) {
     this.Connection.invoke('JoinChat', chatId);
   }

@@ -3,10 +3,10 @@ import { WithChildrenProps } from '../interfaces/props';
 import UserContext, { defaultUserContext } from '../contexts/UserContext';
 
 const UserProvider: React.FC<WithChildrenProps> = ({ children }) => {
-  const [userState, setUserState] = useState(defaultUserContext);
+  const [userContext, setUserContext] = useState(defaultUserContext);
 
   return (
-    <UserContext.Provider value={{ ...userState, setUserState }}>
+    <UserContext.Provider value={{ ...userContext, setUserContext }}>
       {children}
     </UserContext.Provider>
   );

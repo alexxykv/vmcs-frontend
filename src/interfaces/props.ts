@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ShortMessageData } from './dto';
+import { ShortMessageData } from './dto/messages';
 
 export interface MessageProps {
   shortMessage: ShortMessageData
@@ -16,6 +16,8 @@ export interface ToolsPanelProps { }
 export interface SigninFormProps { }
 
 export interface SignupFormProps { }
+
+export interface InputFieldProps { }
 
 export interface WithChildrenProps {
   children?: ReactNode

@@ -1,10 +1,7 @@
-import { Endpoints } from "../enums/Endpoints";
 import Hub from "./Hub";
 
 
 export default class MeetingHub extends Hub {
-  public static readonly Endpoint: Endpoints = Endpoints.MeetingHub;
-
   //#region Test Methods
   public async SendMessageToMeeting(data: string[]) {
     this.Connection.invoke('SendMessageToMeeting', ...data);

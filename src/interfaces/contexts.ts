@@ -4,7 +4,7 @@ import { UserState } from "./states"
 
 export interface IUserContext {
   userState: UserState
-  setUserState: React.Dispatch<SetStateAction<IUserContext>>
+  setUserContext: React.Dispatch<SetStateAction<IUserContext>>
 }
 
 export type ChatHubContextType = ChatHub | undefined;

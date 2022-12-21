@@ -4,12 +4,13 @@ import { useHub } from '../hooks/useHub';
 import MeetingHub from '../hubs/MeetingHub';
 
 import Message from '../components/Message';
-import { ShortMessageData } from '../interfaces/dto';
+import { ShortMessageData } from '../interfaces/dto/messages';
 import { getRandomInt } from '../utils';
+import Endpoints from '../enums/Endpoints';
 
 
 const TestPage: React.FC = () => {
-  const hub = useHub(MeetingHub, MeetingHub.Endpoint);
+  const hub = useHub(MeetingHub, Endpoints.MeetingHub);
 
   const [message, setMessage] = useState<string>('');
   const [login, setLogin] = useState<string>('');

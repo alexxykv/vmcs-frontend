@@ -5,7 +5,7 @@ export const defaultUserContext: IUserContext = {
   userState: {
     loggedIn: false
   },
-  setUserState: () => { }
+  setUserContext: () => { }
 }
 const UserContext = createContext(defaultUserContext);
 

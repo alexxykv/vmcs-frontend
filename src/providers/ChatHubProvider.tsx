@@ -1,5 +1,5 @@
 import React from 'react';
-import { Endpoints } from '../enums/Endpoints';
+import Endpoints from '../enums/Endpoints';
 import { useHub } from '../hooks/useHub';
 import ChatHub from '../hubs/ChatHub';
 import { WithChildrenProps } from '../interfaces/props';

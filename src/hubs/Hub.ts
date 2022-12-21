@@ -1,5 +1,5 @@
 import { HubConnection, HubConnectionState } from "@microsoft/signalr";
-import IHub from "./IHub";
+import IHub from "../interfaces/common/IHub";
 
 export default class Hub implements IHub {
   private readonly _connection: HubConnection;

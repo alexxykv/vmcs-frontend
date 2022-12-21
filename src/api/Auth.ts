@@ -1,24 +1,40 @@
-import { LoginData, RegisterData } from '../interfaces/dto';
-import api from './Api';
+import { LoginData, RegisterData } from '../interfaces/dto/auth';
+import { LoginResponse, RegisterResponse, WhoAmIType } from '../interfaces/responses/auth';
+import { JWTState } from '../interfaces/states';
+import { api, deleteToken, setToken } from './Api';
+
 
 export class Auth {
-  public async Register(registerData: RegisterData) {
+  public static async Register(registerData: RegisterData) {
     const response = await api.post('auth/register/', registerData);
-    return response.data;
+    if (response.status === 200) {
+      const data = response.data as RegisterResponse;
+      setToken(data as JWTState);
+    }
   }
 
-  public async Login(loginData: LoginData) {
+  public static async Login(loginData: LoginData) {
     const response = await api.post('auth/login/', loginData);
-    return response.data;
+    if (response.status === 200) {
+      const data = response.data as LoginResponse;
+      setToken(data as JWTState);
+    }
   }
 
-  public async Logout() {
+  public static async Logout() {
     const response = await api.get('auth/logout/');
-    return response.data;
+    if (response.status === 200) {
+      deleteToken();
+    }
   }
 
-  public async WhoAmI() {
+  public static async WhoAmI() {
     const response = await api.get('auth/whoami/');
-    return response.data;
+    if (response.status === 200) {
+      const whoami: WhoAmIType = response.data === 'Anonymous'
+        ? 'Anonymous'
+        : 'Authorized';
+      return whoami;
+    }
   }
 }
