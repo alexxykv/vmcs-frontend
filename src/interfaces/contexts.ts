@@ -1,6 +1,6 @@
 import { SetStateAction } from "react"
 import ChatHub from "../hubs/ChatHub";
-import { LoginData } from "./dto/auth";
+import { LoginData, RegisterData } from "./dto/auth";
 import { AuthStatusType } from "./responses/auth";
 import { UserState } from "./states"
 
@@ -15,4 +15,5 @@ export interface AuthContextType {
   status: AuthStatusType
   login: (loginData: LoginData, callback: VoidFunction) => void
   logout: (callback: VoidFunction) => void
+  register: (registerData: RegisterData, callback: VoidFunction) => void
 }

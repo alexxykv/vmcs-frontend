@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Auth } from '../api/Auth';
 import AuthContext from '../contexts/AuthContext';
-import { LoginData } from '../interfaces/dto/auth';
+import { LoginData, RegisterData } from '../interfaces/dto/auth';
 import { WithChildrenProps } from '../interfaces/props';
 import { AuthStatusType } from '../interfaces/responses/auth';
 import Cookies from 'js-cookie';
@@ -32,7 +32,14 @@ const AuthProvider: React.FC<WithChildrenProps> = ({ children }) => {
     });
   }
 
-  const value = { status, login, logout };
+  const register = (registerData: RegisterData, callback: VoidFunction) => {
+    return Auth.Register(registerData).then(() => {
+      setStatus('Authorized');
+      callback();
+    });
+  }
+
+  const value = { status, login, logout, register };
 
   return (
     <AuthContext.Provider value={value}>

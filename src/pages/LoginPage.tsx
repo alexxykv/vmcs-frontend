@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import SigninForm from '../components/SigninForm';
 import SignupForm from '../components/SignupForm';
+import { useAuth } from '../hooks/useAuth';
 import { LoginPageProps } from '../interfaces/props';
 
 
 type FormType = 'Signin' | 'Signup';
 
 const LoginPage: React.FC<LoginPageProps> = () => {
+  const auth = useAuth();
+  const location = useLocation();
   const [form, setForm] = useState<FormType>('Signin');
 
   const toggleForm = () => {
@@ -23,11 +27,14 @@ const LoginPage: React.FC<LoginPageProps> = () => {
     }
   };
 
+  if (auth.status === 'Authorized') {
+    return <Navigate to="/main" state={{ from: location }} />;
+  }
+
   return (
     <>
-    {
-      renderForm()
-    }
+      <button onClick={toggleForm}>Toggle</button>
+      {renderForm()}
     </>
   );
 }

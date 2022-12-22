@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { LoginData } from '../interfaces/dto/auth';
 import { SigninFormProps } from '../interfaces/props';
@@ -9,7 +9,6 @@ const SigninForm: React.FC<SigninFormProps> = () => {
   // Авторизация
   const auth = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [loginData, setLoginData] = useState<LoginData>({
     login: '',
     password: ''
@@ -38,30 +37,29 @@ const SigninForm: React.FC<SigninFormProps> = () => {
     auth.login(loginData, () => navigate('/main', { replace: true }));
   };
 
-  if (auth.status === 'Authorized') {
-    return <Navigate to="/main" state={{ from: location }} />;
-  }
-
   return (
-    <form>
-      <label>
-        <span>Login</span>
-        <input
-          type='text'
-          value={loginData.login}
-          onChange={handleChangeLogin}
-        />
-      </label>
-      <label>
-        <span>Password</span>
-        <input
-          type='password'
-          value={loginData.password}
-          onChange={handleChangePassword}
-        />
-      </label>
-      <button onClick={handleSubmit}>Submit</button>
-    </form>
+    <>
+      <h1>Авторизация</h1>
+      <form>
+        <label style={{ display: 'block' }}>
+          <span style={{ marginRight: '10px' }}>Login</span>
+          <input
+            type='text'
+            value={loginData.login}
+            onChange={handleChangeLogin}
+          />
+        </label>
+        <label style={{ display: 'block' }}>
+          <span style={{ marginRight: '10px' }}>Password</span>
+          <input
+            type='password'
+            value={loginData.password}
+            onChange={handleChangePassword}
+          />
+        </label>
+        <button onClick={handleSubmit}>Submit</button>
+      </form>
+    </>
   );
 }
 
