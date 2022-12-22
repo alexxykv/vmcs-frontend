@@ -5,4 +5,4 @@ export interface RegisterResponse {
 
 export interface LoginResponse extends RegisterResponse { }
 
-export type WhoAmIType = 'Anonymous' | 'Authorized';
+export type AuthStatusType = 'Anonymous' | 'Authorized';

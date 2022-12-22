@@ -1,31 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { Auth } from '../api/Auth';
+import React from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 
 const PrivateRoute: React.FC = () => {
-  const [isAnonymous, setIsAnonymous] = useState(true);
+  const auth = useAuth();
+  const location = useLocation();
 
-  useEffect(() => {
+  if (auth.status === 'Anonymous') {
+    return <Navigate to="/login" state={{ from: location }} />;
+  }
 
-    Auth.WhoAmI().then(whoami => {
-      console.log(isAnonymous);
-      console.log(whoami);
-      if (whoami !== 'Anonymous') {
-        setIsAnonymous(false);
-      }
-    });
-  }, []);
-
-  return (
-    <>
-      {
-        isAnonymous
-          ? <Navigate to='/login' replace={true} />
-          : <Outlet />
-      }
-    </>
-  );
+  return <Outlet />;
 }
 
 

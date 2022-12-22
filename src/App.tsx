@@ -1,27 +1,27 @@
-import React, { useEffect } from 'react';
-import ChatHubProvider from './providers/ChatHubProvider';
-import UserProvider from './providers/UserProvider';
+import React from 'react';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute';
+
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
-import PrivateRoute from './components/PrivateRoute';
-import { checkJWT } from './api/Api';
+import AuthProvider from './providers/AuthProvider';
+import UserProvider from './providers/UserProvider';
+import ChatHubProvider from './providers/ChatHubProvider';
 
 // import TestPage from './pages/TestPage';
 
 
 const App: React.FC = () => {
-  useEffect(() => {
-    checkJWT();
-  }, []);
-
   return (
     <BrowserRouter>
-      <UserProvider>
-        <ChatHubProvider>
-          <Routing />
-        </ChatHubProvider>
-      </UserProvider>
+      <AuthProvider>
+        <UserProvider>
+          <ChatHubProvider>
+            <Routing />
+          </ChatHubProvider>
+        </UserProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

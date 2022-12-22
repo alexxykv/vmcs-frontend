@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { Auth } from '../api/Auth';
+import { Navigate, useLocation, useNavigate } from 'react-router';
+import { useAuth } from '../hooks/useAuth';
 import { LoginData } from '../interfaces/dto/auth';
 import { SigninFormProps } from '../interfaces/props';
 
 
 const SigninForm: React.FC<SigninFormProps> = () => {
   // Авторизация
-  const initialLoginData: LoginData = {
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [loginData, setLoginData] = useState<LoginData>({
     login: '',
     password: ''
-  }
-  const [loginData, setLoginData] = useState<LoginData>(initialLoginData);
+  });
 
   const handleChangeLogin = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData(prev => {
@@ -32,8 +35,12 @@ const SigninForm: React.FC<SigninFormProps> = () => {
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
-    Auth.Login(loginData)
+    auth.login(loginData, () => navigate('/main', { replace: true }));
   };
+
+  if (auth.status === 'Authorized') {
+    return <Navigate to="/main" state={{ from: location }} />;
+  }
 
   return (
     <form>
