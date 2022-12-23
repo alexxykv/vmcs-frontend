@@ -1,7 +1,6 @@
 import { SetStateAction } from "react"
 import ChatHub from "../hubs/ChatHub";
-import { LoginData, RegisterData } from "./dto/auth";
-import { AuthStatusType } from "./responses/auth";
+import { LoginData, RegisterData, AuthStatusType } from "./dto/auth";
 import { UserState } from "./states"
 
 export interface IUserContext {

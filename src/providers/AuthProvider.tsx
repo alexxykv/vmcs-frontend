@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Auth } from '../api/Auth';
 import AuthContext from '../contexts/AuthContext';
-import { LoginData, RegisterData } from '../interfaces/dto/auth';
+import { LoginData, RegisterData , AuthStatusType} from '../interfaces/dto/auth';
 import { WithChildrenProps } from '../interfaces/props';
-import { AuthStatusType } from '../interfaces/responses/auth';
 import Cookies from 'js-cookie';
 import CookieKeys from '../enums/CookieKeys';
 

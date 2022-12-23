@@ -9,3 +9,10 @@ export interface LoginData {
   login: string
   password: string
 }
+
+export interface JWTData {
+  token: string
+  expiration: string
+}
+
+export type AuthStatusType = 'Anonymous' | 'Authorized';

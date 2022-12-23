@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { JWTState } from '../interfaces/states';
+import { JWTData } from '../interfaces/dto/auth';
 import LocalStorageKeys from '../enums/LocalStorageKeys';
 
 
@@ -19,13 +19,13 @@ function checkJWT(): void {
   const jwt = localStorage.getItem(LocalStorageKeys.TOKEN);
 
   if (jwt !== null) {
-    const jwtState = JSON.parse(jwt) as JWTState;
-    const expiration = new Date(jwtState.expiration);
+    const jwtData = JSON.parse(jwt) as JWTData;
+    const expiration = new Date(jwtData.expiration);
 
     if (expiration.getTime() < Date.now()) {
       deleteToken();
     } else {
-      setToken(jwtState.token);
+      setToken(jwtData.token);
     }
   }
 }
