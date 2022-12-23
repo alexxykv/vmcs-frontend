@@ -4,7 +4,7 @@ import { ChannelInvitationRequestData } from "../interfaces/dto/channelInvitatio
 import { api } from "./Api";
 
 
-export class ChannelInvitations {
+export default class ChannelInvitations {
   public static async Accept(id: string) {
     const url = path.join(ApiRoutes.ChannelInvitations, 'accept', id);
     const response = await api.get(url);

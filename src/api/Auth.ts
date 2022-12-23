@@ -13,7 +13,7 @@ import path from 'path';
 const ANONYMOUS: AuthStatusType = 'Anonymous';
 const AUTHORIZED: AuthStatusType = 'Authorized';
 
-export class Auth {
+export default class Auth {
   public static async Register(registerData: RegisterData) {
     const url = path.join(ApiRoutes.Auth, 'register');
     const response = await api.post(url, registerData);
