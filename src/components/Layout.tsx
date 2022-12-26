@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { WithChildrenProps } from '../interfaces/props';
-import { logoStyle } from '../styles/LoyoutPage';
+import { logoStyle } from '../styles/LayoutPage';
 
 
 const Layout: React.FC<WithChildrenProps> = ({ children }) => {
