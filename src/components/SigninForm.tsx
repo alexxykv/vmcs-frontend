@@ -50,7 +50,7 @@ const SigninForm: React.FC<SigninFormProps> = () => {
   return (
     <Box component='form' autoComplete='off' noValidate style={formContainerStyle}>
       <TextField fullWidth label='Login' variant='standard' onChange={handleChangeLogin} />
-      <TextField fullWidth label='Password' variant='standard' onChange={handleChangePassword} InputProps={{
+      <TextField type={showPassword ? 'text' : 'password'} fullWidth label='Password' variant='standard' onChange={handleChangePassword} InputProps={{
         endAdornment: (
           <InputAdornment position='end'>
             <IconButton

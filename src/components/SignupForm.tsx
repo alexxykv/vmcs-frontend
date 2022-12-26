@@ -72,7 +72,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       <TextField fullWidth label='Username' variant='standard' onChange={handleChangeUsername} />
       <TextField fullWidth label='Login' variant='standard' onChange={handleChangeLogin} />
       <TextField fullWidth label='Email' variant='standard' onChange={handleChangeEmail} />
-      <TextField fullWidth label='Password' variant='standard' onChange={handleChangePassword} InputProps={{
+      <TextField type={showPassword ? 'text' : 'password'} fullWidth label='Password' variant='standard' onChange={handleChangePassword} InputProps={{
         endAdornment: (
           <InputAdornment position='end'>
             <IconButton
