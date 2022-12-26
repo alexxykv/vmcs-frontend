@@ -2,9 +2,9 @@ name: Publish on Docker Hub and Deploy
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ master ]
   pull_request:
-    branches: [ dev ]
+    branches: [ master ]
 
 jobs:
   build_and_pub:
