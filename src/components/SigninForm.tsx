@@ -1,8 +1,11 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box, Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { LoginData } from '../interfaces/dto/auth';
 import { SigninFormProps } from '../interfaces/props';
+import { submitButtonStyle, formContainerStyle } from '../styles/SigninForm';
 
 
 const SigninForm: React.FC<SigninFormProps> = () => {
@@ -13,6 +16,7 @@ const SigninForm: React.FC<SigninFormProps> = () => {
     login: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleChangeLogin = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData(prev => {
@@ -37,29 +41,29 @@ const SigninForm: React.FC<SigninFormProps> = () => {
     auth.login(loginData, () => navigate('/main', { replace: true }));
   };
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
-    <>
-      <h1>Авторизация</h1>
-      <form>
-        <label style={{ display: 'block' }}>
-          <span style={{ marginRight: '10px' }}>Login</span>
-          <input
-            type='text'
-            value={loginData.login}
-            onChange={handleChangeLogin}
-          />
-        </label>
-        <label style={{ display: 'block' }}>
-          <span style={{ marginRight: '10px' }}>Password</span>
-          <input
-            type='password'
-            value={loginData.password}
-            onChange={handleChangePassword}
-          />
-        </label>
-        <button onClick={handleSubmit}>Submit</button>
-      </form>
-    </>
+    <Box component='form' autoComplete='off' noValidate style={formContainerStyle}>
+      <TextField fullWidth label='Login' variant='standard' onChange={handleChangeLogin} />
+      <TextField fullWidth label='Password' variant='standard' onChange={handleChangePassword} InputProps={{
+        endAdornment: (
+          <InputAdornment position='end'>
+            <IconButton
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        )
+      }} />
+      <Button variant='contained' style={submitButtonStyle} onClick={handleSubmit}>Login</Button>
+    </Box>
   );
 }
 

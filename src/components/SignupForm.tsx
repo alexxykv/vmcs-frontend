@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box, Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { RegisterData } from '../interfaces/dto/auth';
 import { SignupFormProps } from '../interfaces/props';
+import { submitButtonStyle, formContainerStyle } from '../styles/SignupForm';
 
 
 const SignupForm: React.FC<SignupFormProps> = () => {
@@ -15,6 +18,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     password: '',
     email: ''
   });
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleChangeLogin = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRegisterData(prev => {
@@ -57,45 +61,31 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     auth.register(registerData, () => navigate('/main', { replace: true }));
   };
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
-    <>
-      <h1>Регистрация</h1>
-      <form>
-        <label style={{ display: 'block' }}>
-          <span style={{ marginRight: '10px' }}>Username</span>
-          <input
-            type='text'
-            value={registerData.username}
-            onChange={handleChangeUsername}
-          />
-        </label>
-        <label style={{ display: 'block' }}>
-          <span style={{ marginRight: '10px' }}>Login</span>
-          <input
-            type='text'
-            value={registerData.login}
-            onChange={handleChangeLogin}
-          />
-        </label>
-        <label style={{ display: 'block' }}>
-          <span style={{ marginRight: '10px' }}>Email</span>
-          <input
-            type='email'
-            value={registerData.email}
-            onChange={handleChangeEmail}
-          />
-        </label>
-        <label style={{ display: 'block' }}>
-          <span style={{ marginRight: '10px' }}>Password</span>
-          <input
-            type='password'
-            value={registerData.password}
-            onChange={handleChangePassword}
-          />
-        </label>
-        <button onClick={handleSubmit}>Submit</button>
-      </form>
-    </>
+    <Box component='form' autoComplete='off' noValidate style={formContainerStyle}>
+      <TextField fullWidth label='Username' variant='standard' onChange={handleChangeUsername} />
+      <TextField fullWidth label='Login' variant='standard' onChange={handleChangeLogin} />
+      <TextField fullWidth label='Email' variant='standard' onChange={handleChangeEmail} />
+      <TextField fullWidth label='Password' variant='standard' onChange={handleChangePassword} InputProps={{
+        endAdornment: (
+          <InputAdornment position='end'>
+            <IconButton
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        )
+      }} />
+      <Button variant='contained' style={submitButtonStyle} onClick={handleSubmit}>Registration</Button>
+    </Box>
   );
 }
 
