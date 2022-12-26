@@ -8,7 +8,6 @@ import MainPage from './pages/MainPage';
 import AuthProvider from './providers/AuthProvider';
 import UserProvider from './providers/UserProvider';
 import ChatHubProvider from './providers/ChatHubProvider';
-import Login from './components/html/login';
 import Meeting from './components/html/meeting';
 
 // import TestPage from './pages/TestPage';
@@ -31,7 +30,7 @@ const App: React.FC = () => {
 const Routing: React.FC = () => {
   return (
     <Routes>
-      <Route path='/' element={<Login />} />
+      <Route path='/' element={<>Hello</>} />
       <Route path='/meeting' element={<Meeting />} />
       <Route element={<PrivateRoute />}>
         <Route path='/main' element={<MainPage />} />
