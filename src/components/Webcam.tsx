@@ -1,6 +1,9 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 
+import { videoContainerStyle, usernameBoxStyle, webcamStyle, videoStyle } from '../styles/Webcam';
+
+
 const Webcam: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null!);
 
@@ -22,30 +25,12 @@ const Webcam: React.FC = () => {
   };
 
   return (
-    <Box
-      position='relative'
-      width='400px'
-      height='300px'
-      borderRadius='5px'
-      padding='5px'
-      style={{ backgroundColor: '#5685c7' }}>
-      <Box
-        width='120px'
-        height='20px'
-        position='absolute'
-        borderRadius='5px'
-        left='7px'
-        bottom='5px'
-        color='white'
-        fontSize='10px'
-        textAlign='center'
-        style={{ backgroundColor: 'rgb(0, 0, 0, 0.8)' }}>
+    <Box style={webcamStyle}>
+      <Box style={usernameBoxStyle}>
         Максим Цветков
       </Box>
-      <Box
-        width='100%'
-        height='100%'>
-        <video style={{ borderRadius: '5px' }} width='100%' ref={videoRef} muted autoPlay />
+      <Box style={videoContainerStyle}>
+        <video style={videoStyle} ref={videoRef} muted autoPlay />
       </Box>
     </Box>
   )
