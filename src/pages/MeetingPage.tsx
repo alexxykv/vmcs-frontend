@@ -46,7 +46,7 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
   }
 
   return (
-    <Layout>
+    <Layout title="Видеоконференция">
       {renderScreen()}
       <ToolsPanel />
     </Layout>

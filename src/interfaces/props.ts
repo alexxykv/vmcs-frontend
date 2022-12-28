@@ -30,3 +30,15 @@ export interface VideoChatScreenProps {
 export interface WithChildrenProps {
   children?: ReactNode
 }
+
+export interface LayoutProps extends WithChildrenProps {
+  title: string
+}
+
+export interface ChannelItemProps {
+  title: string
+}
+
+export interface ChannelPageProps {
+  title: string
+}

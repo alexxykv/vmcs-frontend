@@ -2,6 +2,7 @@ export const meetingChatStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   width: '20vw',
+  backgroundColor: '#403f3f'
 }
 
 export const messageContainerStyle: React.CSSProperties = {
