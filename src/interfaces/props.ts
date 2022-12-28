@@ -19,6 +19,14 @@ export interface SignupFormProps { }
 
 export interface InputFieldProps { }
 
+export interface MeetingChatProps { 
+  messages: ShortMessageData[]
+}
+
+export interface VideoChatScreenProps {
+  messages: ShortMessageData[]
+}
+
 export interface WithChildrenProps {
   children?: ReactNode
 }

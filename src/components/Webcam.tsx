@@ -1,8 +1,7 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 
 const Webcam: React.FC = () => {
-
   const videoRef = useRef<HTMLVideoElement>(null!);
 
   useEffect(() => {
@@ -29,8 +28,7 @@ const Webcam: React.FC = () => {
       height='300px'
       borderRadius='5px'
       padding='5px'
-      style={{ backgroundColor: '#5685c7' }}
-    >
+      style={{ backgroundColor: '#5685c7' }}>
       <Box
         width='120px'
         height='20px'
@@ -41,18 +39,17 @@ const Webcam: React.FC = () => {
         color='white'
         fontSize='10px'
         textAlign='center'
-        style={{ backgroundColor: 'rgb(0, 0, 0, 0.8)' }}
-      >
+        style={{ backgroundColor: 'rgb(0, 0, 0, 0.8)' }}>
         Максим Цветков
       </Box>
       <Box
         width='100%'
-        height='100%' 
-      >
-        <video style={{ borderRadius: '5px' }} width='100%' ref={videoRef} muted autoPlay/>
+        height='100%'>
+        <video style={{ borderRadius: '5px' }} width='100%' ref={videoRef} muted autoPlay />
       </Box>
     </Box>
   )
 }
+
 
 export default Webcam;

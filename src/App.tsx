@@ -5,10 +5,11 @@ import PrivateRoute from './components/PrivateRoute';
 
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
+import MeetingPage from './pages/MeetingPage';
+
 import AuthProvider from './providers/AuthProvider';
 import UserProvider from './providers/UserProvider';
 import ChatHubProvider from './providers/ChatHubProvider';
-import Meeting from './components/html/meeting';
 
 // import TestPage from './pages/TestPage';
 
@@ -31,7 +32,7 @@ const Routing: React.FC = () => {
   return (
     <Routes>
       <Route path='/' element={<>Hello</>} />
-      <Route path='/meeting' element={<Meeting />} />
+      <Route path='/meeting' element={<MeetingPage />} />
       <Route element={<PrivateRoute />}>
         <Route path='/main' element={<MainPage />} />
       </Route>
