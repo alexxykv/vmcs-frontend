@@ -1,5 +1,6 @@
 import { SetStateAction } from "react"
 import ChatHub from "../hubs/ChatHub";
+import MeetingHub from "../hubs/MeetingHub";
 import { LoginData, RegisterData, AuthStatusType } from "./dto/auth";
 import { UserState } from "./states"
 
@@ -9,6 +10,8 @@ export interface IUserContext {
 }
 
 export type ChatHubContextType = ChatHub;
+
+export type MeetingHubContextType = MeetingHub;
 
 export interface AuthContextType {
   status: AuthStatusType

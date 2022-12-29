@@ -12,6 +12,7 @@ import AuthProvider from './providers/AuthProvider';
 import UserProvider from './providers/UserProvider';
 import ChatHubProvider from './providers/ChatHubProvider';
 import ChannelPage from './pages/ChannelPage';
+import MeetingHubProvider from './providers/MeetingHubProvider';
 
 // import TestPage from './pages/TestPage';
 
@@ -22,7 +23,9 @@ const App: React.FC = () => {
       <AuthProvider>
         <UserProvider>
           <ChatHubProvider>
-            <Routing />
+            <MeetingHubProvider>
+              <Routing />
+            </MeetingHubProvider>
           </ChatHubProvider>
         </UserProvider>
       </AuthProvider>

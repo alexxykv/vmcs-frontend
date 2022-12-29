@@ -22,33 +22,39 @@ export default class MeetingHub extends Hub {
     this.Connection.invoke('LeaveMeeting', meetingId);
   }
 
-  public async sendOffer(clientId: string, offer: object) {
+  public async sendOffer(clientId: string, offer: RTCSessionDescriptionInit) {
     this.Connection.invoke('SendOffer', clientId, offer);
   }
 
-  public async sendAnswer(clientId: string, answer: object) {
+  public async sendAnswer(clientId: string, answer: RTCSessionDescriptionInit) {
     this.Connection.invoke('SendAnswer', clientId, answer);
   }
 
-  public async addIceCandidate(roomId: string, obj: object) {
-    this.Connection.invoke('AddIceCandidate', roomId, obj);
+  public async addIceCandidate(meetingId: string, iceCandidate: RTCIceCandidate) {
+    this.Connection.invoke('AddIceCandidate', meetingId, iceCandidate);
   }
 
-  public async onReceiveOffer(callback: (connectionId: string, offer: object) => void) {
+  public async onReceiveOffer(callback: (connectionId: string, offer: RTCSessionDescriptionInit) => void) {
     this.Connection.on('ReceiveOffer', (connectionId, offer) => {
       callback(connectionId, offer);
     });
   }
 
-  public async onReceiveAnswer(callback: (connectionId: string, answer: object) => void) {
+  public async onReceiveAnswer(callback: (connectionId: string, answer: RTCSessionDescriptionInit) => void) {
     this.Connection.on('ReceiveAnswer', (connectionId, answer) => {
       callback(connectionId, answer);
     });
   }
 
-  public async onReceiveIceCandidate(callback: (roomId: string, obj: object) => void) {
-    this.Connection.on('ReceiveIceCandidate', (roomId, obj) => {
-      callback(roomId, obj);
+  public async onReceiveIceCandidate(callback: (connectionId: string, iceCandidate: RTCIceCandidate) => void) {
+    this.Connection.on('ReceiveIceCandidate', (connectionId, iceCandidate) => {
+      callback(connectionId, iceCandidate);
     });
+  }
+
+  public async onJoinedNewClient(callback: (connectionId: string) => void) {
+    this.Connection.on('JoinedNewClient', connectionId => {
+      callback(connectionId);
+    })
   }
 }

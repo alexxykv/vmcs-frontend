@@ -8,21 +8,18 @@ const Webcam: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null!);
 
   useEffect(() => {
-    getVideo();
+    playVideoFromCamera();
   }, [videoRef]);
 
-  const getVideo = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then(stream => {
-        let video = videoRef.current;
-        video.srcObject = stream;
-        video.play();
-      })
-      .catch(err => {
-        console.error("error:", err);
-      });
-  };
+  const playVideoFromCamera = async () => {
+    const constraints = { 'video': true, 'audio': true };
+    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+      const videoElement = videoRef.current;
+      videoElement.srcObject = stream;
+    }).catch(error => {
+      console.error('Error opening video camera.', error);
+    });
+  }
 
   return (
     <Box style={webcamStyle}>
@@ -30,7 +27,7 @@ const Webcam: React.FC = () => {
         Максим Цветков
       </Box>
       <Box style={videoContainerStyle}>
-        <video style={videoStyle} ref={videoRef} muted autoPlay />
+        <video width='100%' height='100%' ref={videoRef} autoPlay playsInline controls={false} />
       </Box>
     </Box>
   )
