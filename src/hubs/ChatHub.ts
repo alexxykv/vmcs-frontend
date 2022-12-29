@@ -17,12 +17,13 @@ export default class ChatHub extends Hub {
   }
 
   public async SendMessage(text: string, chatId: string) {
+    console.log(this.Connection, text, chatId);
     this.Connection.invoke('SendMessage', text, chatId);
   }
 
-  public async ReceiveMessage(callback: (username: string, text: string, chaId: string) => void) {
-    this.Connection.on('ReceiveMessage', (username, text, chatId) => {
-      callback(username, text, chatId);
+  public async ReceiveMessage(callback: (id: string, username: string, text: string, chatId: string) => void) {
+    this.Connection.on('ReceiveMessage', (id, username, text, chatId) => {
+      callback(id, username, text, chatId);
     });
   }
 }

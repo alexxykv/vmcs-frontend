@@ -8,7 +8,7 @@ export interface IUserContext {
   setUserContext: React.Dispatch<SetStateAction<IUserContext>>
 }
 
-export type ChatHubContextType = ChatHub | undefined;
+export type ChatHubContextType = ChatHub;
 
 export interface AuthContextType {
   status: AuthStatusType

@@ -35,7 +35,7 @@ const Routing: React.FC = () => {
     <Routes>
       <Route path='/' element={<>Hello</>} />
       <Route path='/channels' element={<ChannelsPage />} />
-      <Route path='/channel' element={<ChannelPage title='TEST' />} />
+      <Route path='/channels/:id' element={<ChannelPage title='TEST' />} />
       <Route path='/meeting' element={<MeetingPage />} />
       <Route element={<PrivateRoute />}>
         <Route path='/main' element={<MainPage />} />

@@ -11,6 +11,7 @@ import { Box, Button, Input, Typography } from '@mui/material';
 import {
   channelsStyle, channelsTitleStyle, channelsBlockStyle, channelsContainerStyle
 } from '../styles/ChannelsPage';
+import { Link } from 'react-router-dom';
 
 
 const ChannelsPage: React.FC = () => {
@@ -59,7 +60,11 @@ const ChannelsPage: React.FC = () => {
             <Typography>Ваши каналы</Typography>
             <Box style={channelsContainerStyle}>
               {
-                channels.map(channel => <ChannelItem key={channel.id} title={channel.name} />)
+                channels.map(channel =>
+                  <Link key={channel.id} to={`/channels/${channel.id}`}>
+                    <ChannelItem title={channel.name} />
+                  </Link>
+                )
               }
             </Box>
           </Box>
