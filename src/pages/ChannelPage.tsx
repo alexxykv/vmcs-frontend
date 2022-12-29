@@ -27,6 +27,7 @@ const ChannelPage: React.FC<ChannelPageProps> = ({ title }) => {
       setMessages(channel.chat.messages);
       setChatId(channel.chat.id);
       chatHub.start().then(() => {
+        chatHub.JoinChat(channel.chat.id);
         chatHub.ReceiveMessage((id, username, text, chatId) => {
           const shortMessage: ShortMessageData = {
             id,
@@ -51,6 +52,7 @@ const ChannelPage: React.FC<ChannelPageProps> = ({ title }) => {
 
   const handleSendMessage = async () => {
     chatHub.SendMessage(message, chatId);
+    setMessage('');
   };
 
   const handleChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +80,7 @@ const ChannelPage: React.FC<ChannelPageProps> = ({ title }) => {
       <Box id='chat'>
         <Box id='message-container'>
           {
-            messages.map(message => <Box>{`${message.username}: ${message.text}`}</Box>)
+            messages.map(message => <Box key={message.id}>{`${message.username}: ${message.text}`}</Box>)
           }
         </Box>
         <Input onChange={handleChangeMessage} value={message}/>
