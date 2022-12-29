@@ -1,6 +1,6 @@
 import path from "path";
 import ApiRoutes from "../enums/ApiRoutes";
-import { ChannelData, CreateChannelData } from "../interfaces/dto/channels";
+import { ChannelData, CreateChannelData, ShortChannelData } from "../interfaces/dto/channels";
 import { api } from "./Api";
 
 export default class Channels {
@@ -14,7 +14,8 @@ export default class Channels {
   public static async Create(createData: CreateChannelData) {
     const url = path.join(ApiRoutes.Channels);
     const response = await api.post(url, createData);
-    return response.data;
+    const shortChannels = response.data as ShortChannelData;
+    return shortChannels;
   }
 
   public static async Delete(id: string) {
