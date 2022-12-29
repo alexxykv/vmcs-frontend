@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, Box, Paper, Typography } from '@mui/material';
-import { channelItemContainerStyle, channelItemImageStyle, channelsContainerItemStyle } from '../styles/Channels';
+import { channelItemImageStyle, channelsContainerItemStyle, channelItemContainerStyle } from '../styles/ChannelItem';
 import { ChannelItemProps } from '../interfaces/props';
 
 const ChannelItem: React.FC<ChannelItemProps> = ({ title }) => (

@@ -1,8 +1,14 @@
-import React from 'react';
-import { Box, Button, Input, Paper, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Input, Typography } from '@mui/material';
 import Layout from '../components/Layout';
-import { channelsStyle, channelsTitleStyle, channelsBlockStyle, channelsContainerStyle, channelsContainerItemStyle } from '../styles/Channels';
+import {
+  channelsStyle, channelsTitleStyle, channelsBlockStyle, channelsContainerStyle
+} from '../styles/ChannelsPage';
 import ChannelItem from '../components/ChannelItem';
+import Channels from '../api/Channels';
+import Users from '../api/Users';
+import { CreateChannelData, ShortChannelData } from '../interfaces/dto/channels';
+
 
 const ChannelsPage: React.FC = () => {
   return (
