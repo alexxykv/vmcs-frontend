@@ -30,8 +30,8 @@ export default class MeetingHub extends Hub {
     this.Connection.invoke('SendAnswer', clientId, answer);
   }
 
-  public async addIceCandidate(meetingId: string, iceCandidate: RTCIceCandidate) {
-    this.Connection.invoke('AddIceCandidate', meetingId, iceCandidate);
+  public async addIceCandidate(clientId: string, iceCandidate: RTCIceCandidate) {
+    this.Connection.invoke('AddIceCandidate', clientId, iceCandidate);
   }
 
   public async onReceiveOffer(callback: (connectionId: string, offer: RTCSessionDescriptionInit) => void) {
