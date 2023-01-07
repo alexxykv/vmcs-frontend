@@ -4,21 +4,21 @@ import React, { useEffect, useRef } from 'react';
 import { videoContainerStyle, usernameBoxStyle, webcamStyle, videoStyle } from '../styles/Webcam';
 
 
-const Webcam: React.FC = () => {
+interface WebcamProps {
+  stream: MediaStream
+}
+
+const Webcam: React.FC<WebcamProps> = ({ stream }) => {
   const videoRef = useRef<HTMLVideoElement>(null!);
 
   useEffect(() => {
     playVideoFromCamera();
-  }, [videoRef]);
+    console.log(stream)
+  }, [videoRef, stream]);
 
   const playVideoFromCamera = async () => {
-    const constraints = { 'video': true, 'audio': true };
-    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-      const videoElement = videoRef.current;
-      videoElement.srcObject = stream;
-    }).catch(error => {
-      console.error('Error opening video camera.', error);
-    });
+    const videoElement = videoRef.current;
+    videoElement.srcObject = stream;
   }
 
   return (

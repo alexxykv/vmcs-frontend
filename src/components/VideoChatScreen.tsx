@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { VideoChatScreenProps } from '../interfaces/props';
 
@@ -7,6 +7,7 @@ import Webcam from './Webcam';
 
 import { videoChatScreenStyle, webcamContainerStyle } from '../styles/VideoChatScreen';
 import { useMeetingHub } from '../hooks/useMeetingHub';
+import { getRandomInt } from '../utils';
 
 
 const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
@@ -15,75 +16,119 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages }) => {
 
   const signalingHub = useMeetingHub();
   const clientId = signalingHub.Connection.connectionId;
+  const [localStream, setLocalStream] = useState<MediaStream>(null!);
+  const [remoteStreams, setRemoteStreams] = useState<Map<string, MediaStream>>(new Map());
+  const meetingId = 'asds887-fdsf43-f3f3ff3fh4-4h4thhyr5he-34f3g';
 
   useEffect(() => {
-    signalingHub.start().then(() => {
-      const meetingId = 'asds887-fdsf43-f3f3ff3fh4-4h4thhyr5he-34f3g';
+    navigator.mediaDevices.getUserMedia({ 'video': true, 'audio': true }).then(localStream => {
+      setLocalStream(localStream);
+      signalingHub.start().then(() => {
 
-      signalingHub.onJoinedNewClient(connectionId => {
-        const peerConnection = new RTCPeerConnection(configuration);
+        signalingHub.onJoinClient(connectionId => {
+          const peerConnection = new RTCPeerConnection(configuration);
 
-        peerConnection.onicecandidate = event => {
-          console.log(123)
-          if (event.candidate) {
-            signalingHub.addIceCandidate(meetingId, event.candidate);
+          signalingHub.onReceiveAnswer((connectionId, answer) => {
+            peerConnection.setRemoteDescription(answer);
+          });
+
+          signalingHub.onReceiveIceCandidate((connectionId, iceCandidate) => {
+            peerConnection.addIceCandidate(iceCandidate);
+          });
+
+          peerConnection.onicecandidate = event => {
+            if (event.candidate) {
+              signalingHub.addIceCandidate(connectionId, event.candidate);
+            }
           }
-        }
-  
-        peerConnection.onconnectionstatechange = event => {
-          if (peerConnection.connectionState === 'connected') {
-            console.log('Peers connected!');
+
+          peerConnection.onconnectionstatechange = event => {
+            if (peerConnection.connectionState === 'connected') {
+              console.log('Peers connected!');
+            }
           }
-        }
 
-        signalingHub.onReceiveAnswer((connectionId, answer) => {
-          peerConnection.setRemoteDescription(answer);
-        });
-  
-        signalingHub.onReceiveIceCandidate((connectionId, iceCandidate) => {
-          peerConnection.addIceCandidate(iceCandidate);
-        });
+          peerConnection.onnegotiationneeded = event => {
+            peerConnection.createOffer().then(offer => {
+              peerConnection.setLocalDescription(offer).then(() => {
+                signalingHub.sendOffer(connectionId, new RTCSessionDescription(offer));
+              });
+            });
+          }
 
-        peerConnection.createOffer().then(offer => {
-          peerConnection.setLocalDescription(offer).then(() => {
-            signalingHub.sendOffer(connectionId, new RTCSessionDescription(offer));
+          peerConnection.ontrack = event => {
+            const [remoteStream] = event.streams;
+            setRemoteStreams(new Map(remoteStreams.set(connectionId, remoteStream)));
+          }
+
+          localStream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localStream);
           });
         });
-      });
 
-      signalingHub.onReceiveOffer((connectionId, offer) => {
-        const peerConnection = new RTCPeerConnection(configuration);
+        signalingHub.onReceiveOffer((connectionId, offer) => {
+          const peerConnection = new RTCPeerConnection(configuration);
 
-        peerConnection.onicecandidate = event => {
-          console.log(123)
-          if (event.candidate) {
-            signalingHub.addIceCandidate(meetingId, event.candidate);
+          peerConnection.onicecandidate = event => {
+            if (event.candidate) {
+              signalingHub.addIceCandidate(connectionId, event.candidate);
+            }
           }
-        }
-  
-        peerConnection.onconnectionstatechange = event => {
-          if (peerConnection.connectionState === 'connected') {
-            console.log('Peers connected!');
-          }
-        }
 
-        peerConnection.setRemoteDescription(offer).then(() => {
-          peerConnection.createAnswer().then(answer => {
-            peerConnection.setLocalDescription(answer).then(() => {
-              signalingHub.sendAnswer(connectionId, new RTCSessionDescription(answer));
-            });
-          })
+          peerConnection.onconnectionstatechange = event => {
+            if (peerConnection.connectionState === 'connected') {
+              console.log('Peers connected!');
+            }
+          }
+
+          peerConnection.setRemoteDescription(offer).then(() => {
+            peerConnection.createAnswer().then(answer => {
+              peerConnection.setLocalDescription(answer).then(() => {
+                signalingHub.sendAnswer(connectionId, new RTCSessionDescription(answer));
+              });
+            })
+          });
+
+          peerConnection.ontrack = event => {
+            const [remoteStream] = event.streams;
+            setRemoteStreams(new Map(remoteStreams.set(connectionId, remoteStream)));
+          }
+
+          localStream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localStream);
+          });
         });
-      });
 
-      signalingHub.joinMeeting(meetingId);
+        signalingHub.onLeaveClient(connectionId => {
+          console.log(123)
+          const temp = new Map(remoteStreams);
+          temp.delete(connectionId);
+          setRemoteStreams(new Map(temp));
+        })
+
+        signalingHub.joinMeeting(meetingId);
+      });
     });
+
+    const cleanup = () => {
+      signalingHub.leaveMeeting(meetingId);
+    }
+  
+    window.addEventListener('beforeunload', cleanup);
+  
+    return () => {
+      window.removeEventListener('beforeunload', cleanup);
+    }
   }, []);
 
   return (
     <Box style={videoChatScreenStyle}>
       <Box style={webcamContainerStyle}>
-        <Webcam />
+        <Webcam key={0} stream={localStream} />
+        {
+          Array.from(remoteStreams.values()).map(stream => <Webcam key={getRandomInt(1, 10000000)} stream={stream} />)
+          // remoteStreams.map(stream => <Webcam stream={stream} />)
+        }
       </Box>
       <MeetingChat messages={messages} />
     </Box>
