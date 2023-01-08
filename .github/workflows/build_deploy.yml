@@ -31,3 +31,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/vmcs-frontend:latest
+          build-args: |
+            REACT_APP_HOST_URL=${{ secrets.REACT_APP_HOST_URL }}
