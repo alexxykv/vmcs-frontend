@@ -46,6 +46,10 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages }) => {
             if (peerConnection.connectionState === 'connected') {
               console.log('Peers connected!');
             }
+
+            if (peerConnection.connectionState === 'failed') {
+              peerConnection.restartIce();
+            }
           }
 
           peerConnection.onnegotiationneeded = event => {
@@ -58,7 +62,7 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages }) => {
 
           peerConnection.ontrack = event => {
             const [remoteStream] = event.streams;
-            setRemoteStreams(new Map(remoteStreams.set(connectionId, remoteStream)));
+            setRemoteStreams(prev => new Map(prev.set(connectionId, remoteStream)));
           }
 
           localStream.getTracks().forEach(track => {
@@ -79,6 +83,10 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages }) => {
             if (peerConnection.connectionState === 'connected') {
               console.log('Peers connected!');
             }
+
+            if (peerConnection.connectionState === 'failed') {
+              peerConnection.restartIce();
+            }
           }
 
           peerConnection.setRemoteDescription(offer).then(() => {
@@ -91,7 +99,7 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages }) => {
 
           peerConnection.ontrack = event => {
             const [remoteStream] = event.streams;
-            setRemoteStreams(new Map(remoteStreams.set(connectionId, remoteStream)));
+            setRemoteStreams(prev => new Map(prev.set(connectionId, remoteStream)));
           }
 
           localStream.getTracks().forEach(track => {
@@ -100,10 +108,12 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages }) => {
         });
 
         signalingHub.onLeaveClient(connectionId => {
-          console.log(123)
-          const temp = new Map(remoteStreams);
-          temp.delete(connectionId);
-          setRemoteStreams(new Map(temp));
+          console.log(`Client leave ${connectionId}`)
+          setRemoteStreams(prev => {
+            const temp = new Map(prev);
+            temp.delete(connectionId);
+            return new Map(temp);
+          });
         })
 
         signalingHub.joinMeeting(meetingId);
@@ -113,13 +123,13 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages }) => {
     const cleanup = () => {
       signalingHub.leaveMeeting(meetingId);
     }
-  
+
     window.addEventListener('beforeunload', cleanup);
-  
+
     return () => {
       window.removeEventListener('beforeunload', cleanup);
     }
-  }, []);
+  }, [signalingHub]);
 
   return (
     <Box style={videoChatScreenStyle}>

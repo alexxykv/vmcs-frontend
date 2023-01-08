@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 
-import { videoContainerStyle, usernameBoxStyle, webcamStyle, videoStyle } from '../styles/Webcam';
+import { videoContainerStyle, usernameBoxStyle, webcamStyle } from '../styles/Webcam';
 
 
 interface WebcamProps {
@@ -12,14 +12,10 @@ const Webcam: React.FC<WebcamProps> = ({ stream }) => {
   const videoRef = useRef<HTMLVideoElement>(null!);
 
   useEffect(() => {
-    playVideoFromCamera();
-    console.log(stream)
-  }, [videoRef, stream]);
-
-  const playVideoFromCamera = async () => {
     const videoElement = videoRef.current;
     videoElement.srcObject = stream;
-  }
+    console.log(stream)
+  }, [videoRef, stream]);
 
   return (
     <Box style={webcamStyle}>
