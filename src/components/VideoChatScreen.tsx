@@ -79,6 +79,10 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages }) => {
             }
           }
 
+          signalingHub.onReceiveIceCandidate((connectionId, iceCandidate) => {
+            peerConnection.addIceCandidate(iceCandidate);
+          });
+
           peerConnection.onconnectionstatechange = event => {
             if (peerConnection.connectionState === 'connected') {
               console.log('Peers connected!');
