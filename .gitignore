@@ -9,6 +9,7 @@
 /coverage
 
 # production
+/certs
 /build
 
 # misc
