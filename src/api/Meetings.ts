@@ -1,6 +1,6 @@
 import path from "path";
 import ApiRoutes from "../enums/ApiRoutes";
-import { CreateMeetingData, MeetingData } from "../interfaces/dto/meetings";
+import { CreateMeetingData, MeetingData, ShortMeetingData } from "../interfaces/dto/meetings";
 import { api } from "./Api";
 
 export default class Meetings {
@@ -14,7 +14,8 @@ export default class Meetings {
   public static async Create(createData: CreateMeetingData) {
     const url = path.join(ApiRoutes.Meetings);
     const response = await api.post(url, createData);
-    return response.data;
+    const data = response.data as ShortMeetingData;
+    return data;
   }
 
   public static async Delete(id: string) {

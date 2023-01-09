@@ -20,5 +20,8 @@ export const channelsBlockStyle: React.CSSProperties = {
 
 export const channelsContainerStyle: React.CSSProperties = {
   display: 'flex',
-  gap: '20px'
+  gap: '20px',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  justifyContent: 'start'
 }

@@ -1,13 +1,9 @@
-import { SetStateAction } from "react"
 import ChatHub from "../hubs/ChatHub";
 import MeetingHub from "../hubs/MeetingHub";
 import { LoginData, RegisterData, AuthStatusType } from "./dto/auth";
-import { UserState } from "./states"
+import { UserData } from "./dto/users";
 
-export interface IUserContext {
-  userState: UserState
-  setUserContext: React.Dispatch<SetStateAction<IUserContext>>
-}
+export interface UserContextType extends UserData { }
 
 export type ChatHubContextType = ChatHub;
 

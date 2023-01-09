@@ -34,9 +34,9 @@ export default class MeetingHub extends Hub {
     this.Connection.invoke('AddIceCandidate', clientId, iceCandidate);
   }
 
-  public async onReceiveOffer(callback: (connectionId: string, offer: RTCSessionDescriptionInit) => void) {
-    this.Connection.on('ReceiveOffer', (connectionId, offer) => {
-      callback(connectionId, offer);
+  public async onReceiveOffer(callback: (connectionId: string, offer: RTCSessionDescriptionInit, username: string) => void) {
+    this.Connection.on('ReceiveOffer', (connectionId, offer, username) => {
+      callback(connectionId, offer, username);
     });
   }
 
@@ -52,9 +52,9 @@ export default class MeetingHub extends Hub {
     });
   }
 
-  public async onJoinClient(callback: (connectionId: string) => void) {
-    this.Connection.on('JoinClient', connectionId => {
-      callback(connectionId);
+  public async onJoinClient(callback: (connectionId: string, username: string) => void) {
+    this.Connection.on('JoinClient', (connectionId, username) => {
+      callback(connectionId, username);
     })
   }
 

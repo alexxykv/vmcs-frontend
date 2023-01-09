@@ -1,11 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import CodeShareScreen from '../components/CodeShareScreen';
 import VideoChatScreen from '../components/VideoChatScreen';
 import ToolsPanel from '../components/ToolsPanel';
-import ChatHubContext from '../contexts/ChatHubContext';
 import { ShortMessageData } from '../interfaces/dto/messages';
 import { MeetingPageProps } from '../interfaces/props';
+import { useParams } from 'react-router';
+import { useWebRTC } from '../hooks/useWebRTC';
 
 type ScreenType = 'VideoChat' | 'CodeShare';
 
@@ -28,8 +29,11 @@ const messages: ShortMessageData[] = [
 ]
 
 const MeetingPage: React.FC<MeetingPageProps> = () => {
+  const { id } = useParams();
+  const meetingId = id as string;
+  const rtc = useWebRTC(meetingId);
+
   const [screen, setScreen] = useState<ScreenType>('VideoChat');
-  const chatHub = useContext(ChatHubContext);
 
   const toggleScreen = () => {
     switch (screen) {
@@ -40,7 +44,7 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
 
   const renderScreen = () => {
     switch (screen) {
-      case 'VideoChat': return <VideoChatScreen messages={messages}/>;
+      case 'VideoChat': return <VideoChatScreen rtc={rtc} messages={messages}/>;
       case 'CodeShare': return <CodeShareScreen />;
     }
   }
@@ -48,7 +52,7 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
   return (
     <Layout title="Видеоконференция">
       {renderScreen()}
-      <ToolsPanel />
+      <ToolsPanel toggleScreen={toggleScreen} />
     </Layout>
   );
 }

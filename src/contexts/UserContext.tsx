@@ -1,12 +1,12 @@
 import { createContext } from "react";
-import { IUserContext } from "../interfaces/contexts";
+import { UserContextType } from "../interfaces/contexts";
 
-export const defaultUserContext: IUserContext = {
-  userState: {
-    loggedIn: false
-  },
-  setUserContext: () => { }
-}
+export const defaultUserContext: UserContextType = {
+  id: '',
+  login: '',
+  username: '',
+  email: ''
+};
 const UserContext = createContext(defaultUserContext);
 
 export default UserContext;

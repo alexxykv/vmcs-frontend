@@ -15,7 +15,7 @@ export const useHubConnection = (connectionURL: string): signalR.HubConnection =
       .withAutomaticReconnect()
       // .configureLogging(signalR.LogLevel.None)
       .build();
-  }, [connectionURL]);
+  }, [connectionURL, jwtData.token]);
 
   return hubConnection;
 }

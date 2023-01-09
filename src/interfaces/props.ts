@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { ShortMessageData } from './dto/messages';
+import { WebRTCResult } from './hooks';
 
 export interface MessageProps {
   shortMessage: ShortMessageData
@@ -11,7 +12,15 @@ export interface MeetingPageProps { }
 
 export interface LoginPageProps { }
 
-export interface ToolsPanelProps { }
+export interface ToolsPanelProps {
+  toggleScreen: VoidFunction
+}
+
+export interface WebcamProps {
+  stream: MediaStream
+  username: string,
+  muted: boolean
+}
 
 export interface SigninFormProps { }
 
@@ -25,6 +34,7 @@ export interface MeetingChatProps {
 
 export interface VideoChatScreenProps {
   messages: ShortMessageData[]
+  rtc: WebRTCResult
 }
 
 export interface WithChildrenProps {

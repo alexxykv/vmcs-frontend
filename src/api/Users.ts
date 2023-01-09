@@ -7,15 +7,15 @@ import { api } from "./Api";
 
 
 export default class Users {
-  public static async Get(id: string) {
-    const url = path.join(ApiRoutes.Users, id);
+  public static async Get() {
+    const url = path.join(ApiRoutes.Users);
     const response = await api.get(url);
     const data = response.data as UserData;
     return data;
   }
 
   public static async GetAll() {
-    const url = path.join(ApiRoutes.Users);
+    const url = path.join(ApiRoutes.Users, 'all');
     const response = await api.get(url);
     const data = response.data as Array<UserData>;
     return data;

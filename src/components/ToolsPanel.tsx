@@ -15,12 +15,12 @@ import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import { toolsPanelStyle, toolsContainerStyle } from '../styles/ToolsPanel';
 
 
-const ToolsPanel: React.FC<ToolsPanelProps> = () => {
+const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen }) => {
   return (
     <Box style={toolsPanelStyle}>
       <Box style={toolsContainerStyle}>
         <ToolItem>
-          <IconButton>
+          <IconButton onClick={toggleScreen}>
             <CodeIcon fontSize='large' htmlColor='#5685c7'/>
           </IconButton>
         </ToolItem>
