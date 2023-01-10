@@ -17,8 +17,7 @@ export const channelItemImageStyle: React.CSSProperties = {
 
 export const channelsContainerItemStyle: React.CSSProperties = {
   display: 'flex',
-  width: '200px',
-  padding: '40px 20px',
+  width: '150px',
+  padding: '50px 30px',
   borderRadius: '3px',
-  backgroundColor: '#343434'
 }

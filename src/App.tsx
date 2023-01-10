@@ -16,8 +16,24 @@ import MeetingHubProvider from './providers/MeetingHubProvider';
 import { Link } from 'react-router-dom';
 import Layout from './components/Layout';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import createPalette from '@mui/material/styles/createPalette';
+import { palette } from '@mui/system';
+
 // import TestPage from './pages/TestPage';
 
+const theme = createTheme({
+  typography: {
+    fontFamily: 'JetBrains Mono'
+  },
+  palette: {
+    primary: {
+      main: '#1976d2',
+      mainHover: '#176abd',
+      lightHover: '#4083c5'
+    }
+  }
+});
 
 const App: React.FC = () => {
   return (
@@ -27,9 +43,11 @@ const App: React.FC = () => {
           <ChatHubProvider>
             <MeetingHubProvider>
               {/* <RoutingHeader /> */}
-              <Layout>
-                <Routing />
-              </Layout>
+              <ThemeProvider theme={theme}>
+                <Layout>
+                  <Routing />
+                </Layout>
+              </ThemeProvider>
             </MeetingHubProvider>
           </ChatHubProvider>
         </UserProvider>

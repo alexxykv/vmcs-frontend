@@ -42,7 +42,8 @@ export interface WithChildrenProps {
 }
 
 export interface ChannelItemProps {
-  title: string
+  title?: string,
+  created: boolean
 }
 
 export interface ChannelPageProps {

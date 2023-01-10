@@ -18,10 +18,10 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router';
 
 const pages: string[] = [];
-const settings = ['Профиль', 'Настройки', 'Выйти'];
+const settings = ['Профиль', 'Настройки', 'Приглашения', 'Выйти'];
 
 const Header: React.FC = () => {
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  // const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
   const navigate = useNavigate();
   const auth = useAuth();
@@ -30,13 +30,13 @@ const Header: React.FC = () => {
     navigate('/');
   }
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
+  // const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorElNav(event.currentTarget);
+  // };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  // const handleCloseNavMenu = () => {
+  //   setAnchorElNav(null);
+  // };
 
   return (
     <>
@@ -122,7 +122,7 @@ const Header: React.FC = () => {
               {pages.map((page) => (
                 <Button
                   key={page}
-                  onClick={handleCloseNavMenu}
+                  // onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
                   {page}
