@@ -48,7 +48,6 @@ const ChannelsPage: React.FC = () => {
   };
 
   return (
-    <Layout title="Ваши каналы">
       <Box style={channelsStyle} >
         <Box style={channelsTitleStyle}>Каналы</Box>
         <Box style={channelsBlockStyle}>
@@ -74,7 +73,6 @@ const ChannelsPage: React.FC = () => {
           </Box>
         </Box>
       </Box>
-    </Layout>
   );
 }
 

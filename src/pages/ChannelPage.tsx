@@ -88,7 +88,7 @@ const ChannelPage: React.FC<ChannelPageProps> = ({ title }) => {
   };
 
   return (
-    <Layout title={channelId}>
+    <>
       <Input onChange={handleChangeMeetingName} value={meetingName} />
       <Button onClick={handleCreateMeeting}>Создать Meeting</Button>
       {
@@ -108,7 +108,7 @@ const ChannelPage: React.FC<ChannelPageProps> = ({ title }) => {
         <Input onChange={handleChangeMessage} value={message} />
         <Button onClick={handleSendMessage}>Отправить</Button>
       </Box>
-    </Layout>
+    </>
   );
 }
 

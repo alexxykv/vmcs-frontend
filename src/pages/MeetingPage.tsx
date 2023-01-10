@@ -50,10 +50,10 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
   }
 
   return (
-    <Layout title="Видеоконференция">
+    <>
       {renderScreen()}
       <ToolsPanel toggleScreen={toggleScreen} />
-    </Layout>
+    </>
   );
 }
 

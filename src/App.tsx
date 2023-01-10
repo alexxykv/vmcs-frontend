@@ -14,6 +14,7 @@ import ChatHubProvider from './providers/ChatHubProvider';
 import ChannelPage from './pages/ChannelPage';
 import MeetingHubProvider from './providers/MeetingHubProvider';
 import { Link } from 'react-router-dom';
+import Layout from './components/Layout';
 
 // import TestPage from './pages/TestPage';
 
@@ -25,8 +26,10 @@ const App: React.FC = () => {
         <UserProvider>
           <ChatHubProvider>
             <MeetingHubProvider>
-              <RoutingHeader />
-              <Routing />
+              {/* <RoutingHeader /> */}
+              <Layout>
+                <Routing />
+              </Layout>
             </MeetingHubProvider>
           </ChatHubProvider>
         </UserProvider>
