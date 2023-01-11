@@ -12,13 +12,13 @@ import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 // import MicOffIcon from '@mui/icons-material/MicOff';
 // import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 
-import { toolsPanelStyle, toolsContainerStyle } from '../styles/ToolsPanel';
+import * as styles from '../styles';
 
 
 const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen }) => {
   return (
-    <Box style={toolsPanelStyle}>
-      <Box style={toolsContainerStyle}>
+    <Box sx={styles.toolsPanel.box}>
+      <Box sx={styles.toolsPanel.toolItemsBox}>
         <ToolItem>
           <IconButton onClick={toggleScreen}>
             <CodeIcon fontSize='large' htmlColor='#5685c7'/>

@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { LoginData } from '../interfaces/dto/auth';
 import { SigninFormProps } from '../interfaces/props';
-import { submitButtonStyle, formContainerStyle } from '../styles/SigninForm';
+
+import * as styles from '../styles';
 
 
 const SigninForm: React.FC<SigninFormProps> = () => {
@@ -48,21 +49,32 @@ const SigninForm: React.FC<SigninFormProps> = () => {
   };
 
   return (
-    <Box component='form' autoComplete='off' noValidate style={formContainerStyle}>
+    <Box component='form' autoComplete='off' noValidate sx={styles.signinForm.form}>
       <TextField fullWidth label='Login' variant='standard' onChange={handleChangeLogin} />
-      <TextField type={showPassword ? 'text' : 'password'} fullWidth label='Password' variant='standard' onChange={handleChangePassword} InputProps={{
-        endAdornment: (
-          <InputAdornment position='end'>
-            <IconButton
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-            >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        )
-      }} />
-      <Button variant='contained' style={submitButtonStyle} onClick={handleSubmit}>Login</Button>
+      <TextField
+        fullWidth
+        label='Password'
+        variant='standard'
+        type={showPassword ? 'text' : 'password'}
+        onChange={handleChangePassword}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position='end'>
+              <IconButton
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          )
+        }} />
+      <Button
+        variant='contained'
+        sx={styles.signinForm.submitButton}
+        onClick={handleSubmit}>
+        Login
+      </Button>
     </Box>
   );
 }

@@ -2,28 +2,25 @@ import { Box, Typography } from '@mui/material';
 import { MessageProps } from '../interfaces/props';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
-import {
-  messageStyle, avatarContainerStyle, contentMessageStyle,
-  headerMessageStyle, mainMessageStyle, usernameStyle, timeStyle, textStyle
-} from '../styles/Message';
+import * as styles from '../styles';
 
 
 const Message: React.FC<MessageProps> = ({ shortMessage }) => {
   return (
-    <Box style={messageStyle}>
-      <Box style={avatarContainerStyle}>
+    <Box sx={styles.message.box}>
+      <Box sx={styles.message.avatarBox}>
         <AccountCircleOutlinedIcon htmlColor='white' fontSize='large' />
       </Box>
-      <Box style={contentMessageStyle}>
-        <Box style={headerMessageStyle}>
-          <Typography style={usernameStyle}>{shortMessage.username}</Typography>
-          <Typography style={timeStyle}>15:38</Typography>
+      <Box sx={styles.message.contentBox}>
+        <Box sx={styles.message.headerBox}>
+          <Typography sx={styles.message.username}>{shortMessage.username}</Typography>
+          <Typography sx={styles.message.time}>15:38</Typography>
         </Box>
-        <Box style={mainMessageStyle}>
-          <Typography style={textStyle}>{shortMessage.text}</Typography>
+        <Box sx={styles.message.mainBox}>
+          <Typography sx={styles.message.text}>{shortMessage.text}</Typography>
         </Box>
       </Box>
-    </Box >
+    </Box>
   );
 }
 

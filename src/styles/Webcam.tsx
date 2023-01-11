@@ -1,4 +1,6 @@
-export const webcamStyle: React.CSSProperties = {
+import { SxProps } from "@mui/material"
+
+export const box: React.CSSProperties | SxProps = {
   position: 'relative',
   width: '400px',
   height: '300px',
@@ -7,7 +9,7 @@ export const webcamStyle: React.CSSProperties = {
   backgroundColor: '#5685c7',
 }
 
-export const usernameBoxStyle: React.CSSProperties = {
+export const usernameBox: React.CSSProperties | SxProps = {
   width: '120px',
   height: '20px',
   position: 'absolute',
@@ -20,12 +22,7 @@ export const usernameBoxStyle: React.CSSProperties = {
   backgroundColor: 'rgb(0, 0, 0, 0.8)',
 }
 
-export const videoContainerStyle: React.CSSProperties = {
+export const videoBox: React.CSSProperties | SxProps = {
   width: '100%',
   height: '100%',
-}
-
-export const videoStyle: React.CSSProperties = {
-  borderRadius: '5px',
-  width: '100%',
 }

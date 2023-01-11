@@ -1,4 +1,6 @@
-export const paperStyle: React.CSSProperties = {
+import { SxProps } from "@mui/material"
+
+export const paper: React.CSSProperties | SxProps = {
   height: 650,
   width: 390,
   position: 'absolute',
@@ -7,25 +9,25 @@ export const paperStyle: React.CSSProperties = {
   transform: 'translate(-50%, -50%)',
 }
 
-export const paperContentStyle: React.CSSProperties = {
+export const paperContent: React.CSSProperties | SxProps = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
 }
 
-export const gridStyle: React.CSSProperties = {
+export const grid: React.CSSProperties | SxProps = {
   margin: '70px 0 50px',
   textAlign: 'center'
 }
 
-export const titleStyle: React.CSSProperties = {
+export const title: React.CSSProperties | SxProps = {
   fontSize: 35,
   fontWeight: 'bold',
   textShadow: '3px 3px gray',
   paddingBottom: '10px'
 }
 
-export const logoStyle: React.CSSProperties = {
+export const logo: React.CSSProperties | SxProps = {
   fontSize: 45,
   fontWeight: 'bold',
   color: 'white',
@@ -33,7 +35,7 @@ export const logoStyle: React.CSSProperties = {
   borderRadius: '10px'
 }
 
-export const buttonContainerStyle: React.CSSProperties = {
+export const buttonContainer: React.CSSProperties | SxProps = {
   display: 'flex',
   bottom: '0',
   marginBottom: '15px',
@@ -41,11 +43,11 @@ export const buttonContainerStyle: React.CSSProperties = {
   gap: '5px',
 }
 
-export const toggleButtonStyle: React.CSSProperties = {
+export const toggleButton: React.CSSProperties | SxProps = {
   backgroundColor: 'transparent'
 }
 
-export const toggleTipStyle: React.CSSProperties = {
+export const toggleTip: React.CSSProperties | SxProps = {
   backgroundColor: 'transparent',
   color: 'black'
 }

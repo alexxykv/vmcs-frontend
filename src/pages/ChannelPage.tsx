@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Button, Input } from '@mui/material';
-import Layout from '../components/Layout';
 
 import Meetings from '../api/Meetings';
 import Channels from '../api/Channels';

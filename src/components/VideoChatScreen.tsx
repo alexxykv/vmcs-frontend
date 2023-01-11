@@ -1,12 +1,13 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import { VideoChatScreenProps } from '../interfaces/props';
 
+import { Box } from '@mui/material';
 import MeetingChat from './MeetingChat';
 import Webcam from './Webcam';
 
-import { videoChatScreenStyle, webcamContainerStyle } from '../styles/VideoChatScreen';
 import { useUser } from '../hooks/useUser';
+import { VideoChatScreenProps } from '../interfaces/props';
+
+import * as styles from '../styles';
 
 
 const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages, rtc }) => {
@@ -17,8 +18,8 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages, rtc }) => {
   }
 
   return (
-    <Box style={videoChatScreenStyle}>
-      <Box style={webcamContainerStyle}>
+    <Box sx={styles.videoChatScreen.box}>
+      <Box sx={styles.videoChatScreen.webcamsBox}>
         <Webcam key={rtc.localStream.id} stream={rtc.localStream} username={user.username} muted={true} />
         {
           Array.from(rtc.remoteStreams).map(([connectionId, stream]) => {

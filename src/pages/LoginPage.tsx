@@ -1,14 +1,14 @@
-import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+
+import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import SigninForm from '../components/SigninForm';
 import SignupForm from '../components/SignupForm';
+
 import { useAuth } from '../hooks/useAuth';
 import { LoginPageProps } from '../interfaces/props';
-import {
-  paperStyle, gridStyle, titleStyle, logoStyle, toggleTipStyle,
-  buttonContainerStyle, paperContentStyle, toggleButtonStyle,
-} from '../styles/LoginPage';
+
+import * as styles from '../styles';
 
 
 type FormType = 'Signin' | 'Signup';
@@ -51,16 +51,20 @@ const LoginPage: React.FC<LoginPageProps> = () => {
   }
 
   return (
-    <Paper elevation={3} style={paperStyle}>
-      <Box style={paperContentStyle}>
-        <Grid style={gridStyle}>
-          <Typography style={titleStyle}>WELCOME</Typography>
-          <Typography style={logoStyle}>VMCS</Typography>
+    <Paper elevation={3} sx={styles.loginPage.paper}>
+      <Box sx={styles.loginPage.paperContent}>
+        <Grid sx={styles.loginPage.grid}>
+          <Typography sx={styles.loginPage.title}>WELCOME</Typography>
+          <Typography sx={styles.loginPage.logo}>VMCS</Typography>
         </Grid>
         {renderForm()}
-        <Box style={buttonContainerStyle}>
-          <Button disabled variant='text' style={toggleTipStyle}>{renderToggleTip()}</Button>
-          <Button variant='text' style={toggleButtonStyle} onClick={toggleForm}>{renderToggleButton()}</Button>
+        <Box sx={styles.loginPage.buttonContainer}>
+          <Button disabled variant='text' sx={styles.loginPage.toggleTip}>
+            {renderToggleTip()}
+          </Button>
+          <Button variant='text' sx={styles.loginPage.toggleButton} onClick={toggleForm}>
+            {renderToggleButton()}
+          </Button>
         </Box>
       </Box>
     </Paper>

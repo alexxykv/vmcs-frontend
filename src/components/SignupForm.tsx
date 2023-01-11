@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { RegisterData } from '../interfaces/dto/auth';
 import { SignupFormProps } from '../interfaces/props';
-import { submitButtonStyle, formContainerStyle } from '../styles/SignupForm';
+
+import * as styles from '../styles';
 
 
 const SignupForm: React.FC<SignupFormProps> = () => {
@@ -68,23 +69,34 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   };
 
   return (
-    <Box component='form' autoComplete='off' noValidate style={formContainerStyle}>
+    <Box component='form' autoComplete='off' noValidate sx={styles.signupForm.form}>
       <TextField fullWidth label='Username' variant='standard' onChange={handleChangeUsername} />
       <TextField fullWidth label='Login' variant='standard' onChange={handleChangeLogin} />
       <TextField fullWidth label='Email' variant='standard' onChange={handleChangeEmail} />
-      <TextField type={showPassword ? 'text' : 'password'} fullWidth label='Password' variant='standard' onChange={handleChangePassword} InputProps={{
-        endAdornment: (
-          <InputAdornment position='end'>
-            <IconButton
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-            >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        )
-      }} />
-      <Button variant='contained' style={submitButtonStyle} onClick={handleSubmit}>Registration</Button>
+      <TextField
+        fullWidth
+        label='Password'
+        variant='standard'
+        type={showPassword ? 'text' : 'password'}
+        onChange={handleChangePassword}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position='end'>
+              <IconButton
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          )
+        }} />
+      <Button
+        variant='contained'
+        sx={styles.signupForm.submitButton}
+        onClick={handleSubmit}>
+        Registration
+      </Button>
     </Box>
   );
 }

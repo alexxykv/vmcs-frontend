@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import Layout from '../components/Layout';
+import { useParams } from 'react-router';
+
 import CodeShareScreen from '../components/CodeShareScreen';
 import VideoChatScreen from '../components/VideoChatScreen';
 import ToolsPanel from '../components/ToolsPanel';
+
 import { ShortMessageData } from '../interfaces/dto/messages';
 import { MeetingPageProps } from '../interfaces/props';
-import { useParams } from 'react-router';
 import { useWebRTC } from '../hooks/useWebRTC';
 
 type ScreenType = 'VideoChat' | 'CodeShare';

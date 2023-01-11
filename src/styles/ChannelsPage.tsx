@@ -1,45 +1,14 @@
-export const channelsMainContainerStyle: React.CSSProperties = {
-  display: 'flex',
-  justifyContent: 'center',
-  margin: 0
-}
+import { SxProps } from "@mui/material"
 
-export const channelsContainerStyle: React.CSSProperties = {
+export const container: React.CSSProperties | SxProps = {
   display: 'flex',
   gap: '5%',
   width: '80%',
   padding: '20px 0'
 }
 
-export const channelsMenuItemsStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '5px'
-}
-
-export const channelsMenuItem: React.CSSProperties = {
-  fontSize: '15px',
-  fontWeight: 300
-}
-
-export const channelsMenuDivider: React.CSSProperties = {
-  margin: '5px 0'
-}
-
-export const channelsStyle: React.CSSProperties = {
-  display: 'flex',
-  flexGrow: 1,
-  flexWrap: 'wrap',
+export const channelItemsBox: React.CSSProperties | SxProps = {
+  // display: 'flex',
+  // flexWrap: 'wrap',
   gap: '20px'
-}
-
-
-export const channelsItemStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '150px',
-  height: '200px',
-  color: 'white'
 }

@@ -3,25 +3,18 @@ import React, { useEffect, useState } from 'react';
 import Channels from '../api/Channels';
 import Users from '../api/Users';
 
-import Layout from '../components/Layout';
+import { Box, Container, Grid } from '@mui/material';
 import ChannelItem from '../components/ChannelItem';
+import ChannelsPageAside from '../components/ChannelsPageAside';
+
 import { CreateChannelData, ShortChannelData } from '../interfaces/dto/channels';
 
-import { Box, Button, Container, Divider, Input, Paper, Typography, useTheme } from '@mui/material';
-
-import {
-  channelsStyle, channelsContainerStyle,
-  channelsMenuItem, channelsMenuDivider, channelsMainContainerStyle, channelsMenuItemsStyle, channelsItemStyle
-} from '../styles/ChannelsPage';
-import { Link } from 'react-router-dom';
-import StyledLink from '../components/StyledLink';
+import * as styles from '../styles';
 
 
 const ChannelsPage: React.FC = () => {
   const [createChannelName, setCreateChannelName] = useState<string>("");
   const [channels, setChannels] = useState<ShortChannelData[]>([]);
-
-  const theme = useTheme();
 
   const updateChannels = async () => {
     Users.GetAllUserChannels().then(shortChannels => {
@@ -53,59 +46,17 @@ const ChannelsPage: React.FC = () => {
   };
 
   return (
-    <Container disableGutters maxWidth={false} style={channelsMainContainerStyle}>
-      <Container disableGutters maxWidth={false} style={channelsContainerStyle}>
-        <Box style={channelsMenuItemsStyle}>
-          <Typography style={channelsMenuItem} sx={{ '&:hover': { color: theme.palette.primary.mainHover } }}>Избранные каналы</Typography>
-          <Divider style={channelsMenuDivider} />
-          <Typography style={channelsMenuItem} sx={{ '&:hover': { color: theme.palette.primary.mainHover } }}>Ваши каналы</Typography>
-          <Typography style={channelsMenuItem} sx={{ '&:hover': { color: theme.palette.primary.mainHover } }}>Публичные каналы</Typography>
-        </Box>
-        <Box style={channelsStyle}>
-          <ChannelItem created={true} />
-          {
-            channels.map(channel =>
-              <>
-                
-                  <ChannelItem channel={channel} created={false} />
+    <Container disableGutters maxWidth={false} sx={styles.channelsPage.container}>
+      <ChannelsPageAside />
+      <Grid container columns={16} sx={styles.channelsPage.channelItemsBox}>
+        {/* <Box sx={styles.channelsPage.channelItemsBox}> */}
+        <ChannelItem created={true} />
+        {
+          channels.map(channel => <ChannelItem channel={channel} created={false} />)
+        }
+        {/* </Box> */}
 
-                  <ChannelItem channel={channel} created={false} />
-                  <ChannelItem channel={channel} created={false} />
-                  <ChannelItem channel={channel} created={false} />
-                  <ChannelItem channel={channel} created={false} />
-                  <ChannelItem channel={channel} created={false} />
-                  <ChannelItem channel={channel} created={false} />
-                  <ChannelItem channel={channel} created={false} />
-              </>
-
-            )
-          }
-        </Box>
-      </Container>
-
-      {/* <Typography style={channelsTitleStyle}>Каналы</Typography>
-        <Box style={channelsBlockStyle}>
-          <Box id="create-channel">
-            <Input onChange={handleChangeCreateChannelName} />
-            <Button onClick={handleSubmitCreateChannel}>Добавить канал</Button>
-          </Box>
-          <Box style={channelsBlockStyle}>
-            <Typography>Ваши каналы</Typography>
-            <Box style={channelsContainerStyle}>
-              {
-                channels.map(channel =>
-                  <Link key={channel.id} to={`/channels/${channel.id}`}>
-                    <ChannelItem title={channel.name} />
-                  </Link>
-                )
-              }
-            </Box>
-          </Box>
-          <Typography>Приглашения</Typography>
-          <Box style={channelsContainerStyle}>
-            <ChannelItem title='Команда сишарперов' />
-          </Box>
-        </Box> */}
+      </Grid>
     </Container>
   );
 }

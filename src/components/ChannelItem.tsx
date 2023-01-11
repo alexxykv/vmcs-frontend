@@ -1,50 +1,38 @@
 import React from 'react';
-import { Avatar, Box, hexToRgb, Paper, Typography, useTheme } from '@mui/material';
-import { channelItemImageStyle, channelContainerItemStyle, channelItemContainerStyle, channelItemStyle } from '../styles/ChannelItem';
-import { ChannelItemProps } from '../interfaces/props';
 
+import { Avatar, Box, Grid, Paper, Typography } from '@mui/material';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
-import StyledLink from './StyledLink';
+import BaseLink from './BaseLink';
+
+import { ChannelItemProps } from '../interfaces/props';
 import { ShortChannelData } from '../interfaces/dto/channels';
 
+import * as styles from '../styles';
+
 const ChannelItem: React.FC<ChannelItemProps> = ({ channel }) => {
-
-  const theme = useTheme();
-
   const channelData = channel as ShortChannelData;
-  const paperColor = channel ? theme.palette.primary.main : theme.palette.primary.light;
-  const paperHoverColor = channel ? theme.palette.primary.mainHover : theme.palette.primary.lightHover;
 
   return (
-    <Box style={channelItemStyle}>
+    // <Box sx={styles.channelItem.mainBox}>
+    <Grid item xs={2} sx={styles.channelItem.mainBox}>
       {
-        channel ?
-          <StyledLink key={channelData.id} to={`/channels/${channelData.id}`}>
-            <Paper elevation={10} style={channelContainerItemStyle} sx={{
-              backgroundColor: paperColor,
-              '&:hover': {
-                backgroundColor: paperHoverColor
-              }
-            }}>
-              <Box style={channelItemContainerStyle}>
-                <Avatar style={channelItemImageStyle} variant="square"></Avatar>
-                <Typography>{channelData.name}</Typography>
+        channel
+          ? <BaseLink style={styles.channelItem.link} key={channelData.id} to={`/channels/${channelData.id}`}>
+            <Paper elevation={10} sx={styles.channelItem.paper}>
+              <Box sx={styles.channelItem.contentBox}>
+                <Avatar sx={styles.channelItem.image} variant="square"></Avatar>
+                <Typography sx={styles.channelItem.name}>{channelData.name}</Typography>
               </Box>
             </Paper>
-          </StyledLink>
-          :
-          <Paper elevation={10} style={channelContainerItemStyle} sx={{
-            backgroundColor: paperColor,
-            '&:hover': {
-              backgroundColor: paperHoverColor
-            }
-          }}>
-            <Box style={channelItemContainerStyle}>
+          </BaseLink>
+          : <Paper elevation={10} sx={styles.channelItem.paper}>
+            <Box sx={styles.channelItem.contentBox}>
               <ControlPointIcon fontSize='large' />
             </Box>
           </Paper>
       }
-    </Box>
+    </Grid>
+    // </Box>
   );
 }
 

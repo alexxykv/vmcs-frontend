@@ -1,4 +1,6 @@
-export const toolsPanelStyle: React.CSSProperties = {
+import { SxProps } from "@mui/material"
+
+export const box: React.CSSProperties | SxProps = {
   width: '500px',
   height: '70px',
   position: 'absolute',
@@ -9,7 +11,7 @@ export const toolsPanelStyle: React.CSSProperties = {
   transform: 'translate(-50%, 0)',
 }
 
-export const toolsContainerStyle: React.CSSProperties = {
+export const toolItemsBox: React.CSSProperties | SxProps = {
   display: 'flex',
   justifyContent: 'space-evenly',
   alignItems: 'center',

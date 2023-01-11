@@ -13,12 +13,12 @@ import UserProvider from './providers/UserProvider';
 import ChatHubProvider from './providers/ChatHubProvider';
 import ChannelPage from './pages/ChannelPage';
 import MeetingHubProvider from './providers/MeetingHubProvider';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Layout from './components/Layout';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import createPalette from '@mui/material/styles/createPalette';
-import { palette } from '@mui/system';
+// import createPalette from '@mui/material/styles/createPalette';
+// import { palette } from '@mui/system';
 
 // import TestPage from './pages/TestPage';
 
@@ -72,16 +72,16 @@ const Routing: React.FC = () => {
   );
 }
 
-const RoutingHeader: React.FC = () => {
-  return (
-    <div style={{ display: 'flex', gap: '20px' }}>
-      <Link style={{ padding: '10px' }} to='/'>Main</Link>
-      <Link style={{ padding: '10px' }} to='/main'>Private main</Link>
-      <Link style={{ padding: '10px' }} to='/login'>Login</Link>
-      <Link style={{ padding: '10px' }} to='/channels'>Channels</Link>
-    </div>
-  );
-}
+// const RoutingHeader: React.FC = () => {
+//   return (
+//     <div style={{ display: 'flex', gap: '20px' }}>
+//       <Link style={{ padding: '10px' }} to='/'>Main</Link>
+//       <Link style={{ padding: '10px' }} to='/main'>Private main</Link>
+//       <Link style={{ padding: '10px' }} to='/login'>Login</Link>
+//       <Link style={{ padding: '10px' }} to='/channels'>Channels</Link>
+//     </div>
+//   );
+// }
 
 
 export default App;
