@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { ShortChannelData } from './dto/channels';
 import { ShortMessageData } from './dto/messages';
 import { WebRTCResult } from './hooks';
 
@@ -42,7 +43,7 @@ export interface WithChildrenProps {
 }
 
 export interface ChannelItemProps {
-  title?: string,
+  channel?: ShortChannelData,
   created: boolean
 }
 

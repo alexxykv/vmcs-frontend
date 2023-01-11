@@ -3,7 +3,7 @@ export const channelItemContainerStyle: React.CSSProperties = {
   flexGrow: 1,
   flexDirection: 'column',
   justifyContent: 'center',
-  alignItems:'center',
+  alignItems: 'center',
   gap: '10px',
   fontSize: '10px',
   textAlign: 'center',
@@ -15,9 +15,16 @@ export const channelItemImageStyle: React.CSSProperties = {
   height: '50px'
 }
 
-export const channelsContainerItemStyle: React.CSSProperties = {
+export const channelContainerItemStyle: React.CSSProperties = {
   display: 'flex',
-  width: '150px',
+  flexGrow: 1,
+  maxWidth: '150px',
+  minWidth: '75px',
   padding: '50px 30px',
   borderRadius: '3px',
+}
+
+export const channelItemStyle: React.CSSProperties = {
+  display: 'flex',
+  flexGrow: 1,
 }

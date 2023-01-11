@@ -65,9 +65,19 @@ const ChannelsPage: React.FC = () => {
           <ChannelItem created={true} />
           {
             channels.map(channel =>
-              <StyledLink key={channel.id} to={`/channels/${channel.id}`}>
-                <ChannelItem title={channel.name} created={false} />
-              </StyledLink>
+              <>
+                
+                  <ChannelItem channel={channel} created={false} />
+
+                  <ChannelItem channel={channel} created={false} />
+                  <ChannelItem channel={channel} created={false} />
+                  <ChannelItem channel={channel} created={false} />
+                  <ChannelItem channel={channel} created={false} />
+                  <ChannelItem channel={channel} created={false} />
+                  <ChannelItem channel={channel} created={false} />
+                  <ChannelItem channel={channel} created={false} />
+              </>
+
             )
           }
         </Box>
