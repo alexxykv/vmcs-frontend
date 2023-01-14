@@ -1,113 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Button, Input } from '@mui/material';
+import { Container } from '@mui/material';
+import Loading from '../components/Loading';
+import ChannelAsideMenu from '../components/ChannelAsideMenu';
+import ChannelChat from '../components/ChannelChat';
 
-import Meetings from '../api/Meetings';
 import Channels from '../api/Channels';
+import { ChannelData } from '../interfaces/dto';
 
-import { CreateMeetingData, ShortMeetingData } from '../interfaces/dto/meetings';
-import { ShortMessageData } from '../interfaces/dto/messages';
-import { ChannelPageProps } from '../interfaces/props';
-
-import { useChatHub } from '../hooks/useChatHub';
+import { fakeAsync } from '../utils';
+import * as styles from '../styles';
 
 
-const ChannelPage: React.FC<ChannelPageProps> = ({ title }) => {
+const ChannelPage: React.FC = () => {
   const { id } = useParams();
   const channelId = id as string;
+
   const navigate = useNavigate();
-  const chatHub = useChatHub();
+  const [channel, setChannel] = useState<ChannelData>(null!);
 
-  const [channelChatId, setChannelChatId] = useState<string>('');
-  const [channelMessages, setChannelMessages] = useState<ShortMessageData[]>([]);
-  const [channelMeetings, setChannelMeetings] = useState<ShortMeetingData[]>([]);
-
-  const [message, setMessage] = useState<string>('');
-  const [meetingName, setMeetingName] = useState<string>('');
+  const uploadChannelData = useCallback(() => {
+    fakeAsync(() => {
+      Channels.Get(channelId).then(channel => {
+        setChannel(channel);
+      }).catch(() => {
+        navigate('/channels', { replace: true });
+      });
+    });
+  }, [navigate, channelId]);
 
   useEffect(() => {
-    Channels.Get(channelId).then(channel => {
-      setChannelMessages(channel.chat.messages);
-      setChannelChatId(channel.chat.id);
-      setChannelMeetings(channel.meetings);
+    uploadChannelData();
+  }, [uploadChannelData]);
 
-      chatHub.start().then(() => {
-        chatHub.JoinChat(channel.chat.id);
-        chatHub.ReceiveMessage((id, username, text, chatId) => {
-          const shortMessage: ShortMessageData = {
-            id,
-            username,
-            text,
-          };
-
-          if (chatId === channel.chat.id) {
-            setChannelMessages(prev => {
-              return [
-                ...prev,
-                shortMessage
-              ];
-            });
-          }
-        });
-      });
-    }).catch(() => {
-      navigate('/channels', { replace: true });
-    });
-  }, [channelId, chatHub, navigate]);
-
-  const handleSendMessage = async () => {
-    chatHub.SendMessage(message, channelChatId);
-    setMessage('');
-  };
-
-  const handleChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(event.target.value);
-  };
-
-  const handleChangeMeetingName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMeetingName(event.target.value);
+  const render = () => {
+    if (channel === null) {
+      return <Loading />;
+    }
+    return (
+      <>
+        <ChannelAsideMenu channel={channel} />
+        <ChannelChat {...channel.chat} />
+      </>
+    );
   }
 
-  const handleCreateMeeting = async () => {
-    const createData: CreateMeetingData = {
-      name: meetingName,
-      channelId,
-      isInChannel: true,
-    }
-
-    Meetings.Create(createData).then((meetingData) => {
-      setChannelMeetings(prev => {
-        return [
-          ...prev,
-          meetingData
-        ];
-      });
-    });
-  };
-
   return (
-    <>
-      <Input onChange={handleChangeMeetingName} value={meetingName} />
-      <Button onClick={handleCreateMeeting}>Создать Meeting</Button>
-      {
-        channelMeetings.map(meeting =>
-          <Link key={meeting.id} to={`../meeting/${meeting.id}}`}>
-            <Box>{meeting.name}</Box>
-          </Link>
-        )
-      }
-      <hr />
-      <Box id='chat'>
-        <Box id='message-container'>
-          {
-            channelMessages.map(message => <Box key={message.id}>{`${message.username}: ${message.text}`}</Box>)
-          }
-        </Box>
-        <Input onChange={handleChangeMessage} value={message} />
-        <Button onClick={handleSendMessage}>Отправить</Button>
-      </Box>
-    </>
+    <Container disableGutters maxWidth={false} sx={styles.channelPage.container}>
+      {render()}
+    </Container>
   );
 }
 

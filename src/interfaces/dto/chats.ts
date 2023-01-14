@@ -1,6 +1,6 @@
-import { ShortMessageData } from "./messages"
+import { MessageData } from "./messages"
 
 export interface ShortChatData {
   id: string
-  messages: Array<ShortMessageData>
+  messages: Array<MessageData>
 }

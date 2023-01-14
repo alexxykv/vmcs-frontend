@@ -1,9 +1,13 @@
+import { HubConnectionState } from "@microsoft/signalr";
+import { MessageData } from "../interfaces/dto";
 import Hub from "./Hub";
 
 
 export default class ChatHub extends Hub {
   public async JoinChat(chatId: string) {
-    this.Connection.invoke('JoinChat', chatId);
+    if (this.Connection.state === HubConnectionState.Connected) {
+      this.Connection.invoke('JoinChat', chatId);
+    }
   }
 
   public async JoinChats(chatIds: string[]) {
@@ -13,17 +17,28 @@ export default class ChatHub extends Hub {
   }
 
   public async LeaveChat(chatId: string) {
-    this.Connection.invoke('LeaveChat', chatId);
+    if (this.Connection.state === HubConnectionState.Connected) {
+      this.Connection.invoke('LeaveChat', chatId);
+    }
   }
 
   public async SendMessage(text: string, chatId: string) {
-    console.log(this.Connection, text, chatId);
-    this.Connection.invoke('SendMessage', text, chatId);
+    if (this.Connection.state === HubConnectionState.Connected) {
+      this.Connection.invoke('SendMessage', text, chatId);
+    }
   }
 
-  public async ReceiveMessage(callback: (id: string, username: string, text: string, chatId: string) => void) {
-    this.Connection.on('ReceiveMessage', (id, username, text, chatId) => {
-      callback(id, username, text, chatId);
-    });
+  public async onReceiveMessage(callback: (message: MessageData) => void) {
+    if (this.Connection.state === HubConnectionState.Connected) { 
+      this.Connection.on('ReceiveMessage', (message) => {
+        callback(message);
+      });
+    }
+  }
+
+  public async offReceiveMessage() {
+    if (this.Connection.state === HubConnectionState.Connected) { 
+      this.Connection.off('ReceiveMessage');
+    }
   }
 }

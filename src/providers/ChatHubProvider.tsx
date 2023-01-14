@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Endpoints from '../enums/Endpoints';
 import { useHub } from '../hooks/useHub';
 import ChatHub from '../hubs/ChatHub';
@@ -8,6 +8,10 @@ import ChatHubContext from '../contexts/ChatHubContext';
 
 const ChatHubProvider: React.FC<WithChildrenProps> = ({ children }) => {
   const chatHub = useHub(ChatHub, Endpoints.ChatHub);
+
+  useEffect(() => {
+    chatHub.start();
+  }, [chatHub]);
 
   return (
     <ChatHubContext.Provider value={chatHub}>

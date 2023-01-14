@@ -1,0 +1,120 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { Avatar, Box, Divider, Modal, Typography } from '@mui/material';
+import AddIcCallIcon from '@mui/icons-material/AddIcCall';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+
+import { ChannelData, ShortMeetingData, ShortUserData } from '../interfaces/dto';
+import { WithChildrenProps } from '../interfaces/props';
+
+import * as styles from '../styles';
+
+
+interface ChannelAsideMenuProps {
+  channel: ChannelData
+}
+
+const ChannelAsideMenu: React.FC<ChannelAsideMenuProps> = ({ channel }) => {
+  const [meetings, setMeetings] = useState<ShortMeetingData[]>(channel.meetings);
+  const [participants, setParticipants] = useState<ShortUserData[]>(channel.users);
+  const [openCreateMeeting, setOpenCreateMeeting] = useState<boolean>(false);
+  
+  return (
+    <>
+      <Box sx={styles.channelAsideMenu.asideMenu}>
+        <Box sx={styles.channelAsideMenu.asideHeader}>
+          <Avatar sx={styles.channelAsideMenu.asideHeaderAvatar}>{channel.name[0]}</Avatar>
+          <Typography component='h2' sx={styles.channelAsideMenu.asideHeaderTitle}>{channel.name}</Typography>
+        </Box>
+        <Box sx={styles.channelAsideMenu.asideContent}>
+          <AsideBox
+            title='Meetings'
+            icon={<AddIcCallIcon
+              onClick={() => setOpenCreateMeeting(true)}
+              sx={styles.channelAsideMenu.asideBoxHeaderIcon} />}>
+            {
+              meetings.map(meeting => {
+                return (
+                  <MeetingItem key={meeting.id} meeting={meeting} />
+                );
+              })
+            }
+          </AsideBox>
+          <AsideBox
+            title='Participants'
+            icon={<PersonAddIcon sx={styles.channelAsideMenu.asideBoxHeaderIcon} />}>
+            {
+              participants.map(participant => {
+                return (
+                  <ParticipantItem key={participant.id} participant={participant} />
+                );
+              })
+            }
+          </AsideBox>
+        </Box>
+      </Box>
+      <Modal disableAutoFocus open={openCreateMeeting} onClose={() => setOpenCreateMeeting(false)}>
+        <Box sx={styles.modal.box}>
+            123
+        </Box>
+      </Modal>
+    </>
+  );
+}
+
+interface MeetingItemProps {
+  meeting: ShortMeetingData
+}
+
+const MeetingItem: React.FC<MeetingItemProps> = ({ meeting }) => {
+  const { id, name } = meeting;
+  const navigate = useNavigate();
+
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    navigate(`/meeting/${id}`);
+  };
+
+  return (
+    <Box sx={styles.channelAsideMenu.asideBoxItem} onClick={handleClick}>
+      <Typography sx={styles.channelAsideMenu.asideBoxItemTitle}>{name}</Typography>
+    </Box>
+  );
+}
+
+interface ParticipantItemProps {
+  participant: ShortUserData
+}
+
+const ParticipantItem: React.FC<ParticipantItemProps> = ({ participant }) => {
+  return (
+    <Box sx={styles.channelAsideMenu.asideBoxItem}>
+      <Typography sx={styles.channelAsideMenu.asideBoxItemTitle}>{participant.username}</Typography>
+    </Box>
+  );
+}
+
+interface AsideBoxProps extends WithChildrenProps {
+  title: string,
+  icon?: React.ReactElement
+}
+
+const AsideBox: React.FC<AsideBoxProps> = ({ children, title, icon }) => {
+  return (
+    <Box sx={styles.channelAsideMenu.asideBox}>
+      <Box sx={styles.channelAsideMenu.asideBoxHeader}>
+        <Typography component='h3' sx={styles.channelAsideMenu.asideBoxHeaderTitle}>
+          {title}
+        </Typography>
+        {icon}
+      </Box>
+      <Divider sx={styles.channelAsideMenu.asideBoxDivider} />
+      <Box sx={styles.channelAsideMenu.asideBoxItems}>
+        {children}
+      </Box>
+    </Box>
+  );
+}
+
+
+export default ChannelAsideMenu;

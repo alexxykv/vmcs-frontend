@@ -46,7 +46,3 @@ export interface ChannelItemProps {
   channel?: ShortChannelData,
   created: boolean
 }
-
-export interface ChannelPageProps {
-  title: string
-}
