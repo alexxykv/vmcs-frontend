@@ -11,6 +11,7 @@ export interface MeetingData {
   name: string
   chat: ShortChatData
   users: Array<ShortUserData>
+  repositoryId: string
 }
 
 export interface CreateMeetingData {
