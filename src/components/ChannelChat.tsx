@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { Box, Divider, InputAdornment, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, InputAdornment, TextField, Typography } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MicIcon from '@mui/icons-material/Mic';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -54,7 +54,8 @@ const ChannelChat: React.FC<ChatProps> = ({ id, messages }) => {
     setMessage(event.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage: React.FormEventHandler<HTMLFormElement> = event => {
+    event.preventDefault();
     if (message !== '') {
       chatHub.SendMessage(message, id);
       setMessage('');
@@ -82,7 +83,7 @@ const ChannelChat: React.FC<ChatProps> = ({ id, messages }) => {
         }
         <div style={{ float: "left", clear: "both" }} ref={messagesEndRef}></div>
       </Box>
-      <Box sx={styles.channelChat.chatInputBox}>
+      <Box component='form' sx={styles.channelChat.chatInputBox} onSubmit={handleSendMessage}>
         <TextField fullWidth variant='outlined' size='small' sx={styles.channelChat.chatInputTextField}
           value={message}
           onChange={handleChangeMessage}
@@ -91,10 +92,13 @@ const ChannelChat: React.FC<ChatProps> = ({ id, messages }) => {
               <InputAdornment position='end' sx={{ gap: '5px' }}>
                 <AttachFileIcon />
                 <MicIcon />
-                <SendIcon color='success' onClick={handleSendMessage} />
+
               </InputAdornment>
             ),
           }} />
+        <Button type='submit' color='success'>
+          <SendIcon />
+        </Button>
       </Box>
     </Box>
   );

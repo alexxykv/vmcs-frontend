@@ -37,7 +37,8 @@ export const headerTime: React.CSSProperties | SxProps = {
   alignSelf: 'flex-start',
   fontSize: '10px',
   marginLeft: 'auto',
-  cursor: 'default'
+  cursor: 'default',
+  userSelect: 'none'
 }
 
 export const divider: React.CSSProperties | SxProps = {
