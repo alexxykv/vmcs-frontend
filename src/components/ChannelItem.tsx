@@ -9,7 +9,7 @@ import { ShortChannelData } from '../interfaces/dto/channels';
 
 import * as styles from '../styles';
 
-const ChannelItem: React.FC<ChannelItemProps> = ({ channel }) => {
+const ChannelItem: React.FC<ChannelItemProps> = ({ channel, onClick }) => {
   const channelData = channel as ShortChannelData;
 
   return (
@@ -25,7 +25,7 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel }) => {
               </Box>
             </Paper>
           </BaseLink>
-          : <Paper elevation={10} sx={styles.channelItem.paper}>
+          : <Paper onClick={onClick} elevation={10} sx={styles.channelItem.paper}>
             <Box sx={styles.channelItem.contentBox}>
               <ControlPointIcon fontSize='large' />
             </Box>

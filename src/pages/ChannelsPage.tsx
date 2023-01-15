@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
 import ChannelItem from '../components/ChannelItem';
@@ -8,53 +8,52 @@ import { Users, Channels } from '../api';
 import { CreateChannelData, ShortChannelData } from '../interfaces/dto/channels';
 
 import * as styles from '../styles';
+import CreateChannelDialog from '../components/CreateChannelDialog';
 
 
 const ChannelsPage: React.FC = () => {
-  const [createChannelName, setCreateChannelName] = useState<string>("");
   const [channels, setChannels] = useState<ShortChannelData[]>([]);
+  const [openCreateChannel, setOpenCreateChannel] = useState<boolean>(false);
 
-  const updateChannels = async () => {
-    Users.GetAllUserChannels().then(shortChannels => {
-      setChannels(shortChannels);
-    });
+  const handleCloseCreateChannel = () => {
+    setOpenCreateChannel(false);
   };
 
-  useEffect(() => {
-    updateChannels();
+  const uploadChannels = useCallback(() => {
+    Users.GetAllUserChannels().then(channels => {
+      setChannels(channels);
+    })
   }, []);
 
-  const handleChangeCreateChannelName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCreateChannelName(event.target.value);
-  };
+  useEffect(() => {
+    uploadChannels();
+  }, [uploadChannels]);
 
-  const handleSubmitCreateChannel = async () => {
-    const createData: CreateChannelData = {
-      name: createChannelName
-    };
+  const createChannel = (name: string) => {
+    const createData: CreateChannelData = { name };
 
-    Channels.Create(createData).then(channel => {
-      setChannels(prev => {
-        return [
-          ...prev,
-          channel
-        ];
-      });
-    }).catch((error) => console.error(error));
-  };
+    Channels.Create(createData).then((channel) => {
+      setChannels(prev => prev.concat(channel));
+    });
+  }
 
   return (
     <Container disableGutters maxWidth={false} sx={styles.channelsPage.container}>
       <ChannelsPageAside />
       <Grid container columns={16} sx={styles.channelsPage.channelItemsBox}>
         {/* <Box sx={styles.channelsPage.channelItemsBox}> */}
-        <ChannelItem key={0} created={true} />
+        <ChannelItem key={0} created={true} onClick={() => setOpenCreateChannel(true)} />
         {
           channels.map(channel => <ChannelItem key={channel.id} channel={channel} created={false} />)
         }
         {/* </Box> */}
 
       </Grid>
+      <CreateChannelDialog
+        open={openCreateChannel}
+        handleClose={handleCloseCreateChannel}
+        createChannel={createChannel}
+      />
     </Container>
   );
 }

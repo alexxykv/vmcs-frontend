@@ -45,4 +45,5 @@ export interface WithChildrenProps {
 export interface ChannelItemProps {
   channel?: ShortChannelData,
   created: boolean
+  onClick?: React.MouseEventHandler<HTMLDivElement>
 }
