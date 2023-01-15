@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Avatar, Box, Divider, Modal, Typography } from '@mui/material';
+import { Avatar, Box, Divider, Typography } from '@mui/material';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import CreateMeetingDialog from './CreateMeetingDialog';
 
-import { ChannelData, ShortMeetingData, ShortUserData } from '../interfaces/dto';
+import Meetings from '../api/Meetings';
+import { ChannelData, CreateMeetingData, ShortMeetingData, ShortUserData } from '../interfaces/dto';
 import { WithChildrenProps } from '../interfaces/props';
 
 import * as styles from '../styles';
@@ -19,7 +21,22 @@ const ChannelAsideMenu: React.FC<ChannelAsideMenuProps> = ({ channel }) => {
   const [meetings, setMeetings] = useState<ShortMeetingData[]>(channel.meetings);
   const [participants, setParticipants] = useState<ShortUserData[]>(channel.users);
   const [openCreateMeeting, setOpenCreateMeeting] = useState<boolean>(false);
-  
+
+  const handleCloseCreateMeeting = () => {
+    setOpenCreateMeeting(false);
+  };
+
+  const createMeeting = (name: string) => {
+    const createData: CreateMeetingData = {
+      name,
+      channelId: channel.id,
+      isInChannel: true
+    };
+    Meetings.Create(createData).then(meeting => {
+      setMeetings(prev => prev.concat(meeting));
+    });
+  }
+
   return (
     <>
       <Box sx={styles.channelAsideMenu.asideMenu}>
@@ -54,11 +71,11 @@ const ChannelAsideMenu: React.FC<ChannelAsideMenuProps> = ({ channel }) => {
           </AsideBox>
         </Box>
       </Box>
-      <Modal disableAutoFocus open={openCreateMeeting} onClose={() => setOpenCreateMeeting(false)}>
-        <Box sx={styles.modal.box}>
-            123
-        </Box>
-      </Modal>
+      <CreateMeetingDialog
+        open={openCreateMeeting}
+        handleClose={handleCloseCreateMeeting}
+        createMeeting={createMeeting}
+      />
     </>
   );
 }
