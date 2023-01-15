@@ -17,7 +17,7 @@ import InvitationsPage from './pages/InvitationsPage';
 import AuthProvider from './providers/AuthProvider';
 import UserProvider from './providers/UserProvider';
 import ChatHubProvider from './providers/ChatHubProvider';
-
+import CodeSharingProvider from './providers/CodeSharingProvider';
 import MeetingHubProvider from './providers/MeetingHubProvider';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
@@ -30,12 +30,14 @@ const App: React.FC = () => {
         <UserProvider>
           <ChatHubProvider>
             <MeetingHubProvider>
-              {/* <RoutingHeader /> */}
-              <ThemeProvider theme={theme}>
-                <Layout>
-                  <Routing />
-                </Layout>
-              </ThemeProvider>
+              <CodeSharingProvider>
+                {/* <RoutingHeader /> */}
+                <ThemeProvider theme={theme}>
+                  <Layout>
+                    <Routing />
+                  </Layout>
+                </ThemeProvider>
+              </CodeSharingProvider>
             </MeetingHubProvider>
           </ChatHubProvider>
         </UserProvider>

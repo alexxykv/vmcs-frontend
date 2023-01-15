@@ -1,7 +1,6 @@
 import { SxProps } from "@mui/material"
 
-export const box: React.CSSProperties | SxProps = {
-  height: '100%',
+export const container: React.CSSProperties | SxProps = {
   width: '100%',
   display: 'flex',
 }

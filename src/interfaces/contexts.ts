@@ -1,4 +1,5 @@
 import ChatHub from "../hubs/ChatHub";
+import CodeSharingHub from "../hubs/CodeSharingHub";
 import MeetingHub from "../hubs/MeetingHub";
 import { LoginData, RegisterData, AuthStatusType } from "./dto/auth";
 import { ChannelData } from "./dto/channels";
@@ -11,6 +12,8 @@ export interface ChannelContextType extends ChannelData { }
 export type ChatHubContextType = ChatHub;
 
 export type MeetingHubContextType = MeetingHub;
+
+export type CodeSharingHubContextType = CodeSharingHub;
 
 export interface AuthContextType {
   status: AuthStatusType

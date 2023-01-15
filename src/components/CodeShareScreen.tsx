@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { Container } from '@mui/system';
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-jsx";
 import "ace-builds/src-min-noconflict/ext-searchbox";
 import "ace-builds/src-min-noconflict/ext-language_tools";
+
+
 const languages = [
   "javascript",
   "java",
@@ -47,29 +50,28 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 const CodeShareScreen: React.FC = () => {
   const [value, setValue] = useState<string>('');
 
-   const handleChange = (newValue: string) => {
+  const handleChange = (newValue: string) => {
     setValue(newValue);
   }
 
   return (
-    <AceEditor
-      placeholder="Placeholder Text"
-      mode="python"
-      theme="monokai"
-      name="blah2"
-      value={value}
-      onChange={handleChange}
-      fontSize={14}
-      showPrintMargin={true}
-      showGutter={true}
-      highlightActiveLine={true}
-      setOptions={{
-        useWorker: false,
-        enableBasicAutocompletion: true,
-        enableLiveAutocompletion: true,
-        enableSnippets: true
-      }}
-    />
+    <Container disableGutters maxWidth={false}>
+      <AceEditor
+        mode="python"
+        theme="monokai"
+        value={value}
+        onChange={handleChange}
+        fontSize={14}
+        highlightActiveLine={true}
+        enableBasicAutocompletion={true}
+        enableLiveAutocompletion={true}
+        enableSnippets={true}
+        setOptions={{ useWorker: false, }}
+        showGutter={true}
+        showPrintMargin={false}
+        style={{ width: '100%', height: '100%' }}
+      />
+    </Container>
   );
 }
 

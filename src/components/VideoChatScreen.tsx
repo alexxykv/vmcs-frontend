@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import MeetingChat from './MeetingChat';
 import Webcam from './Webcam';
 
@@ -18,7 +18,7 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages, rtc }) => {
   }
 
   return (
-    <Box sx={styles.videoChatScreen.box}>
+    <Container disableGutters maxWidth={false} sx={styles.videoChatScreen.container}>
       <Box sx={styles.videoChatScreen.webcamsBox}>
         <Webcam key={rtc.localStream.id} stream={rtc.localStream} username={user.username} muted={true} />
         {
@@ -33,7 +33,7 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages, rtc }) => {
         }
       </Box>
       <MeetingChat messages={messages} />
-    </Box>
+    </Container>
   );
 }
 
