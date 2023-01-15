@@ -6,9 +6,9 @@ import {
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Loading from '../components/Loading';
+
 import { ChannelInvitationData } from '../interfaces/dto';
-import Users from '../api/Users';
-import ChannelInvitations from '../api/ChannelInvitations';
+import { Users, ChannelInvitations } from '../api';
 import { fakeAsync } from '../utils';
 
 

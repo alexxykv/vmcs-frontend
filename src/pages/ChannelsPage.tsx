@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import Channels from '../api/Channels';
-import Users from '../api/Users';
-
-import { Box, Container, Grid } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import ChannelItem from '../components/ChannelItem';
 import ChannelsPageAside from '../components/ChannelsPageAside';
 
+import { Users, Channels } from '../api';
 import { CreateChannelData, ShortChannelData } from '../interfaces/dto/channels';
 
 import * as styles from '../styles';
@@ -50,9 +48,9 @@ const ChannelsPage: React.FC = () => {
       <ChannelsPageAside />
       <Grid container columns={16} sx={styles.channelsPage.channelItemsBox}>
         {/* <Box sx={styles.channelsPage.channelItemsBox}> */}
-        <ChannelItem created={true} />
+        <ChannelItem key={0} created={true} />
         {
-          channels.map(channel => <ChannelItem channel={channel} created={false} />)
+          channels.map(channel => <ChannelItem key={channel.id} channel={channel} created={false} />)
         }
         {/* </Box> */}
 

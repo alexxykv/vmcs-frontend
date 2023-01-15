@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Auth from '../api/Auth';
+import { Auth } from '../api';
 import AuthContext from '../contexts/AuthContext';
 import { LoginData, RegisterData , AuthStatusType} from '../interfaces/dto/auth';
 import { WithChildrenProps } from '../interfaces/props';

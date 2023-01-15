@@ -6,7 +6,7 @@ import Loading from '../components/Loading';
 import ChannelAsideMenu from '../components/ChannelAsideMenu';
 import ChannelChat from '../components/ChannelChat';
 
-import Channels from '../api/Channels';
+import { Channels } from '../api';
 import { ChannelData } from '../interfaces/dto';
 
 import { fakeAsync } from '../utils';

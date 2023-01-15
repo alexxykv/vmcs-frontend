@@ -18,7 +18,7 @@ const ChannelChatMessage: React.FC<ChannelChatMessageProps> = ({ message }) => {
   });
 
   return (
-    <Box sx={{ ...styles.channelChatMessage.box, marginLeft: user.id ? 'auto' : 0 }}>
+    <Box sx={{ ...styles.channelChatMessage.box, marginLeft: user.id === message.userId ? 'auto' : 0 }}>
       <Box sx={styles.channelChatMessage.header}>
         <Avatar sx={styles.channelChatMessage.headerAvatar}>
           {message.username[0]}

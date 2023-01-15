@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Users from '../api/Users';
+import { Users } from '../api';
 import UserContext, { defaultUserContext } from '../contexts/UserContext';
 import { UserData } from '../interfaces/dto/users';
 import { WithChildrenProps } from '../interfaces/props';
@@ -17,12 +17,7 @@ const UserProvider: React.FC<WithChildrenProps> = ({ children }) => {
     }
   }, [auth.status]);
 
-  const value: UserData = {
-    id: userData.id,
-    login: userData.login,
-    username: userData.username,
-    email: userData.email
-  }
+  const value: UserData = { ...userData }
 
   return (
     <UserContext.Provider value={value}>

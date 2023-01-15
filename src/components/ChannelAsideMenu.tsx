@@ -8,8 +8,7 @@ import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
 import CreateMeetingDialog from './CreateMeetingDialog';
 import InviteParticipantDialog from './InviteParticipantDialog';
 
-import Meetings from '../api/Meetings';
-import ChannelInvitations from '../api/ChannelInvitations';
+import { Meetings, ChannelInvitations } from '../api';
 import {
   ChannelData, ChannelInvitationRequestData, CreateMeetingData,
   ShortMeetingData, ShortUserData

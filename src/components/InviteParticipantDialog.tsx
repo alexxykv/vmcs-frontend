@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import Users from '../api/Users';
+import { Users } from '../api';
 
 
 interface InviteParticipantDialogProps {
