@@ -102,6 +102,8 @@ export const asideBoxItems: React.CSSProperties | SxProps = {
 }
 
 export const asideBoxItem: React.CSSProperties | SxProps = {
+  display: 'flex',
+  justifyContent: 'space-between',
   padding: '5px 0',
   '&:hover': {
     backgroundColor: '#bbdefb',

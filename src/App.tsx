@@ -12,6 +12,7 @@ import MeetingPage from './pages/MeetingPage';
 import ChannelPage from './pages/ChannelPage';
 import ChannelsPage from './pages/ChannelsPage';
 import NotFoundPage from './pages/NotFoundPage';
+import InvitationsPage from './pages/InvitationsPage';
 
 import AuthProvider from './providers/AuthProvider';
 import UserProvider from './providers/UserProvider';
@@ -53,6 +54,7 @@ const Routing: React.FC = () => {
         <Route path='/channels' element={<ChannelsPage />} />
         <Route path='/channels/:id' element={<ChannelPage />} />
         <Route path='/meeting/:id' element={<MeetingPage />} />
+        <Route path='/invitations' element={<InvitationsPage />} />
       </Route>
       <Route path='/login' element={<LoginPage />} />
       <Route path='*' element={<NotFoundPage />} />

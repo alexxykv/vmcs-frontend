@@ -90,7 +90,7 @@ const ProfileMenu: React.FC = () => {
     },
     {
       title: 'Приглашения',
-      handler: () => { },
+      handler: handle(() => navigate('/invitations')),
     },
     {
       title: 'Выйти',
