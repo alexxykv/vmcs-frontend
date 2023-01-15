@@ -81,7 +81,13 @@ const ChannelChat: React.FC<ChatProps> = ({ id, messages }) => {
         {
           chatMessages.map(message => <ChannelChatMessage key={message.id} message={message} />)
         }
-        <div style={{ float: "left", clear: "both" }} ref={messagesEndRef}></div>
+        <div ref={messagesEndRef} style={
+          {
+            float: "left",
+            clear: "both",
+            /* Margin top depends ChatChatMessage gap */ 
+            marginTop: '-5px'
+          }} />
       </Box>
       <Box component='form' sx={styles.channelChat.chatInputBox} onSubmit={handleSendMessage}>
         <TextField fullWidth variant='outlined' size='small' sx={styles.channelChat.chatInputTextField}

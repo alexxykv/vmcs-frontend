@@ -76,11 +76,28 @@ export const asideBoxItems: React.CSSProperties | SxProps = {
   display: 'flex',
   flexDirection: 'column',
   gap: '5px',
+  paddingRight: '5px',
   overflowY: 'scroll',
-  msOverflowStyle: 'none', /* Internet Explorer 10+ */
-  scrollbarWidth: 'none', /* Firefox */
+  // msOverflowStyle: 'none', /* Internet Explorer 10+ */
+  // scrollbarWidth: 'none', /* Firefox */
+  // '&::-webkit-scrollbar': {
+  //   display: 'none', /* Safari and Chrome */
+  //   width: '5px',
+  // },
+  // '&:hover': {
+  //   '&::-webkit-scrollbar': {
+  //     display: '-webkit-flex'
+  //   }
+  // },
   '&::-webkit-scrollbar': {
-    display: 'none' /* Safari and Chrome */
+    width: '5px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'primary.main',
+    borderRadius: '5px',
+  },
+  '&::-webkit-scrollbar-track': {
+    borderRadius: '5px',
   }
 }
 
