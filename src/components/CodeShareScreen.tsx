@@ -1,78 +1,45 @@
-import React, { useState } from 'react';
-import { Container } from '@mui/system';
-import AceEditor from "react-ace";
-
-import "ace-builds/src-noconflict/mode-jsx";
-import "ace-builds/src-min-noconflict/ext-searchbox";
-import "ace-builds/src-min-noconflict/ext-language_tools";
-
-
-const languages = [
-  "javascript",
-  "java",
-  "python",
-  "xml",
-  "ruby",
-  "sass",
-  "markdown",
-  "mysql",
-  "json",
-  "html",
-  "handlebars",
-  "golang",
-  "csharp",
-  "elixir",
-  "typescript",
-  "css"
-];
-
-const themes = [
-  "monokai",
-  "github",
-  "tomorrow",
-  "kuroir",
-  "twilight",
-  "xcode",
-  "textmate",
-  "solarized_dark",
-  "solarized_light",
-  "terminal"
-];
-
-languages.forEach(lang => {
-  require(`ace-builds/src-noconflict/mode-${lang}`);
-  require(`ace-builds/src-noconflict/snippets/${lang}`);
-});
-
-themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
+import React, { useCallback, useEffect, useState } from 'react';
+import Loading from './Loading';
+import Repository from './Repository';
+import RepositoryWelcome from './RepositoryWelcome';
+import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
+import { useMeeting } from '../hooks/useMeeting';
+import { IRepository } from '../hubs/CodeSharingHub';
 
 
 const CodeShareScreen: React.FC = () => {
-  const [value, setValue] = useState<string>('');
+  const meeting = useMeeting();
+  const codeHub = useCodeSharingHub();
+  const [repository, setRepository] = useState<IRepository | null>(null);
+  const [repositoryExist, setRepositryExist] = useState<boolean>(meeting.repositoryId !== null);
 
-  const handleChange = (newValue: string) => {
-    setValue(newValue);
+  const connectCodeHub = useCallback(() => {
+    codeHub.start().then(() => {
+      if (repositoryExist) {
+        codeHub.connectToRepository(meeting.repositoryId);
+      }
+      codeHub.onConnectToRepository(repository => {
+        setRepositryExist(true);
+        setRepository(repository);
+      });
+    });
+  }, [codeHub, repositoryExist, meeting.repositoryId]);
+
+  useEffect(() => {
+    connectCodeHub();
+  }, [connectCodeHub]);
+
+  const render = () => {
+    if (repositoryExist) {
+      if (repository) {
+        return <Repository repository={repository} />
+      }
+      return <Loading />
+    }
+    return <RepositoryWelcome />
   }
 
-  return (
-    <Container disableGutters maxWidth={false}>
-      <AceEditor
-        mode="python"
-        theme="monokai"
-        value={value}
-        onChange={handleChange}
-        fontSize={14}
-        highlightActiveLine={true}
-        enableBasicAutocompletion={true}
-        enableLiveAutocompletion={true}
-        enableSnippets={true}
-        setOptions={{ useWorker: false, }}
-        showGutter={true}
-        showPrintMargin={false}
-        style={{ width: '100%', height: '100%' }}
-      />
-    </Container>
-  );
+  return render();
 }
 
 

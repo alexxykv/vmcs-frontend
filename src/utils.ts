@@ -5,5 +5,5 @@ export function getRandomInt(min: number, max: number) {
 }
 
 export function fakeAsync(callback: VoidFunction) {
-  setTimeout(callback, 2000);
+  setTimeout(callback, 1000);
 }

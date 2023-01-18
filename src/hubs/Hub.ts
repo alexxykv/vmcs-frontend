@@ -15,16 +15,15 @@ export default class Hub implements IHub {
   public async start() {
     if (this.Connection.state === HubConnectionState.Disconnected) {
       await this.Connection.start();
-      console.log(`Connected to ${this.Connection.baseUrl}.`);
-      return;
+      // console.log(`Connected to ${this.Connection.baseUrl}.`);
     }
+    return;
+  }
 
-    const errorMessage = []
-    errorMessage.push(
-      `Cannot starts connecting when the connection state is not ${HubConnectionState.Disconnected}`,
-      `Actual connection state is ${this.Connection.state}`
-    );
-
-    throw new Error(errorMessage.join('\n'));
+  public async stop() {
+    if (this.Connection.state === HubConnectionState.Connected) {
+      await this.Connection.stop();
+    }
+    return;
   }
 }

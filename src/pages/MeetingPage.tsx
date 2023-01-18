@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
+import { Container } from '@mui/material';
 import CodeShareScreen from '../components/CodeShareScreen';
 import VideoChatScreen from '../components/VideoChatScreen';
 import ToolsPanel from '../components/ToolsPanel';
+import Loading from '../components/Loading';
 
-import { ShortMessageData } from '../interfaces/dto/messages';
-import { MeetingPageProps } from '../interfaces/props';
+import { Meetings } from '../api';
+import { MeetingData, ShortMessageData } from '../interfaces/dto';
 import { useWebRTC } from '../hooks/useWebRTC';
+import { useMeeting } from '../hooks/useMeeting';
+import MeetingContext from '../contexts/MeetingContext';
+
 
 type ScreenType = 'VideoChat' | 'CodeShare';
 
@@ -29,12 +34,36 @@ const messages: ShortMessageData[] = [
   }
 ]
 
-const MeetingPage: React.FC<MeetingPageProps> = () => {
+const MeetingPage: React.FC = () => {
   const { id } = useParams();
   const meetingId = id as string;
-  const rtc = useWebRTC(meetingId);
+  const [meeting, setMeeting] = useState<MeetingData>(null!);
 
-  const [screen, setScreen] = useState<ScreenType>('VideoChat');
+  const uploadMeetingData = useCallback(() => {
+    Meetings.Get(meetingId).then(meeting => {
+      setMeeting(meeting);
+    })
+  }, [meetingId]);
+
+  useEffect(() => {
+    uploadMeetingData();
+  }, [uploadMeetingData]);
+
+  if (meeting === null) {
+    return <Loading />
+  }
+
+  return (
+    <MeetingContext.Provider value={meeting}>
+      <MeetingPageWithContext />
+    </MeetingContext.Provider>
+  );
+}
+
+const MeetingPageWithContext: React.FC = () => {
+  const meeting = useMeeting();
+  const rtc = useWebRTC(meeting.id);
+  const [screen, setScreen] = useState<ScreenType>('CodeShare');
 
   const toggleScreen = () => {
     switch (screen) {
@@ -45,16 +74,16 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
 
   const renderScreen = () => {
     switch (screen) {
-      case 'VideoChat': return <VideoChatScreen rtc={rtc} messages={messages}/>;
+      case 'VideoChat': return <VideoChatScreen rtc={rtc} messages={messages} />;
       case 'CodeShare': return <CodeShareScreen />;
     }
   }
 
   return (
-    <>
+    <Container disableGutters maxWidth={false} sx={{ display: 'flex' }}>
       {renderScreen()}
       <ToolsPanel toggleScreen={toggleScreen} />
-    </>
+    </Container>
   );
 }
 

@@ -6,43 +6,44 @@ export enum Action {
   Delete
 }
 
-export interface TextFile {
+export interface ITextFile {
   id: number
   name: string
-  textInBytes: number[]
+  text: string
+  isDeleted: boolean
 }
 
-export interface Folder {
+export interface IFolder {
   id: number
   name: string
-  files: TextFile[]
-  folders: Folder[]
+  files: ITextFile[]
+  folders: IFolder[]
 }
 
-export interface Repository {
+export interface IRepository {
   id: string
   meetingId: string
   name: string
-  directory: Folder
+  directory: IFolder
 }
 
-export interface ChangeInfo {
-  repoId: string
-  fileId: number
-  position: number
-  action: Action
-  insertedChars: number[]
-  charsDeleted: number[]
-}
+// export interface IChangeInfo {
+//   repoId: string
+//   fileId: number
+//   position: number
+//   action: Action
+//   insertedChars: number[]
+//   charsDeleted: number[]
+// }
 
 export default class CodeSharingHub extends Hub {
-  upload(file: TextFile, folderId: number, repoId: string) {
+  upload(file: ITextFile, folderId: number, repoId: string) {
     if (this.Connection.state === HubConnectionState.Connected) {
       this.Connection.invoke('Upload', file, folderId, repoId);
     }
   }
 
-  onUpload(callback: (file: TextFile, folderId: number, repoId: string) => void) {
+  onUpload(callback: (file: ITextFile, folderId: number, repoId: string) => void) {
     if (this.Connection.state === HubConnectionState.Connected) {
       this.Connection.on('Upload', (file, folderId, repoId) => {
         callback(file, folderId, repoId);
@@ -50,13 +51,13 @@ export default class CodeSharingHub extends Hub {
     }
   }
 
-  connectToRepository(meetingId: string) {
+  connectToRepository(repositoryId: string) {
     if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('ConnectToRepository', meetingId);
+      this.Connection.invoke('ConnectToRepository', repositoryId);
     }
   }
 
-  onConnectToRepository(callback: (repository: Repository) => void) {
+  onConnectToRepository(callback: (repository: IRepository) => void) {
     if (this.Connection.state === HubConnectionState.Connected) {
       this.Connection.on('ConnectToRepository', (repository) => {
         callback(repository);
@@ -91,16 +92,16 @@ export default class CodeSharingHub extends Hub {
     }
   }
 
-  change(change: ChangeInfo) {
+  change(text: string, repositoryId: string, fileId: number) {
     if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('Change', change);
+      this.Connection.invoke('Change', text, repositoryId, fileId);
     }
   }
 
-  onChange(callback: (change: ChangeInfo) => void) {
+  onChange(callback: (text: string, repositoryId: string, fileId: number) => void) {
     if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.on('Change', (change) => {
-        callback(change);
+      this.Connection.on('Change', (text, repositoryId, fileId) => {
+        callback(text, repositoryId, fileId);
       });
     }
   }

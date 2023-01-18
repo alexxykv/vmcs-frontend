@@ -9,6 +9,7 @@ export const box: React.CSSProperties | SxProps = {
   borderRadius: '10px',
   backgroundColor: '#353535',
   transform: 'translate(-50%, 0)',
+  zIndex: '100'
 }
 
 export const toolItemsBox: React.CSSProperties | SxProps = {

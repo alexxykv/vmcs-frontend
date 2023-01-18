@@ -11,6 +11,10 @@ const ChatHubProvider: React.FC<WithChildrenProps> = ({ children }) => {
 
   useEffect(() => {
     chatHub.start();
+
+    return () => {
+      chatHub.stop();
+    };
   }, [chatHub]);
 
   return (
