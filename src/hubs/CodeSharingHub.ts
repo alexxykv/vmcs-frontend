@@ -13,6 +13,17 @@ export interface ITextFile {
   isDeleted: boolean
 }
 
+export interface ITextFileReturnDTO {
+  id: string
+  name: string
+  text: string
+}
+
+export interface ITextFileDTO {
+  name: string
+  text: string
+}
+
 export interface IFolder {
   id: number
   name: string
@@ -37,13 +48,13 @@ export interface IRepository {
 // }
 
 export default class CodeSharingHub extends Hub {
-  upload(file: ITextFile, folderId: number, repoId: string) {
+  upload(file: ITextFileDTO, folderId: number, repoId: string) {
     if (this.Connection.state === HubConnectionState.Connected) {
       this.Connection.invoke('Upload', file, folderId, repoId);
     }
   }
 
-  onUpload(callback: (file: ITextFile, folderId: number, repoId: string) => void) {
+  onUpload(callback: (file: ITextFileReturnDTO, folderId: number, repoId: string) => void) {
     if (this.Connection.state === HubConnectionState.Connected) {
       this.Connection.on('Upload', (file, folderId, repoId) => {
         callback(file, folderId, repoId);

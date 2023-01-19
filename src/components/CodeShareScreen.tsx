@@ -14,7 +14,7 @@ const CodeShareScreen: React.FC = () => {
   const [repositoryExist, setRepositryExist] = useState<boolean>(meeting.repositoryId !== null);
 
   const connectCodeHub = useCallback(() => {
-    codeHub.start().then(() => {
+    codeHub.Connection.start().then(() => {
       if (repositoryExist) {
         codeHub.connectToRepository(meeting.repositoryId);
       }

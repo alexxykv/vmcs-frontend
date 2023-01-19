@@ -7,7 +7,7 @@ import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import { useMeeting } from '../hooks/useMeeting';
 
 
-const Repository: React.FC = () => {
+const RepositoryWelcome: React.FC = () => {
   const meeting = useMeeting();
   const codeHub = useCodeSharingHub();
   const [openCreate, setOpenCreate] = useState<boolean>(false);
@@ -85,4 +85,4 @@ const CreateRepositoryDialog: React.FC<CreateRepositoryDialogProps> = ({ open, o
 }
 
 
-export default Repository;
+export default RepositoryWelcome;

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Box, ButtonGroup, IconButton, TextField } from '@mui/material';
+import { Box, ButtonGroup, IconButton, TextField, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { TreeItem, TreeView } from '@mui/lab';
@@ -7,7 +7,7 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 
 import Editor from './Editor';
-import { IFolder, IRepository, ITextFile } from '../hubs/CodeSharingHub';
+import { IFolder, IRepository, ITextFile, ITextFileDTO } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 
 
@@ -20,17 +20,35 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
 
   const [files, setFiles] = useState<Map<number, ITextFile>>(new Map());
   const [directory, setDirectory] = useState<IFolder>(repository.directory);
-  const [selected, setSelected] = useState<string>(repository.directory.id.toString());
+  const [selectedNode, setSelectedNode] = useState<string>(repository.directory.id.toString());
+  const [selectedFile, setSelectedFile] = useState<string>('');
 
   useEffect(() => {
     codeHub.onCreateFolder((folderName, repoId, parentFolderId) => {
-      console.log('Папка создана ёба')
+      console.log('Папка создана ёба');
+    });
+
+    codeHub.onUpload((file, folderId, repoId) => {
+      console.log(file, folderId, repoId);
     });
 
     return () => {
       codeHub.offCreateFolder();
+      codeHub.offUpload();
     };
   }, [codeHub]);
+
+  useEffect(() => {
+    codeHub.onChange((text, repositoryId, fileId) => {
+      const file = files.get(fileId) as ITextFile;
+      const newFile: ITextFile = {
+        ...file,
+        text
+      };
+      console.log(newFile)
+      setFiles(prev => new Map(prev).set(fileId, newFile));
+    });
+  }, [codeHub, files]);
 
   const getFiles = useCallback((folder: IFolder) => {
     const files = [...folder.files];
@@ -59,29 +77,46 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
   };
 
   const handleNodeSelect = (event: React.SyntheticEvent, nodeId: string) => {
-    setSelected(nodeId);
+    setSelectedNode(nodeId);
+    if (files.has(parseInt(nodeId))) {
+      setSelectedFile(nodeId);
+    }
   };
 
   const handleClickAddFile = () => {
+    const file: ITextFileDTO = {
+      name,
+      text: ''
+    };
 
+    codeHub.upload(file, parseInt(selectedNode), repository.id);
   };
 
   const handleClickAddFolder = () => {
-    codeHub.createFolder(name, repository.id, parseInt(selected));
+    codeHub.createFolder(name, repository.id, parseInt(selectedNode));
     setName('');
   };
 
   const [name, setName] = useState<string>('');
 
+  const renderSelectedFile = () => {
+    const file = files.get(parseInt(selectedFile));
+    if (file === undefined) {
+      return <SelectFile />
+    }
+    console.log(file)
+    return <Editor file={file} />;
+  };
+
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, height: '100%' }}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <TreeView
-          selected={selected}
+          selected={selectedNode}
           onNodeSelect={handleNodeSelect}
           defaultCollapseIcon={<ExpandMoreIcon />}
           defaultExpandIcon={<ChevronRightIcon />}
-          sx={{ maxHeight: '600px', p: 2, minWidth: 200, maxWidth: 200, overflowY: 'auto' }}
+          sx={{ maxHeight: '600px', p: 2, minWidth: 200, maxWidth: 400, overflowY: 'auto' }}
         >
           {renderTreeDirectory(directory)}
         </TreeView>
@@ -95,7 +130,22 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
         </ButtonGroup>
         <TextField value={name} onChange={event => setName(event.target.value)} />
       </Box>
-      <Editor />
+      {renderSelectedFile()}
+    </Box>
+  );
+}
+
+const SelectFile: React.FC = () => {
+  return (
+    <Box sx={{
+      display: 'flex',
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <Typography>
+        Select file
+      </Typography>
     </Box>
   );
 }
