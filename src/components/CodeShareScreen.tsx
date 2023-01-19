@@ -19,15 +19,22 @@ const CodeShareScreen: React.FC = () => {
         codeHub.connectToRepository(meeting.repositoryId);
       }
       codeHub.onConnectToRepository(repository => {
+        console.log(repository);
         setRepositryExist(true);
         setRepository(repository);
       });
     });
   }, [codeHub, repositoryExist, meeting.repositoryId]);
 
+  const leaveCodeHub = useCallback(() => {
+    codeHub.offConnectToRepository();
+    // codeHub.Connection.stop();
+  }, [codeHub]);
+
   useEffect(() => {
     connectCodeHub();
-  }, [connectCodeHub]);
+    return leaveCodeHub;
+  }, [connectCodeHub, leaveCodeHub]);
 
   const render = () => {
     if (repositoryExist) {

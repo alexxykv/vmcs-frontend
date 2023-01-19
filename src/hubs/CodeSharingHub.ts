@@ -105,4 +105,28 @@ export default class CodeSharingHub extends Hub {
       });
     }
   }
+
+  offUpload() {
+    if (this.Connection.state === HubConnectionState.Connected) {
+      this.Connection.off('Upload');
+    }
+  }
+
+  offConnectToRepository() {
+    if (this.Connection.state === HubConnectionState.Connected) {
+      this.Connection.off('ConnectToRepository');
+    }
+  }
+
+  offCreateFolder() {
+    if (this.Connection.state === HubConnectionState.Connected) {
+      this.Connection.off('CreateFolder');
+    }
+  }
+
+  offChange() {
+    if (this.Connection.state === HubConnectionState.Connected) {
+      this.Connection.off('Change');
+    }
+  }
 }
