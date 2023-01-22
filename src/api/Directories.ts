@@ -8,7 +8,7 @@ export default class Directories {
   public static async Create(createData: CreateDirectoryData) {
     const url = path.join(ApiRoutes.Directories);
     const response = await api.post(url, createData);
-    const data = response.data as DirectoryData;
+    const data = response.data as string;
     return data;
   }
 

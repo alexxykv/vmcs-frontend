@@ -5,45 +5,56 @@ import RepositoryWelcome from './RepositoryWelcome';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import { useMeeting } from '../hooks/useMeeting';
 import { IDirectory } from '../hubs/CodeSharingHub';
+import { Directories } from '../api';
+import { CreateDirectoryData } from '../interfaces/dto';
 
 
 const CodeShareScreen: React.FC = () => {
   const meeting = useMeeting();
   const codeHub = useCodeSharingHub();
   const [repository, setRepository] = useState<IDirectory | null>(null);
-  const [repositoryExist, setRepositryExist] = useState<boolean>(meeting.repositoryId !== null);
+  const [repositoryId, setRepositoryId] = useState<string>(meeting.repositoryId);
 
-  const connectCodeHub = useCallback(() => {
+  const repositoryExist = useCallback(() => {
+    return repositoryId !== null;
+  }, [repositoryId]);
+
+  const connectToRepository = useCallback((repositoryId: string) => {
     codeHub.Connection.start().then(() => {
-      if (repositoryExist) {
-        codeHub.connectToRepository(meeting.repositoryId);
-      }
-      codeHub.onConnectToRepository(repository => {
-        console.log(repository);
-        setRepositryExist(true);
-        setRepository(repository);
+      codeHub.connectToRepository(repositoryId);
+      codeHub.onConnectToRepository(directory => {
+        console.log('connect repository');
+        setRepository(directory);
       });
     });
-  }, [codeHub, repositoryExist, meeting.repositoryId]);
-
-  const leaveCodeHub = useCallback(() => {
-    codeHub.offConnectToRepository();
-    // codeHub.Connection.stop();
   }, [codeHub]);
 
+  const disconnectRepository = useCallback(() => {
+    codeHub.offConnectToRepository();
+  }, [codeHub]);
+
+  const createRepository = useCallback((createData: CreateDirectoryData) => {
+    Directories.Create(createData).then(directoryId => {
+      setRepositoryId(directoryId);
+      // connectToRepository(directoryId);
+    });
+  }, []);
+
   useEffect(() => {
-    connectCodeHub();
-    return leaveCodeHub;
-  }, [connectCodeHub, leaveCodeHub]);
+    if (repositoryExist()) {
+      connectToRepository(repositoryId);
+    }
+    return disconnectRepository;
+  }, [connectToRepository, disconnectRepository, repositoryExist, repositoryId]);
 
   const render = () => {
-    if (repositoryExist) {
+    if (repositoryExist()) {
       if (repository) {
         return <Repository repository={repository} />
       }
       return <Loading />
     }
-    return <RepositoryWelcome />
+    return <RepositoryWelcome onCreateRepository={createRepository} />
   }
 
   return render();

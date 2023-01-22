@@ -5,9 +5,10 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { TreeItem, TreeView } from '@mui/lab';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+import SaveIcon from '@mui/icons-material/Save';
 
 import Editor from './Editor';
-import { IFolder, IDirectory, ITextFile, TextFileDTO } from '../hubs/CodeSharingHub';
+import { IFolder, IDirectory, ITextFile, TextFileDTO, FolderReturnDTO } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 
 
@@ -19,22 +20,22 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
   const codeHub = useCodeSharingHub();
 
   const [files, setFiles] = useState<Map<number, ITextFile>>(new Map());
-  const [directory, setDirectory] = useState<IFolder>(repository.directory);
-  const [selectedNode, setSelectedNode] = useState<string>(repository.directory.id.toString());
+  const [directory, setDirectory] = useState<IFolder>(repository.rootFolder);
+  const [selectedNode, setSelectedNode] = useState<string>(repository.rootFolder.id.toString());
   const [selectedFile, setSelectedFile] = useState<string>('');
 
   useEffect(() => {
-    codeHub.onCreateFolder((folderName, repoId, parentFolderId) => {
-      console.log('Папка создана ёба');
+    codeHub.onCreateFolder(folder => {
+      console.log('Папка создана ёба', folder);
     });
 
-    codeHub.onUpload((file, folderId, repoId) => {
-      console.log(file, folderId, repoId);
+    codeHub.onCreateFile(file => {
+      console.log('Файл создан', file);
     });
 
     return () => {
       codeHub.offCreateFolder();
-      codeHub.offUpload();
+      codeHub.offCreateFile();
     };
   }, [codeHub]);
 
@@ -89,12 +90,16 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
       text: ''
     };
 
-    codeHub.upload(file, parseInt(selectedNode), repository.id);
+    codeHub.createFile(file, parseInt(selectedNode), repository.id);
   };
 
   const handleClickAddFolder = () => {
     codeHub.createFolder(name, repository.id, parseInt(selectedNode));
     setName('');
+  };
+
+  const handleClickSave = () => {
+    codeHub.saveRepository(repository.id);
   };
 
   const [name, setName] = useState<string>('');
@@ -126,6 +131,9 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
           </IconButton>
           <IconButton onClick={handleClickAddFolder}>
             <CreateNewFolderIcon />
+          </IconButton>
+          <IconButton onClick={handleClickSave}>
+            <SaveIcon />
           </IconButton>
         </ButtonGroup>
         <TextField value={name} onChange={event => setName(event.target.value)} />

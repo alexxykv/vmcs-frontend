@@ -3,13 +3,16 @@ import {
   Box, Button, ButtonGroup, Container, Dialog,
   DialogActions, DialogContent, DialogTitle, TextField, Typography
 } from '@mui/material';
-import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import { useMeeting } from '../hooks/useMeeting';
+import { CreateDirectoryData } from '../interfaces/dto';
 
 
-const RepositoryWelcome: React.FC = () => {
+interface RepositoryWelcomeProps {
+  onCreateRepository: (createData: CreateDirectoryData) => void
+}
+
+const RepositoryWelcome: React.FC<RepositoryWelcomeProps> = ({ onCreateRepository }) => {
   const meeting = useMeeting();
-  const codeHub = useCodeSharingHub();
   const [openCreate, setOpenCreate] = useState<boolean>(false);
 
   const handleCloseCreateRepository = () => {
@@ -17,7 +20,12 @@ const RepositoryWelcome: React.FC = () => {
   };
 
   const createRepository = (name: string) => {
-    codeHub.createRepository(meeting.id, name);
+    const createData: CreateDirectoryData = {
+      name,
+      directoryInJSON: '',
+      meetingId: meeting.id
+    };
+    onCreateRepository(createData);
     setOpenCreate(false);
   };
 
