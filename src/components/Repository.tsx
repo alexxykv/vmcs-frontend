@@ -1,17 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Box, Typography } from '@mui/material';
 import Editor from './Editor';
-import { IFolder, IRepository, ITextFile, ITextFileDTO } from '../hubs/CodeSharingHub';
-import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
+import { IDirectory, ITextFile } from '../hubs/CodeSharingHub';
 import RepositoryAside from './RepositoryAside';
 
 
 interface RepositoryProps {
-  repository: IRepository
+  repository: IDirectory
 }
 
 const Repository: React.FC<RepositoryProps> = ({ repository }) => {
-  const codeHub = useCodeSharingHub();
   const [selectedFile, setSelectedFile] = useState<ITextFile | null>(null);
 
   const selectFile = (file: ITextFile) => {

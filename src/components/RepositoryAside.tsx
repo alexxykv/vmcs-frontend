@@ -6,18 +6,18 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 
-import { IFolder, IRepository, ITextFile, ITextFileDTO } from '../hubs/CodeSharingHub';
+import { IFolder, IDirectory, ITextFile, TextFileDTO } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 
 
 interface RepositoryAsideProps {
-  repository: IRepository
+  repository: IDirectory
   selectFile: (file: ITextFile) => void
 }
 
 const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFile }) => {
   const codeHub = useCodeSharingHub();
-  const [directory, setDirectory] = useState<IFolder>(repository.directory);
+  const [directory, setDirectory] = useState<IFolder>(repository.rootFolder);
   const [files, setFiles] = useState<Map<string, ITextFile>>(new Map());
   const [folders, setFolders] = useState<Map<string, IFolder>>(new Map());
   const [selectedNode, setSelectedNode] = useState<string>(directory.id.toString());
@@ -55,12 +55,12 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
   }, [directory, getFiles, getFolders]);
 
   useEffect(() => {
-    codeHub.onCreateFolder((folderName, repoId, parentFolderId) => {
-      console.log('Папка создана ёба');
+    codeHub.onCreateFolder((folder) => {
+      console.log('Папка создана', folder);
     });
 
-    codeHub.onUpload((file, folderId, repoId) => {
-      console.log(file, folderId, repoId);
+    codeHub.onCreateFile((file) => {
+      console.log('Файл создан', file);
     });
 
     codeHub.onChange((text, repositoryId, fileId) => {
@@ -73,15 +73,15 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     });
 
     return () => {
+      codeHub.offCreateFile();
       codeHub.offCreateFolder();
-      codeHub.offUpload();
       codeHub.offChange();
     };
   }, [codeHub, files]);
 
   const addFile = useCallback((name: string, parentId: string) => {
-    const file: ITextFileDTO = { name, text: '' };
-    codeHub.upload(file, parseInt(parentId), repository.id);
+    const file: TextFileDTO = { name, text: '' };
+    codeHub.createFile(file, parseInt(parentId), repository.id);
   }, [codeHub, repository.id]);
 
   const addFolder = useCallback((name: string, parentId: string) => {
