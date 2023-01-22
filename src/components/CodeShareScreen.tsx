@@ -4,13 +4,13 @@ import Repository from './Repository';
 import RepositoryWelcome from './RepositoryWelcome';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import { useMeeting } from '../hooks/useMeeting';
-import { IRepository } from '../hubs/CodeSharingHub';
+import { IDirectory } from '../hubs/CodeSharingHub';
 
 
 const CodeShareScreen: React.FC = () => {
   const meeting = useMeeting();
   const codeHub = useCodeSharingHub();
-  const [repository, setRepository] = useState<IRepository | null>(null);
+  const [repository, setRepository] = useState<IDirectory | null>(null);
   const [repositoryExist, setRepositryExist] = useState<boolean>(meeting.repositoryId !== null);
 
   const connectCodeHub = useCallback(() => {

@@ -7,12 +7,12 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 
 import Editor from './Editor';
-import { IFolder, IRepository, ITextFile, ITextFileDTO } from '../hubs/CodeSharingHub';
+import { IFolder, IDirectory, ITextFile, TextFileDTO } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 
 
 interface RepositoryProps {
-  repository: IRepository
+  repository: IDirectory
 }
 
 const Repository: React.FC<RepositoryProps> = ({ repository }) => {
@@ -84,7 +84,7 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
   };
 
   const handleClickAddFile = () => {
-    const file: ITextFileDTO = {
+    const file: TextFileDTO = {
       name,
       text: ''
     };
