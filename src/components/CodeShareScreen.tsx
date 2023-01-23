@@ -20,23 +20,26 @@ const CodeShareScreen: React.FC = () => {
   }, [repositoryId]);
 
   const connectToRepository = useCallback((repositoryId: string) => {
-    codeHub.Connection.start().then(() => {
-      codeHub.connectToRepository(repositoryId);
-      codeHub.onConnectToRepository(directory => {
-        console.log('connect repository');
-        setRepository(directory);
+    codeHub.Connection.stop().then(() => {
+      codeHub.Connection.start().then(() => {
+        codeHub.connectToRepository(repositoryId);
+        console.log('connect')
       });
+    });
+    codeHub.onConnectToRepository(directory => {
+      console.log(directory)
+      setRepository(directory);
     });
   }, [codeHub]);
 
   const disconnectRepository = useCallback(() => {
     codeHub.offConnectToRepository();
+    codeHub.Connection.stop();
   }, [codeHub]);
 
   const createRepository = useCallback((createData: CreateDirectoryData) => {
     Directories.Create(createData).then(directoryId => {
       setRepositoryId(directoryId);
-      // connectToRepository(directoryId);
     });
   }, []);
 

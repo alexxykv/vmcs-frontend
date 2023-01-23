@@ -1,4 +1,3 @@
-import { HubConnectionState } from "@microsoft/signalr";
 import Hub from "./Hub";
 
 
@@ -24,7 +23,7 @@ export interface IFolder {
 }
 
 export interface TextFileReturnDTO {
-  id: string
+  id: number
   name: string
   text: string
 }
@@ -44,9 +43,7 @@ export interface FolderReturnDTO {
 
 export default class CodeSharingHub extends Hub {
   createFile(file: TextFileDTO, folderId: number, directoryId: string) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('CreateFile', file, folderId, directoryId);
-    }
+    return this.Connection.invoke('CreateFile', file, folderId, directoryId);
   }
 
   onCreateFile(callback: (file: TextFileReturnDTO) => void) {
@@ -56,9 +53,7 @@ export default class CodeSharingHub extends Hub {
   }
 
   connectToRepository(directoryId: string) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('ConnectToRepository', directoryId);
-    }
+    this.Connection.invoke('ConnectToRepository', directoryId);
   }
 
   onConnectToRepository(callback: (directory: IDirectory) => void) {
@@ -68,15 +63,11 @@ export default class CodeSharingHub extends Hub {
   }
 
   saveRepository(directoryId: string) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('SaveRepository', directoryId);
-    }
+    return this.Connection.invoke('SaveRepository', directoryId);
   }
 
   createFolder(folderName: string, directoryId: string, parentFolderId: number) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('CreateFolder', folderName, directoryId, parentFolderId);
-    }
+    return this.Connection.invoke('CreateFolder', folderName, directoryId, parentFolderId);
   }
 
   onCreateFolder(callback: (folder: FolderReturnDTO) => void) {
@@ -86,9 +77,7 @@ export default class CodeSharingHub extends Hub {
   }
 
   change(text: string, directoryId: string, fileId: number) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('Change', text, directoryId, fileId);
-    }
+    return this.Connection.invoke('Change', text, directoryId, fileId);
   }
 
   onChange(callback: (text: string, directoryId: string, fileId: number) => void) {
@@ -98,26 +87,18 @@ export default class CodeSharingHub extends Hub {
   }
 
   offCreateFile() {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.off('CreateFile');
-    }
+    return this.Connection.off('CreateFile');
   }
 
   offConnectToRepository() {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.off('ConnectToRepository');
-    }
+    return this.Connection.off('ConnectToRepository');
   }
 
   offCreateFolder() {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.off('CreateFolder');
-    }
+    return this.Connection.off('CreateFolder');
   }
 
   offChange() {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.off('Change');
-    }
+    return this.Connection.off('Change');
   }
 }

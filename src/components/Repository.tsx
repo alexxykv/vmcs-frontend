@@ -20,7 +20,7 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
     if (selectedFile === null) {
       return <SelectFile />
     }
-    return <Editor file={selectedFile} />;
+    return <Editor repository={repository} file={selectedFile} />;
   };
 
   return (

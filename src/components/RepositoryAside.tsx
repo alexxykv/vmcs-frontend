@@ -24,6 +24,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
   const [files, setFiles] = useState<Map<string, ITextFile>>(new Map());
   const [folders, setFolders] = useState<Map<string, IFolder>>(new Map());
   const [selectedNode, setSelectedNode] = useState<string>(directory.id.toString());
+  const [selectedFile, setSelectedFile] = useState<string>('');
   const [selectedFolder, setSelectedFolder] = useState<string>(selectedNode);
   const [name, setName] = useState<string>('');
 
@@ -43,6 +44,31 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     return folders;
   }, []);
 
+  const updateDirectory = useCallback((file?: ITextFile, folder?: IFolder) => {
+    let founded = false;
+    const find = (_folder: IFolder) => {
+      if (founded) return;
+      ///// TODO: selectedFolder -> parentId
+      if (_folder.id.toString() === selectedFolder) {
+        if (file !== undefined) {
+          _folder.files.push(file);
+        }
+        if (folder !== undefined) {
+          _folder.folders.push(folder);
+        }
+        founded = true;
+        return;
+      }
+      _folder.folders.forEach((f) => {
+        find(f);
+      });
+    };
+
+    const newDirectory = JSON.parse(JSON.stringify(directory)) as IFolder;
+    find(newDirectory);
+    setDirectory(newDirectory);
+  }, [directory, selectedFolder]);
+
   useEffect(() => {
     const files = getFiles(directory);
     setFiles(new Map(files.map(file => {
@@ -59,11 +85,20 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
   useEffect(() => {
     codeHub.onCreateFolder((folder) => {
-      console.log('Папка создана', folder);
+      const id = folder.id.toString();
+      setFolders(prev => prev.set(id, folder));
+      updateDirectory(undefined, folder as IFolder);
     });
 
     codeHub.onCreateFile((file) => {
-      console.log('Файл создан', file);
+      const id = file.id.toString();
+      // TODO: TextFileReturnDTO -> ITextFile
+      const newFile: ITextFile = {
+        ...file,
+        isDeleted: false
+      };
+      setFiles(prev => prev.set(id, newFile));
+      updateDirectory(newFile);
     });
 
     codeHub.onChange((text, repositoryId, fileId) => {
@@ -73,6 +108,12 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
         text
       };
       setFiles(prev => new Map(prev).set(fileId.toString(), newFile));
+
+      ///// TODO: Change it
+      console.log(fileId, selectedFile)
+      if (fileId === parseInt(selectedFile)) {
+        selectFile(newFile);
+      }
     });
 
     return () => {
@@ -80,7 +121,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
       codeHub.offCreateFolder();
       codeHub.offChange();
     };
-  }, [codeHub, files]);
+  }, [codeHub, files, updateDirectory, selectedFile, selectFile]);
 
   const addFile = useCallback((name: string, parentId: string) => {
     const file: TextFileDTO = { name, text: '' };
@@ -96,7 +137,14 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
     const file = files.get(nodeId);
     if (file !== undefined) {
+      setSelectedFile(file.id.toString())
       selectFile(file);
+      folders.forEach((folder, id) => {
+        const fileIds = folder.files.map(f => f.id);
+        if (fileIds.includes(file.id)) {
+          setSelectedFolder(id);
+        }
+      });
     }
 
     const folder = folders.get(nodeId);
@@ -106,7 +154,6 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
   };
 
   const handleClickAddFile = () => {
-    // setFiles() or setDirectory() ?????
     addFile(name, selectedFolder);
     setName('');
   };

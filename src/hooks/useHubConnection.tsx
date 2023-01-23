@@ -11,7 +11,11 @@ export const useHubConnection = (connectionURL: string): signalR.HubConnection =
 
   const hubConnection = useMemo(() => {
     return new signalR.HubConnectionBuilder()
-      .withUrl(connectionURL, { accessTokenFactory: () => jwtData.token})
+      .withUrl(connectionURL, { 
+        accessTokenFactory: () => jwtData.token,
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets
+      })
       .withAutomaticReconnect()
       // .configureLogging(signalR.LogLevel.None)
       .build();
