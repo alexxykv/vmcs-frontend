@@ -1,9 +1,11 @@
-import { HubConnectionState } from "@microsoft/signalr";
 import Hub from "./Hub";
 
-export enum Action {
-  Insert,
-  Delete
+
+export interface IDirectory {
+  id: string
+  name: string
+  meetingId: string
+  rootFolder: IFolder
 }
 
 export interface ITextFile {
@@ -20,113 +22,83 @@ export interface IFolder {
   folders: IFolder[]
 }
 
-export interface IRepository {
-  id: string
-  meetingId: string
+export interface TextFileReturnDTO {
+  id: number
   name: string
-  directory: IFolder
+  text: string
 }
 
-// export interface IChangeInfo {
-//   repoId: string
-//   fileId: number
-//   position: number
-//   action: Action
-//   insertedChars: number[]
-//   charsDeleted: number[]
-// }
+export interface TextFileDTO {
+  name: string
+  text: string
+}
+
+export interface FolderReturnDTO {
+  id: number
+  name: string
+  files: ITextFile[]
+  folders: IFolder[]
+}
+
 
 export default class CodeSharingHub extends Hub {
-  upload(file: ITextFile, folderId: number, repoId: string) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('Upload', file, folderId, repoId);
-    }
+  createFile(file: TextFileDTO, folderId: number, directoryId: string) {
+    return this.Connection.invoke('CreateFile', file, folderId, directoryId);
   }
 
-  onUpload(callback: (file: ITextFile, folderId: number, repoId: string) => void) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.on('Upload', (file, folderId, repoId) => {
-        callback(file, folderId, repoId);
-      });
-    }
+  onCreateFile(callback: (file: TextFileReturnDTO) => void) {
+    this.Connection.on('CreateFile', (file) => {
+      callback(file);
+    });
   }
 
-  connectToRepository(repositoryId: string) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('ConnectToRepository', repositoryId);
-    }
+  connectToRepository(directoryId: string) {
+    this.Connection.invoke('ConnectToRepository', directoryId);
   }
 
-  onConnectToRepository(callback: (repository: IRepository) => void) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.on('ConnectToRepository', (repository) => {
-        callback(repository);
-      });
-    }
+  onConnectToRepository(callback: (directory: IDirectory) => void) {
+    this.Connection.on('ConnectToRepository', (directory) => {
+      callback(directory);
+    });
   }
 
-  createRepository(meetingId: string, repoName: string) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('CreateRepository', meetingId, repoName);
-    }
+  saveRepository(directoryId: string) {
+    return this.Connection.invoke('SaveRepository', directoryId);
   }
 
-  saveRepository(repoId: string) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('SaveRepository', repoId);
-    }
+  createFolder(folderName: string, directoryId: string, parentFolderId: number) {
+    return this.Connection.invoke('CreateFolder', folderName, directoryId, parentFolderId);
   }
 
-  createFolder(folderName: string, repoId: string, parentFolderId: number) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('CreateFolder', folderName, repoId, parentFolderId);
-    }
+  onCreateFolder(callback: (folder: FolderReturnDTO) => void) {
+    this.Connection.on('CreateFolder', (folder) => {
+      callback(folder);
+    });
   }
 
-  onCreateFolder(callback: (folderName: string, repoId: string, parentFolderId: number) => void) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      // В неправильном порядке это нормали
-      this.Connection.on('CreateFolder', (folderName, parentFolderId, repoId) => {
-        callback(folderName, repoId, parentFolderId);
-      });
-    }
+  change(text: string, directoryId: string, fileId: number) {
+    return this.Connection.invoke('Change', text, directoryId, fileId);
   }
 
-  change(text: string, repositoryId: string, fileId: number) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.invoke('Change', text, repositoryId, fileId);
-    }
+  onChange(callback: (text: string, directoryId: string, fileId: number) => void) {
+    this.Connection.on('Change', (text, directoryId, fileId) => {
+      callback(text, directoryId, fileId);
+    });
   }
 
-  onChange(callback: (text: string, repositoryId: string, fileId: number) => void) {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.on('Change', (text, repositoryId, fileId) => {
-        callback(text, repositoryId, fileId);
-      });
-    }
-  }
-
-  offUpload() {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.off('Upload');
-    }
+  offCreateFile() {
+    return this.Connection.off('CreateFile');
   }
 
   offConnectToRepository() {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.off('ConnectToRepository');
-    }
+    return this.Connection.off('ConnectToRepository');
   }
 
   offCreateFolder() {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.off('CreateFolder');
-    }
+    return this.Connection.off('CreateFolder');
   }
 
   offChange() {
-    if (this.Connection.state === HubConnectionState.Connected) {
-      this.Connection.off('Change');
-    }
+    return this.Connection.off('Change');
   }
 }

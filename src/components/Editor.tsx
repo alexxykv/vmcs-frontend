@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AceEditor from 'react-ace';
+import { IDirectory, ITextFile } from '../hubs/CodeSharingHub';
+import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 
 import 'ace-builds/src-noconflict/mode-jsx';
 import 'ace-builds/src-min-noconflict/ext-searchbox';
@@ -44,11 +46,21 @@ languages.forEach(lang => {
 
 themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 
+interface EditorProps {
+  file: ITextFile
+  repository: IDirectory
+}
 
-const Editor: React.FC = () => {
+const Editor: React.FC<EditorProps> = ({ file, repository }) => {
+  const codeHub = useCodeSharingHub();
   const [value, setValue] = useState<string>('');
 
+  useEffect(() => {
+    setValue(file.text);
+  }, [file, file.text]);
+
   const handleChange = (newValue: string) => {
+    codeHub.change(newValue, repository.id, file.id);
     setValue(newValue);
   };
 

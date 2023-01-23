@@ -4,46 +4,60 @@ import Repository from './Repository';
 import RepositoryWelcome from './RepositoryWelcome';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import { useMeeting } from '../hooks/useMeeting';
-import { IRepository } from '../hubs/CodeSharingHub';
+import { IDirectory } from '../hubs/CodeSharingHub';
+import { Directories } from '../api';
+import { CreateDirectoryData } from '../interfaces/dto';
 
 
 const CodeShareScreen: React.FC = () => {
   const meeting = useMeeting();
   const codeHub = useCodeSharingHub();
-  const [repository, setRepository] = useState<IRepository | null>(null);
-  const [repositoryExist, setRepositryExist] = useState<boolean>(meeting.repositoryId !== null);
+  const [repository, setRepository] = useState<IDirectory | null>(null);
+  const [repositoryId, setRepositoryId] = useState<string>(meeting.repositoryId);
 
-  const connectCodeHub = useCallback(() => {
-    codeHub.start().then(() => {
-      if (repositoryExist) {
-        codeHub.connectToRepository(meeting.repositoryId);
-      }
-      codeHub.onConnectToRepository(repository => {
-        console.log(repository);
-        setRepositryExist(true);
-        setRepository(repository);
+  const repositoryExist = useCallback(() => {
+    return repositoryId !== null;
+  }, [repositoryId]);
+
+  const connectToRepository = useCallback((repositoryId: string) => {
+    codeHub.Connection.stop().then(() => {
+      codeHub.Connection.start().then(() => {
+        codeHub.connectToRepository(repositoryId);
+        console.log('connect')
       });
     });
-  }, [codeHub, repositoryExist, meeting.repositoryId]);
-
-  const leaveCodeHub = useCallback(() => {
-    codeHub.offConnectToRepository();
-    // codeHub.Connection.stop();
+    codeHub.onConnectToRepository(directory => {
+      console.log(directory)
+      setRepository(directory);
+    });
   }, [codeHub]);
 
+  const disconnectRepository = useCallback(() => {
+    codeHub.offConnectToRepository();
+    codeHub.Connection.stop();
+  }, [codeHub]);
+
+  const createRepository = useCallback((createData: CreateDirectoryData) => {
+    Directories.Create(createData).then(directoryId => {
+      setRepositoryId(directoryId);
+    });
+  }, []);
+
   useEffect(() => {
-    connectCodeHub();
-    return leaveCodeHub;
-  }, [connectCodeHub, leaveCodeHub]);
+    if (repositoryExist()) {
+      connectToRepository(repositoryId);
+    }
+    return disconnectRepository;
+  }, [connectToRepository, disconnectRepository, repositoryExist, repositoryId]);
 
   const render = () => {
-    if (repositoryExist) {
+    if (repositoryExist()) {
       if (repository) {
         return <Repository repository={repository} />
       }
       return <Loading />
     }
-    return <RepositoryWelcome />
+    return <RepositoryWelcome onCreateRepository={createRepository} />
   }
 
   return render();

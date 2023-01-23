@@ -12,6 +12,8 @@ export default class Hub implements IHub {
     this._connection = connection;
   }
 
+  // TODO: Rewrite start and stop methods and use them
+
   public async start() {
     if (this.Connection.state === HubConnectionState.Disconnected) {
       await this.Connection.start();
