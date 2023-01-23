@@ -10,7 +10,7 @@ import FolderZipIcon from '@mui/icons-material/FolderZip';
 import { IFolder, IDirectory, ITextFile, TextFileDTO } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import { Directories } from '../api';
-import JSZip from 'jszip';
+import { saveAs as saveZip } from 'file-saver';
 
 
 interface RepositoryAsideProps {
@@ -168,15 +168,17 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
   };
 
   const handleClickDownloadZip = useCallback(() => {
-    codeHub.saveRepository(repository.id);
-    Directories.Get(repository.id).then((directory) => {
-      var zip = new JSZip();
-      var zipData = directory.directoryZip
-      zip.file("response.txt", zipData);
-      zip.generateAsync({ type: "blob" })
-        .then(function (content) {
-          saveAs(content, `${directory.name}.zip`);
-        });
+    codeHub.saveRepository(repository.id).then(() => {
+      Directories.Get(repository.id).then((directory) => {
+        const byteCharacters = window.atob(directory.directoryZip)
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        } 
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray]);
+        saveZip(blob, `${directory.name}.zip`);
+      })
     })
   }, []);
 
@@ -225,7 +227,3 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
 
 export default RepositoryAside;
-
-function saveAs(content: Blob, arg1: string) {
-  throw new Error('Function not implemented.');
-}
