@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import React, { useState, useMemo } from 'react';
+import DashboardPage from './DashboardPage';
 import Layout from './Layout';
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
@@ -28,7 +29,9 @@ const MyApp: React.FC = () => {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <Layout />
+        <Layout>
+          <DashboardPage />
+        </Layout>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
