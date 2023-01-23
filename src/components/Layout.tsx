@@ -1,24 +1,38 @@
-import React from 'react';
-import Header from './Header';
+import React, { useState } from 'react';
 import { Container } from '@mui/material';
 import { WithChildrenProps } from '../interfaces/props';
+import DrawerMenu from './DrawerMenu';
+import Main from './Main';
+import Header from './Header';
+import { useAuth } from '../hooks/useAuth';
 
 
 const Layout: React.FC<WithChildrenProps> = ({ children }) => {
+  const [open, setOpen] = useState<boolean>(true);
+  const auth = useAuth();
+
+  const toggleOpen = () => {
+    setOpen(prev => !prev);
+  };
+
   return (
-    <>
-      <Header />
-      <Container disableGutters component='main' maxWidth={false} sx={{
-        display: 'flex',
-        minHeight: 'calc(100vh - 56px)',
-        '@media(min-width: 600px)': {
-          minHeight: 'calc(100vh - 64px)'
-        }
-      }}>
+    <Container disableGutters maxWidth={false} sx={{
+      display: 'flex',
+      minHeight: '100vh'
+    }}>
+      {
+        auth.status === 'Authorized'
+          ? <>
+            <DrawerMenu open={open} />
+            <Header open={open} toggleOpen={toggleOpen} />
+          </>
+          : <></>
+      }
+      <Main open={open}>
         {children}
-      </Container>
-    </>
-  )
+      </Main>
+    </Container>
+  );
 }
 
 

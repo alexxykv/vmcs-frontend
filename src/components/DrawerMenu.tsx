@@ -9,46 +9,57 @@ import PublicIcon from '@mui/icons-material/Public';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useUser } from '../hooks/useUser';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router';
 
-
-const drawerWidth = 240;
-
-const menuItems = [
-  {
-    text: 'Account',
-    icon: <AccountCircleIcon />
-  },
-  {
-    text: 'Dashboard',
-    icon: <DashboardIcon />
-  },
-  {
-    text: 'Public channels',
-    icon: <PublicIcon />
-  },
-  {
-    text: 'Invitations',
-    icon: <CampaignIcon />
-  },
-  {
-    text: 'Settings',
-    icon: <SettingsIcon />
-  },
-  {
-    text: 'Logout',
-    icon: <LogoutIcon />
-  }
-];
 
 interface DrawerMenuProps {
   open: boolean
 }
 
 const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
+  const auth = useAuth();
+  const user = useUser();
+  const navigate = useNavigate();
+
+  const menuItems = [
+    {
+      text: 'Account',
+      icon: <AccountCircleIcon />,
+      action: () => navigate('/profile')
+    },
+    {
+      text: 'Dashboard',
+      icon: <DashboardIcon />,
+      action: () => navigate('/dashboard')
+    },
+    {
+      text: 'Public channels',
+      icon: <PublicIcon />,
+      action: () => { }
+    },
+    {
+      text: 'Invitations',
+      icon: <CampaignIcon />,
+      action: () => navigate('/invitations')
+    },
+    {
+      text: 'Settings',
+      icon: <SettingsIcon />,
+      action: () => { }
+    },
+    {
+      text: 'Logout',
+      icon: <LogoutIcon />,
+      action: () => auth.logout(() => navigate('/login', { replace: true }))
+    }
+  ];
+
   return (
     <Drawer open={open}
       sx={{
-        width: drawerWidth,
+        width: 240,
         flexShrink: 0
       }}
       PaperProps={{
@@ -83,10 +94,10 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
       >
         <Avatar sx={{ width: 72, height: 72, mb: 1 }} />
         <Typography variant='h5' component='div' >
-          Username
+          {user.username}
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          email@mail.ru
+          {user.email}
         </Typography>
       </Stack>
       <List disablePadding sx={{
@@ -98,11 +109,11 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
         }
       }}>
         {
-          menuItems.map(({ text, icon }) => {
+          menuItems.map(item => {
             return (
               <>
-                {text === 'Logout' ? <Divider /> : <></>}
-                <MenuItem key={text} text={text} icon={icon} />
+                {item.text === 'Logout' ? <Divider /> : <></>}
+                <MenuItem key={item.text} {...item} />
               </>
             );
           })
@@ -115,14 +126,15 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
 interface MenuItemProps {
   text: string
   icon: JSX.Element
+  action: VoidFunction
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ text, icon }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ text, icon, action }) => {
   const iconWithColor = React.cloneElement(icon, { color: 'primary' });
 
   return (
     <ListItem disablePadding>
-      <ListItemButton>
+      <ListItemButton onClick={action}>
         <ListItemIcon>
           {iconWithColor}
         </ListItemIcon>
