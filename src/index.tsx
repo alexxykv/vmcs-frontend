@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+// import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Layout from './design/Layout';
+// import Layout from './design/Layout';
+import MyApp from './design/MyApp';
 
 
 const root = ReactDOM.createRoot(
@@ -12,7 +13,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <Layout />
+    {/* <Layout /> */}
+    <MyApp />
   </React.StrictMode>
 );
 

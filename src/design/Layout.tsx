@@ -1,20 +1,28 @@
+import React, { useState } from 'react';
 import { Container } from '@mui/material';
-import React from 'react';
 import DrawerMenu from './DrawerMenu';
 import Header from './Header';
+import { WithChildrenProps } from '../interfaces/props';
+import Main from './Main';
 
 
-const Layout: React.FC = () => {
+const Layout: React.FC<WithChildrenProps> = ({ children }) => {
+  const [open, setOpen] = useState<boolean>(true);
+
+  const toggleOpen = () => {
+    setOpen(prev => !prev);
+  };
+
   return (
-    <Container component='main' disableGutters maxWidth={false} sx={{
+    <Container disableGutters maxWidth={false} sx={{
       display: 'flex',
       minHeight: '100vh'
     }}>
-      <DrawerMenu />
-      <Header />
-      <Container id='main-content' sx={{ pt: 10 }}>
-
-      </Container>
+      <DrawerMenu open={open} />
+      <Header open={open} toggleOpen={toggleOpen} />
+      <Main open={open}>
+        {children}
+      </Main>
     </Container>
   );
 }

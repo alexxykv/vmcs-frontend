@@ -1,54 +1,134 @@
-import { Divider, Drawer, IconButton, Link, List, ListItem, Toolbar, Typography } from '@mui/material';
 import React from 'react';
-import Diversity1Icon from '@mui/icons-material/Diversity1';
+import { Avatar, Divider, Drawer, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from '@mui/material';
+// import Diversity1Icon from '@mui/icons-material/Diversity1';
 import Diversity2Icon from '@mui/icons-material/Diversity2';
-import Diversity3Icon from '@mui/icons-material/Diversity3';
+// import Diversity3Icon from '@mui/icons-material/Diversity3';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PublicIcon from '@mui/icons-material/Public';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
+
 
 const drawerWidth = 240;
 
 const menuItems = [
-  'Profile',
-  'Dashboard',
-  'Public channels',
-  //
-  'Logout'
-]
+  {
+    text: 'Account',
+    icon: <AccountCircleIcon />
+  },
+  {
+    text: 'Dashboard',
+    icon: <DashboardIcon />
+  },
+  {
+    text: 'Public channels',
+    icon: <PublicIcon />
+  },
+  {
+    text: 'Invitations',
+    icon: <CampaignIcon />
+  },
+  {
+    text: 'Settings',
+    icon: <SettingsIcon />
+  },
+  {
+    text: 'Logout',
+    icon: <LogoutIcon />
+  }
+];
 
-const appBarItems = [
+interface DrawerMenuProps {
+  open: boolean
+}
 
-]
-
-const DrawerMenu: React.FC = () => {
+const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
   return (
-    <Drawer
+    <Drawer open={open}
       sx={{
         width: drawerWidth,
         flexShrink: 0
       }}
       PaperProps={{
         sx: {
-          width: drawerWidth
+          width: 240
         }
       }}
-      variant="permanent"
+      variant="persistent"
       anchor="left"
     >
       <Toolbar disableGutters sx={{ minHeight: '64px', justifyContent: 'center' }}>
-        <Link href='#'>
-          <Diversity1Icon fontSize='large' />
+        <Link href='/' underline='none' variant='overline' sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          p: 1,
+          userSelect: 'none'
+        }}>
+          <Diversity2Icon fontSize='large' />
+          <Typography variant='h5' fontWeight={700} color='primary'>
+            VMCS
+          </Typography>
         </Link>
-        <Divider orientation='vertical' flexItem={true} sx={{ m: 2 }} />
-        <Typography variant='h5' fontWeight={700} color='primary'>
-          VMCS
-        </Typography>
       </Toolbar>
       <Divider />
-      <List>
-        <ListItem>AAAAAAAA</ListItem>
-        <ListItem>BBBBBBBB</ListItem>
-        <ListItem>CCCCCCCC</ListItem>
+      <Stack
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
+        padding={2}
+        sx={{ cursor: 'default' }}
+      >
+        <Avatar sx={{ width: 72, height: 72, mb: 1 }} />
+        <Typography variant='h5' component='div' >
+          Username
+        </Typography>
+        <Typography variant='body2' color='text.secondary'>
+          email@mail.ru
+        </Typography>
+      </Stack>
+      <List disablePadding sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+        '& > li:nth-last-of-type(2)': {
+          mb: 'auto',
+        }
+      }}>
+        {
+          menuItems.map(({ text, icon }) => {
+            return (
+              <>
+                {text === 'Logout' ? <Divider /> : <></>}
+                <MenuItem key={text} text={text} icon={icon} />
+              </>
+            );
+          })
+        }
       </List>
     </Drawer>
+  );
+}
+
+interface MenuItemProps {
+  text: string
+  icon: JSX.Element
+}
+
+const MenuItem: React.FC<MenuItemProps> = ({ text, icon }) => {
+  const iconWithColor = React.cloneElement(icon, { color: 'primary' });
+
+  return (
+    <ListItem disablePadding>
+      <ListItemButton>
+        <ListItemIcon>
+          {iconWithColor}
+        </ListItemIcon>
+        <ListItemText primary={text} />
+      </ListItemButton>
+    </ListItem>
   );
 }
 
