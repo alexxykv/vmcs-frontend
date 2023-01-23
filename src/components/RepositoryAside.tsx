@@ -5,9 +5,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+import FolderZipIcon from '@mui/icons-material/FolderZip';
 
 import { IFolder, IDirectory, ITextFile, TextFileDTO } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
+import { Directories } from '../api';
+import JSZip from 'jszip';
 
 
 interface RepositoryAsideProps {
@@ -117,6 +120,19 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     setName(event.target.value);
   };
 
+  const handleClickDownloadZip = useCallback(() => {
+    codeHub.saveRepository(repository.id);
+    Directories.Get(repository.id).then((directory) => {
+      var zip = new JSZip();
+      var zipData = directory.directoryZip
+      zip.file("response.txt", zipData);
+      zip.generateAsync({ type: "blob" })
+        .then(function (content) {
+          saveAs(content, `${directory.name}.zip`);
+        });
+    })
+  }, []);
+
   const renderTreeDirectory = (folder: IFolder) => {
     return (
       <TreeItem key={folder.id} nodeId={folder.id.toString()} label={folder.name}>
@@ -148,6 +164,9 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
         <IconButton onClick={handleClickAddFolder}>
           <CreateNewFolderIcon />
         </IconButton>
+        <IconButton onClick={handleClickDownloadZip}>
+          <FolderZipIcon />
+        </IconButton>
       </ButtonGroup>
       <TextField
         value={name}
@@ -159,3 +178,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
 
 export default RepositoryAside;
+
+function saveAs(content: Blob, arg1: string) {
+  throw new Error('Function not implemented.');
+}
