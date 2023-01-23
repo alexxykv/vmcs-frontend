@@ -7,7 +7,7 @@ const WelcomePage: React.FC = () => {
   const auth = useAuth();
 
   if (auth.status === 'Authorized') {
-    return <Navigate to='/main' replace={true} />
+    return <Navigate to='/dashboard' replace={true} />
   }
 
   return (
