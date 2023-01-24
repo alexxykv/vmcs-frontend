@@ -22,6 +22,10 @@ export default class MeetingHub extends Hub {
     this.Connection.invoke('LeaveMeeting', meetingId);
   }
 
+  public async toggleWebCamera(meetingId: string, isActive: boolean) {
+    this.Connection.invoke('ToggleWebCamera', meetingId, isActive);
+  }
+
   public async sendOffer(clientId: string, offer: RTCSessionDescriptionInit) {
     this.Connection.invoke('SendOffer', clientId, offer);
   }
@@ -62,5 +66,15 @@ export default class MeetingHub extends Hub {
     this.Connection.on('LeaveClient', connectionId => {
       callback(connectionId);
     })
+  }
+
+  public async onToggleWebCamera(callback: (connectionId: string, isActive: boolean) => void) {
+    this.Connection.on('ToggleWebCamera', (connectionId, isActive) => {
+      callback(connectionId, isActive);
+    })
+  }
+
+  public async OffToggleWebCamera() {
+    this.Connection.off('ToggleWebCamera')
   }
 }

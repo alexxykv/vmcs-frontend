@@ -13,7 +13,7 @@ export const useHubConnection = (connectionURL: string): signalR.HubConnection =
     return new signalR.HubConnectionBuilder()
       .withUrl(connectionURL, { 
         accessTokenFactory: () => jwtData.token,
-        skipNegotiation: true,
+        // skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets
       })
       .withAutomaticReconnect()
