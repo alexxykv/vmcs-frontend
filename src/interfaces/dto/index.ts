@@ -6,3 +6,4 @@ export * from './directories';
 export * from './meetings';
 export * from './messages';
 export * from './users';
+export * from './github';

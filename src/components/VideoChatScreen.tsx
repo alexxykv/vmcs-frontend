@@ -20,16 +20,18 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages, rtc }) => {
   return (
     <Container disableGutters maxWidth={false} sx={styles.videoChatScreen.container}>
       <Box sx={styles.videoChatScreen.webcamsBox}>
-        <Webcam key={rtc.localStream.id} stream={rtc.localStream} username={user.username} muted={true} connectionId={rtc.localConnectionId} />
+        <Webcam key={rtc.localConnectionId} stream={rtc.localStream} username={user.username} connectionId={rtc.localConnectionId} />
         {
           Array.from(rtc.remoteStreams).map(([connectionId, stream]) => {
-            return <Webcam
-              key={stream.id}
-              stream={stream}
-              username={rtc.remoteUsernames.get(connectionId) as string}
-              muted={false}
-              connectionId={connectionId}
-            />;
+            console.log(rtc.remoteStreams)
+            return <>
+              <Webcam
+                key={stream.id}
+                stream={stream}
+                username={rtc.remoteUsernames.get(connectionId) as string}
+                connectionId={connectionId}
+              />
+            </>;
           })
         }
       </Box>

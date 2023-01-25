@@ -21,9 +21,12 @@ export interface ToolsPanelProps {
 
 export interface WebcamProps {
   stream: MediaStream
-  username: string,
-  muted: boolean,
+  username: string
   connectionId: string
+}
+
+export interface AudioProps {
+  stream: MediaStream
 }
 
 export interface SigninFormProps { }

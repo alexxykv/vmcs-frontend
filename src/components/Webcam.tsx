@@ -6,25 +6,23 @@ import { WebcamProps } from '../interfaces/props';
 import * as styles from '../styles';
 
 
-const Webcam: React.FC<WebcamProps> = ({ stream, username, muted, connectionId }) => {
+const Webcam: React.FC<WebcamProps> = ({ stream, username, connectionId }) => {
   const [camOn, setCamOn] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null!);
-  const audioRef = useRef<HTMLAudioElement>(null!);
 
   const meetingHub = useMeetingHub();
 
   useEffect(() => {
-    const videoTrack = stream.getVideoTracks()[0];
-    if (videoTrack) {
-      setCamOn(videoTrack.enabled);
+    if (stream) {
+      const videoTracks = stream.getVideoTracks();
+      if (videoTracks.length > 0) {
+        const videoTrack = videoTracks[0];
+        if (videoTrack) {
+          setCamOn(videoTrack.enabled);
+        }
+      }
     }
   }, [stream])
-
-  useEffect(() => {
-    const audioElement = audioRef.current;
-    if (audioElement)
-      audioElement.srcObject = stream;
-  }, [audioRef, stream]);
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -35,7 +33,6 @@ const Webcam: React.FC<WebcamProps> = ({ stream, username, muted, connectionId }
   useEffect(() => {
     meetingHub.onToggleWebCamera((clientId, isActive) => {
       const videoTrack = stream.getVideoTracks()[0];
-      console.log(videoTrack);
       if (videoTrack) {
         if (connectionId === clientId) {
           setCamOn(isActive);
@@ -51,7 +48,6 @@ const Webcam: React.FC<WebcamProps> = ({ stream, username, muted, connectionId }
       <Box sx={styles.webcam.videoBox}>
         {camOn ? '' : 'Вебка не работает'}
         <video width='100%' height='100%' ref={videoRef} autoPlay muted={true} hidden={!camOn} />
-        <audio ref={audioRef} autoPlay muted={muted} />
       </Box>
     </Box>
   )

@@ -5,6 +5,7 @@ enum ApiRoutes {
   Directories = 'directories',
   Meetings = 'meeting',
   Users = 'user',
+  Github = 'github'
 }
 
 export default ApiRoutes;
