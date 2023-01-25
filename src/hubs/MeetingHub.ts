@@ -34,6 +34,10 @@ export default class MeetingHub extends Hub {
     this.Connection.invoke('SendAnswer', clientId, answer);
   }
 
+  public async addTrack(meetingId: string, track: MediaStreamTrack) {
+    this.Connection.invoke('AddTrack', meetingId, track);
+  }
+
   public async addIceCandidate(clientId: string, iceCandidate: RTCIceCandidate) {
     this.Connection.invoke('AddIceCandidate', clientId, iceCandidate);
   }
@@ -53,6 +57,12 @@ export default class MeetingHub extends Hub {
   public async onReceiveIceCandidate(callback: (connectionId: string, iceCandidate: RTCIceCandidate) => void) {
     this.Connection.on('ReceiveIceCandidate', (connectionId, iceCandidate) => {
       callback(connectionId, iceCandidate);
+    });
+  }
+
+  public async onReceiveTrack(callback: (track: MediaStreamTrack) => void) {
+    this.Connection.on('ReceiveTrack', (track) => {
+      callback(track);
     });
   }
 

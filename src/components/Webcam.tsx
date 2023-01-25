@@ -9,25 +9,22 @@ import * as styles from '../styles';
 const Webcam: React.FC<WebcamProps> = ({ stream, username, muted, connectionId }) => {
   const [camOn, setCamOn] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null!);
+  const audioRef = useRef<HTMLAudioElement>(null!);
 
   const meetingHub = useMeetingHub();
 
   useEffect(() => {
-    stream.getVideoTracks().forEach(track => {
-      console.log(track)
-      if (track.kind === 'video') {
-        setCamOn(track.enabled);
-      }
-    })
-    // const videoTrack = videoTracks[0];
-    // console.log('WEBCAM')
-    // console.log(videoTrack.enabled)
-    // if (videoTrack.enabled){
-    //   setCamOn(true);
-    // } else {
-    //   setCamOn(false);
-    // }
-  }, [])
+    const videoTrack = stream.getVideoTracks()[0];
+    if (videoTrack) {
+      setCamOn(videoTrack.enabled);
+    }
+  }, [stream])
+
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    if (audioElement)
+      audioElement.srcObject = stream;
+  }, [audioRef, stream]);
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -37,10 +34,13 @@ const Webcam: React.FC<WebcamProps> = ({ stream, username, muted, connectionId }
 
   useEffect(() => {
     meetingHub.onToggleWebCamera((clientId, isActive) => {
-      console.log(connectionId)
-      console.log(clientId)
-      if (clientId === connectionId) {
-        setCamOn(isActive);
+      const videoTrack = stream.getVideoTracks()[0];
+      console.log(videoTrack);
+      if (videoTrack) {
+        if (connectionId === clientId) {
+          setCamOn(isActive);
+          videoTrack.enabled = isActive;
+        }
       }
     });
   }, [])
@@ -49,8 +49,9 @@ const Webcam: React.FC<WebcamProps> = ({ stream, username, muted, connectionId }
     <Box sx={styles.webcam.box}>
       <Box sx={styles.webcam.usernameBox}>{username}</Box>
       <Box sx={styles.webcam.videoBox}>
-        <video width='100%' height='100%' ref={videoRef} autoPlay muted={muted} hidden={!camOn} />
         {camOn ? '' : 'Вебка не работает'}
+        <video width='100%' height='100%' ref={videoRef} autoPlay muted={true} hidden={!camOn} />
+        <audio ref={audioRef} autoPlay muted={muted} />
       </Box>
     </Box>
   )

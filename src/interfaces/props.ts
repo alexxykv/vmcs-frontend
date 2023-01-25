@@ -15,7 +15,8 @@ export interface LoginPageProps { }
 
 export interface ToolsPanelProps {
   toggleScreen: VoidFunction,
-  localStream: MediaStream
+  localStream: MediaStream,
+  rtc: WebRTCResult
 }
 
 export interface WebcamProps {

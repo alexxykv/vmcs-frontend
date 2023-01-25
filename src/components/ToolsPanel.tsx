@@ -17,7 +17,7 @@ import { useMeetingHub } from '../hooks/useMeetingHub';
 import { useMeeting } from '../hooks/useMeeting';
 
 
-const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen, localStream }) => {
+const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen, localStream, rtc }) => {
   const [audioTrack, setAudioTrack] = useState<MediaStreamTrack | null>(null);
   const [videoTrack, setVideoTrack] = useState<MediaStreamTrack | null>(null);
   const [micOn, setMicOn] = useState<boolean>(true);
@@ -29,11 +29,11 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen, localStream }) =>
   useEffect(() => {
     if (localStream) {
       const audioTracks = localStream.getAudioTracks();
-      if (audioTracks.length > 0){
+      if (audioTracks.length > 0) {
         setAudioTrack(audioTracks[0]);
       }
       const videoTracks = localStream.getVideoTracks();
-      if (videoTracks.length > 0){
+      if (videoTracks.length > 0) {
         setVideoTrack(videoTracks[0])
       }
     }
@@ -61,6 +61,20 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen, localStream }) =>
         setCamOn(true);
       }
       meetingHub.toggleWebCamera(meeting.id, videoTrack.enabled);
+    // } else {
+    //   navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+    //     const videoTracks = stream.getVideoTracks();
+    //     stream.getTracks().forEach(track => {
+    //       localStream.addTrack(track);
+    //       rtc.peerConnections.forEach(pc => {
+    //         pc.addTrack(track, localStream);
+    //       })
+    //     })
+    //     setVideoTrack(videoTracks[0])
+    //     meetingHub.toggleWebCamera(meeting.id, true);
+    //   })
+    } else {
+      alert('Connect a video capturing device.')
     }
   }
 

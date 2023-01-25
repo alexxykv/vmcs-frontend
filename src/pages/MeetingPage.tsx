@@ -82,7 +82,7 @@ const MeetingPageWithContext: React.FC = () => {
   return (
     <Container disableGutters maxWidth={false} sx={{ display: 'flex' }}>
       {renderScreen()}
-      <ToolsPanel toggleScreen={toggleScreen} localStream={rtc.localStream} />
+      <ToolsPanel toggleScreen={toggleScreen} localStream={rtc.localStream} rtc={rtc} />
     </Container>
   );
 }

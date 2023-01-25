@@ -4,6 +4,7 @@ import { useMeetingHub } from './useMeetingHub';
 
 
 const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+const constraints = { video: true, audio: true }
 
 
 export const useWebRTC = (meetingId: string) => {
@@ -16,17 +17,13 @@ export const useWebRTC = (meetingId: string) => {
   const signalingHub = useMeetingHub();
 
   useEffect(() => {
-    navigator.mediaDevices.enumerateDevices().then(devices => {
-      const cams = devices.filter(device => device.kind == "videoinput");
-      const mics = devices.filter(device => device.kind == "audioinput");
-      const constraints = { video: cams.length > 0, audio: mics.length > 0 };
-      return navigator.mediaDevices.getUserMedia(constraints);
-    }).then(localStream => {
-      localStream.getTracks().forEach(track => {
-        if (track.kind === 'video') {
-          track.enabled = false;
-        }
-      })
+    navigator.mediaDevices.getUserMedia(constraints)
+    .catch(() => navigator.mediaDevices.getUserMedia({ audio: true }))
+    .then(localStream => {
+      const videoTrack = localStream.getVideoTracks()[0];
+      if (videoTrack){
+        videoTrack.enabled = false;
+      }
       setLocalStream(localStream);
       signalingHub.Connection.stop().then(() => {
         signalingHub.Connection.start().then(() => {
@@ -59,6 +56,10 @@ export const useWebRTC = (meetingId: string) => {
 
             peerConnection.onconnectionstatechange = event => {
               if (peerConnection.connectionState === 'connected') {
+                const videoTrack = localStream.getVideoTracks()[0];
+                if (videoTrack) {
+                  signalingHub.toggleWebCamera(meetingId, videoTrack.enabled);
+                }
                 console.log('Peers connected!');
               }
             }
@@ -72,7 +73,13 @@ export const useWebRTC = (meetingId: string) => {
             }
 
             peerConnection.ontrack = event => {
+              console.log('Пришел новый трек')
               const [remoteStream] = event.streams;
+              console.log(remoteStream)
+              const videoTrack = remoteStream.getVideoTracks()[0];
+              if (videoTrack) {
+                videoTrack.enabled = false;
+              }
               setRemoteStreams(prev => new Map(prev.set(connectionId, remoteStream)));
             }
 
@@ -117,6 +124,10 @@ export const useWebRTC = (meetingId: string) => {
 
             peerConnection.ontrack = event => {
               const [remoteStream] = event.streams;
+              const videoTrack = remoteStream.getVideoTracks()[0];
+              if (videoTrack) {
+                videoTrack.enabled = false;
+              }
               setRemoteStreams(prev => new Map(prev.set(connectionId, remoteStream)));
             }
 
@@ -173,7 +184,8 @@ export const useWebRTC = (meetingId: string) => {
     localStream,
     remoteStreams,
     remoteUsernames,
-    localConnectionId
+    localConnectionId,
+    peerConnections
   };
 
   return result;
