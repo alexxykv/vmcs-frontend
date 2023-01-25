@@ -80,13 +80,17 @@ const MeetingPageWithContext: React.FC = () => {
     }
   }
 
+  if (rtc.localStream === null || rtc.localConnectionId === null) {
+    return <>Загрузка</>
+  }
+
   return (
     <Container disableGutters maxWidth={false} sx={{ display: 'flex' }}>
       {renderScreen()}
       <ToolsPanel toggleScreen={toggleScreen} localStream={rtc.localStream} rtc={rtc} />
       {
         Array.from(rtc.remoteStreams).map(([connectionId, stream]) => {
-          return <Audio stream={stream} />;
+          return <Audio stream={stream} connectionId={connectionId} />;
         })
       }
     </Container>

@@ -27,6 +27,7 @@ export interface WebcamProps {
 
 export interface AudioProps {
   stream: MediaStream
+  connectionId: string
 }
 
 export interface SigninFormProps { }

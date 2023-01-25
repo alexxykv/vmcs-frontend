@@ -17,6 +17,12 @@ export const useWebRTC = (meetingId: string) => {
   const signalingHub = useMeetingHub();
 
   useEffect(() => {
+    setInterval(() => {
+      console.log(remoteStreams);
+    }, 5000)
+  }, [])
+
+  useEffect(() => {
     navigator.mediaDevices.enumerateDevices().then(devices => {
       const cams = devices.filter(device => device.kind === 'videoinput');
       const mics = devices.filter(device => device.kind === 'audioinput');
@@ -28,11 +34,13 @@ export const useWebRTC = (meetingId: string) => {
           .then(stream => Start(stream))
           .catch(() => {
             console.log('Второй катч')
-            alert('You need to have a microphone connected to join the conference')
+            alert('You need a connected mic to join conference.')
+            // Start(new MediaStream());
           });
       })
 
     const cleanup = () => {
+      console.log('clean up')
       setLocalStream(prev => {
         if (prev) {
           prev.getTracks().forEach(track => {
@@ -56,16 +64,15 @@ export const useWebRTC = (meetingId: string) => {
     }
 
     return () => {
-      console.log('clean up')
       cleanup();
       window.onbeforeunload = () => { }
     }
   }, [signalingHub, meetingId])
 
   const Start = (localStream: MediaStream) => {
-    cleanup()
+    cleanup();
     const videoTracks = localStream.getVideoTracks();
-    if (videoTracks.length > 0){
+    if (videoTracks.length > 0) {
       const videoTrack = videoTracks[0];
       if (videoTrack) {
         videoTrack.enabled = false;
@@ -81,6 +88,12 @@ export const useWebRTC = (meetingId: string) => {
           setRemoteUsernames(prev => new Map(prev.set(connectionId, username)));
 
           const peerConnection = new RTCPeerConnection(configuration);
+
+          // if (localStream.getAudioTracks().length == 0) {
+          //   const tAudio = peerConnection.addTransceiver('audio');
+          //   tAudio.direction = 'recvonly';
+          // }
+
           setPeerConnections(prev => new Map(prev.set(connectionId, peerConnection)));
 
           signalingHub.onReceiveAnswer((connectionId, answer) => {
@@ -103,16 +116,18 @@ export const useWebRTC = (meetingId: string) => {
 
           peerConnection.onconnectionstatechange = event => {
             if (peerConnection.connectionState === 'connected') {
-              const videoTrack = localStream.getVideoTracks()[0];
-              if (videoTrack) {
-                signalingHub.toggleWebCamera(meetingId, videoTrack.enabled);
+              const videoTracks = localStream.getVideoTracks();
+              if (videoTracks.length > 0){
+                if (videoTracks[0]) {
+                  signalingHub.toggleWebCamera(meetingId, videoTracks[0].enabled);
+                }
               }
               console.log('Peers connected!');
             }
           }
 
           peerConnection.onnegotiationneeded = event => {
-            peerConnection.createOffer().then(offer => {
+            peerConnection.createOffer({ offerToReceiveAudio: true, offerToReceiveVideo: true }).then(offer => {
               peerConnection.setLocalDescription(offer).then(() => {
                 signalingHub.sendOffer(connectionId, new RTCSessionDescription(offer));
               });
@@ -120,12 +135,13 @@ export const useWebRTC = (meetingId: string) => {
           }
 
           peerConnection.ontrack = event => {
-            console.log('Пришел новый трек')
             const [remoteStream] = event.streams;
-            const videoTrack = remoteStream.getVideoTracks()[0];
-            console.log(remoteStream.getAudioTracks());
-            if (videoTrack) {
-              videoTrack.enabled = false;
+            console.log(remoteStream.getTracks());
+            const videoTracks = remoteStream.getVideoTracks();
+            if (videoTracks.length > 0) {
+              if (videoTracks[0]) {
+                videoTracks[0].enabled = false;
+              }
             }
             setRemoteStreams(prev => new Map(prev.set(connectionId, remoteStream)));
           }
@@ -141,6 +157,12 @@ export const useWebRTC = (meetingId: string) => {
           setRemoteUsernames(prev => new Map(prev.set(connectionId, username)));
 
           const peerConnection = new RTCPeerConnection(configuration);
+
+          // if (localStream.getAudioTracks().length == 0) {
+          //   const tAudio = peerConnection.addTransceiver('audio');
+          //   tAudio.direction = 'recvonly';
+          // }
+
           setPeerConnections(prev => new Map(prev.set(connectionId, peerConnection)));
 
           peerConnection.onicecandidate = event => {
@@ -171,11 +193,13 @@ export const useWebRTC = (meetingId: string) => {
 
           peerConnection.ontrack = event => {
             const [remoteStream] = event.streams;
-            const videoTrack = remoteStream.getVideoTracks()[0];
-            if (videoTrack) {
-              videoTrack.enabled = false;
+            console.log(remoteStream.getTracks());
+            const videoTracks = remoteStream.getVideoTracks();
+            if (videoTracks.length > 0) {
+              if (videoTracks[0]) {
+                videoTracks[0].enabled = false;
+              }
             }
-            console.log(remoteStream.getAudioTracks());
             setRemoteStreams(prev => new Map(prev.set(connectionId, remoteStream)));
           }
 
