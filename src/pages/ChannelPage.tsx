@@ -1,21 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Avatar, Box, Button, Container, Divider, IconButton, InputAdornment, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, ListSubheader, Paper, Stack, TextField, Typography, useTheme } from '@mui/material';
+import {
+  Avatar, Box, Button, Divider,
+  IconButton, List, ListItem, ListItemAvatar,
+  ListItemButton, ListItemText, Paper, TextField, Typography
+} from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import GroupIcon from '@mui/icons-material/Group';
 import ChatIcon from '@mui/icons-material/Chat';
 import VideoChatIcon from '@mui/icons-material/VideoChat';
+import SendIcon from '@mui/icons-material/Send';
+import AddIcon from '@mui/icons-material/Add';
 
 import Loading from '../components/Loading';
-import ChannelAsideMenu from '../components/ChannelAsideMenu';
-import ChannelChat from '../components/ChannelChat';
+// import ChannelAsideMenu from '../components/ChannelAsideMenu';
+// import ChannelChat from '../components/ChannelChat';
 
 import { Channels } from '../api';
 import { ChannelData, MessageData, ShortMeetingData, ShortUserData } from '../interfaces/dto';
 
 import { fakeAsync } from '../utils';
-import * as styles from '../styles';
+// import * as styles from '../styles';
 import { useUser } from '../hooks/useUser';
 
 
@@ -102,29 +108,68 @@ const MeetingList: React.FC<MeetingListProps> = ({ meetings }) => {
   const [meetingsState, setMeetingsState] = useState<ShortMeetingData[]>(meetings);
 
   return (
-    <List subheader={<li />} sx={{ overflowY: 'auto', minWidth: 240 }}>
-      <ListSubheader sx={{
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      minWidth: 240
+    }}>
+      <Paper square variant='outlined' component='div' sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'start',
         gap: 2,
         fontSize: '1rem',
+        fontWeight: 500,
         cursor: 'default',
-        height: '48px',
+        minHeight: '48px',
+        pl: 2,
+        pr: 1,
+        color: 'text.primary',
+        borderLeft: 'none',
+        borderRight: 'none',
+        borderTop: 'none'
       }}>
-        <VideoChatIcon />
-        <Typography>Meetings</Typography>
-      </ListSubheader>
-      {meetingsState.map(meeting => {
-        return (
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary={meeting.name} />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
-    </List>
+        <VideoChatIcon color='primary' />
+        <Typography fontWeight={500}>
+          Meetings
+        </Typography>
+        <Box flexGrow={1}></Box>
+        <IconButton size='small' color='primary'>
+          <AddIcon />
+        </IconButton>
+      </Paper>
+      <List disablePadding sx={{
+        overflowY: 'auto',
+        minWidth: 240,
+        '&::-webkit-scrollbar': {
+          width: '4px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'transparent',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-track': {
+          borderRadius: '4px',
+        },
+        '&:hover': {
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'primary.light',
+          }
+        },
+      }}>
+        {meetingsState.map(meeting => {
+          return (
+            <ListItem disablePadding sx={{
+              color: 'text.secondary'
+            }}>
+              <ListItemButton>
+                <ListItemText primary={meeting.name} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+    </Box>
   );
 }
 
@@ -137,25 +182,69 @@ const Chat: React.FC<ChatProps> = ({ chatId, messages }) => {
   const [messagesState, setMessagesState] = useState<MessageData[]>(messages);
 
   return (
-    <List subheader={<div />} sx={{
-      flexGrow: 1,
+    <Box sx={{
+      display: 'flex',
       flexDirection: 'column',
-      overflowY: 'auto',
+      flexGrow: 1,
+      minWidth: 400
     }}>
-      <ListSubheader sx={{
+      <Paper square variant='outlined' component='div' sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'start',
         gap: 2,
         fontSize: '1rem',
         cursor: 'default',
-        height: '48px',
+        minHeight: '48px',
+        px: 2,
+        color: 'text.primary',
+        borderLeft: 'none',
+        borderRight: 'none',
+        borderTop: 'none'
       }}>
-        <ChatIcon />
-        <Typography>Chat</Typography>
-      </ListSubheader>
-      {messagesState.map(message => <ChatMessage message={message} />)}
-    </List>
+        <ChatIcon color='primary' />
+        <Typography fontWeight={500}>
+          Chat
+        </Typography>
+      </Paper>
+      <List disablePadding sx={{
+        display: 'flex',
+        flexGrow: 1,
+        flexDirection: 'column',
+        overflowY: 'auto',
+        '&::-webkit-scrollbar': {
+          width: '4px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'transparent',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-track': {
+          borderRadius: '4px',
+        },
+        '&:hover': {
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'primary.light'
+          }
+        },
+      }}>
+        {messagesState.map(message => <ChatMessage message={message} />)}
+      </List>
+      <Paper square variant='outlined' sx={{
+        display: 'flex',
+        p: 2,
+        borderLeft: 'none',
+        borderRight: 'none',
+      }}>
+        <TextField variant='outlined' color='primary' fullWidth size='small' sx={{
+          bgcolor: 'action.selected',
+          borderRadius: '4px'
+        }} />
+        <Button>
+          <SendIcon />
+        </Button>
+      </Paper>
+    </Box>
   );
 }
 
@@ -174,18 +263,35 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     <Paper elevation={4} sx={{
       display: 'flex',
       width: 'fit-content',
-      minWidth: '40%',
-      maxWidth: '70%',
+      minWidth: 'fit-content',
+      maxWidth: '60%',
       my: 1,
       mr: 2,
       ml: user.id === message.userId ? 'auto' : 2,
     }}>
       <ListItem>
+        <Typography sx={{
+          position: 'absolute',
+          fontSize: '0.75rem',
+          mt: 1,
+          mr: 2,
+          top: 0,
+          right: 0,
+          userSelect: 'none',
+          cursor: 'default',
+          color: 'text.secondary'
+        }}>
+          {time}
+        </Typography>
         <ListItemAvatar>
           <Avatar>{message.username[0]}</Avatar>
         </ListItemAvatar>
         <ListItemText
-          primary={message.username}
+          primary={
+            <Typography sx={{ pr: 6 }}>
+              {message.username}
+            </Typography>
+          }
           secondary={
             <span style={{ wordWrap: 'break-word' }}>
               {message.text}
@@ -205,29 +311,67 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
   const [usersState, setUsersState] = useState<ShortUserData[]>(users);
 
   return (
-    <List subheader={<li />} sx={{ overflowY: 'auto', minWidth: 240 }}>
-      <ListSubheader sx={{
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      minWidth: 240
+    }}>
+      <Paper square variant='outlined' component='div' sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'start',
         gap: 2,
         fontSize: '1rem',
         cursor: 'default',
-        height: '48px',
+        minHeight: '48px',
+        pl: 2,
+        pr: 1,
+        color: 'text.primary',
+        borderLeft: 'none',
+        borderRight: 'none',
+        borderTop: 'none'
       }}>
-        <GroupIcon />
-        <Typography>Users</Typography>
-      </ListSubheader>
-      {usersState.map(user => {
-        return (
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary={user.username} />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
-    </List>
+        <GroupIcon color='primary' />
+        <Typography fontWeight={500}>
+          Users
+        </Typography>
+        <Box flexGrow={1}></Box>
+        <IconButton size='small' color='primary'>
+          <AddIcon />
+        </IconButton>
+      </Paper>
+      <List disablePadding sx={{
+        overflowY: 'auto',
+        minWidth: 240,
+        '&::-webkit-scrollbar': {
+          width: '4px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'transparent',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-track': {
+          borderRadius: '4px',
+        },
+        '&:hover': {
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'primary.light'
+          }
+        },
+      }}>
+        {usersState.map(user => {
+          return (
+            <ListItem disablePadding sx={{
+              color: 'text.secondary'
+            }}>
+              <ListItemButton>
+                <ListItemText primary={user.username} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+    </Box>
   );
 }
 
