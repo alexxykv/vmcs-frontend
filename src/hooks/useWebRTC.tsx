@@ -1,10 +1,10 @@
+import { cleanup } from '@testing-library/react';
 import { useState, useEffect } from 'react';
 import { WebRTCResult } from '../interfaces/hooks';
 import { useMeetingHub } from './useMeetingHub';
 
 
 const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
-const constrains: MediaStreamConstraints = { 'audio': true, 'video': true }
 
 
 export const useWebRTC = (meetingId: string) => {
@@ -12,27 +12,87 @@ export const useWebRTC = (meetingId: string) => {
   const [localStream, setLocalStream] = useState<MediaStream>(null!);
   const [remoteStreams, setRemoteStreams] = useState<Map<string, MediaStream>>(new Map());
   const [remoteUsernames, setRemoteUsernames] = useState<Map<string, string>>(new Map());
-  const signalingHub = useMeetingHub();
-  // const clientId = signalingHub.Connection.connectionId;
+  const [localConnectionId, setLocalConnectionId] = useState<string>(null!);
 
+  const signalingHub = useMeetingHub();
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia(constrains).then(localStream => {
-      setLocalStream(localStream);
-      signalingHub.start().then(() => {
+    navigator.mediaDevices.enumerateDevices().then(devices => {
+      const cams = devices.filter(device => device.kind === 'videoinput');
+      const mics = devices.filter(device => device.kind === 'audioinput');
+      return navigator.mediaDevices.getUserMedia({ video: cams.length > 0, audio: mics.length > 0 })
+    }).then(stream => Start(stream))
+      .catch(() => {
+        console.log('Первый катч')
+        navigator.mediaDevices.getUserMedia({ video: false, audio: true })
+          .then(stream => Start(stream))
+          .catch(() => {
+            console.log('Второй катч')
+            alert('You need to have a microphone connected to join the conference')
+          });
+      })
 
+    const cleanup = () => {
+      setLocalStream(prev => {
+        if (prev) {
+          prev.getTracks().forEach(track => {
+            track.stop()
+          });
+        }
+        return null!;
+      });
+
+      remoteStreams.forEach(stream => stream.getTracks().forEach(track => track.stop()));
+      setRemoteStreams(new Map());
+
+      Array.from(peerConnections.values()).forEach(pc => pc.close());
+      setPeerConnections(new Map());
+
+      signalingHub.leaveMeeting(meetingId);
+    }
+
+    window.onbeforeunload = () => {
+      cleanup();
+    }
+
+    return () => {
+      console.log('clean up')
+      cleanup();
+      window.onbeforeunload = () => { }
+    }
+  }, [signalingHub, meetingId])
+
+  const Start = (localStream: MediaStream) => {
+    cleanup()
+    const videoTracks = localStream.getVideoTracks();
+    if (videoTracks.length > 0){
+      const videoTrack = videoTracks[0];
+      if (videoTrack) {
+        videoTrack.enabled = false;
+      }
+    }
+    setLocalStream(localStream);
+    signalingHub.Connection.stop().then(() => {
+      signalingHub.Connection.start().then(() => {
+        setLocalConnectionId(signalingHub.Connection.connectionId as string);
         signalingHub.onJoinClient((connectionId, username) => {
+          const tempConnectionId = connectionId;
+
           setRemoteUsernames(prev => new Map(prev.set(connectionId, username)));
 
           const peerConnection = new RTCPeerConnection(configuration);
           setPeerConnections(prev => new Map(prev.set(connectionId, peerConnection)));
 
           signalingHub.onReceiveAnswer((connectionId, answer) => {
-            peerConnection.setRemoteDescription(answer);
+            if (tempConnectionId === connectionId) {
+              peerConnection.setRemoteDescription(answer);
+            }
           });
 
           signalingHub.onReceiveIceCandidate((connectionId, iceCandidate) => {
-            peerConnection.addIceCandidate(iceCandidate);
+            if (tempConnectionId === connectionId) {
+              peerConnection.addIceCandidate(iceCandidate);
+            }
           });
 
           peerConnection.onicecandidate = event => {
@@ -43,6 +103,10 @@ export const useWebRTC = (meetingId: string) => {
 
           peerConnection.onconnectionstatechange = event => {
             if (peerConnection.connectionState === 'connected') {
+              const videoTrack = localStream.getVideoTracks()[0];
+              if (videoTrack) {
+                signalingHub.toggleWebCamera(meetingId, videoTrack.enabled);
+              }
               console.log('Peers connected!');
             }
           }
@@ -56,7 +120,13 @@ export const useWebRTC = (meetingId: string) => {
           }
 
           peerConnection.ontrack = event => {
+            console.log('Пришел новый трек')
             const [remoteStream] = event.streams;
+            const videoTrack = remoteStream.getVideoTracks()[0];
+            console.log(remoteStream.getAudioTracks());
+            if (videoTrack) {
+              videoTrack.enabled = false;
+            }
             setRemoteStreams(prev => new Map(prev.set(connectionId, remoteStream)));
           }
 
@@ -66,6 +136,8 @@ export const useWebRTC = (meetingId: string) => {
         });
 
         signalingHub.onReceiveOffer((connectionId, offer, username) => {
+          const tempConnectionId = connectionId;
+
           setRemoteUsernames(prev => new Map(prev.set(connectionId, username)));
 
           const peerConnection = new RTCPeerConnection(configuration);
@@ -78,7 +150,9 @@ export const useWebRTC = (meetingId: string) => {
           }
 
           signalingHub.onReceiveIceCandidate((connectionId, iceCandidate) => {
-            peerConnection.addIceCandidate(iceCandidate);
+            if (tempConnectionId === connectionId) {
+              peerConnection.addIceCandidate(iceCandidate);
+            }
           });
 
           peerConnection.onconnectionstatechange = event => {
@@ -97,6 +171,11 @@ export const useWebRTC = (meetingId: string) => {
 
           peerConnection.ontrack = event => {
             const [remoteStream] = event.streams;
+            const videoTrack = remoteStream.getVideoTracks()[0];
+            if (videoTrack) {
+              videoTrack.enabled = false;
+            }
+            console.log(remoteStream.getAudioTracks());
             setRemoteStreams(prev => new Map(prev.set(connectionId, remoteStream)));
           }
 
@@ -113,40 +192,18 @@ export const useWebRTC = (meetingId: string) => {
             return new Map(temp);
           });
         })
-
-        signalingHub.joinMeeting(meetingId);
-
-        const cleanup = () => {
-          localStream.getTracks().forEach(track => track.stop());
-          setLocalStream(null!);
-
-          remoteStreams.forEach(stream => stream.getTracks().forEach(track => track.stop()));
-          setRemoteStreams(new Map());
-
-          Array.from(peerConnections.values()).forEach(pc => pc.close());
-          setPeerConnections(new Map());
-
-          signalingHub.leaveMeeting(meetingId);
-          signalingHub.Connection.stop();
-        }
-
-        window.onbeforeunload = () => {
-          cleanup();
-        }
-
-        return () => {
-          cleanup();
-          window.onbeforeunload = () => { }
-        }
+        console.log(meetingId)
+        signalingHub.joinMeeting(meetingId)
       });
     });
-  }, [signalingHub, meetingId]);
-
+  };
 
   const result: WebRTCResult = {
     localStream,
     remoteStreams,
-    remoteUsernames
+    remoteUsernames,
+    localConnectionId,
+    peerConnections
   };
 
   return result;

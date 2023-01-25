@@ -35,6 +35,13 @@ export default class Users {
     return data;
   }
 
+  public static async IsUserHaveAccessToken() {
+    const url = path.join(ApiRoutes.Users, 'access-token');
+    const response = await api.get(url);
+    const data = response.data as boolean;
+    return data;
+  }
+
   public static async Update(id: string, changeData: ChangeUserData) {
     const url = path.join(ApiRoutes.Users, id);
     const response = await api.put(url, changeData);
