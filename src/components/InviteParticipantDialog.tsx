@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Autocomplete, AutocompleteChangeDetails, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { Users } from '../api';
+import { UserData } from '../interfaces/dto';
+import { useUser } from '../hooks/useUser';
 
 
 interface InviteParticipantDialogProps {
@@ -12,38 +14,86 @@ interface InviteParticipantDialogProps {
 const InviteParticipantDialog: React.FC<InviteParticipantDialogProps> = (
   { open, handleClose, inviteParticipant }
 ) => {
-  const [idParticipant, setIdParticipant] = useState<string>('');
-
-  const handleChangeName: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setIdParticipant(event.target.value);
-  };
+  const currentUser = useUser();
+  const [users, setUsers] = useState<UserData[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<UserData[]>([]);
+  const [openAutocomplete, setOpenAutocomplete] = useState<boolean>(false);
+  const loading = openAutocomplete && users.length === 0;
 
   const handleInvite = () => {
-    inviteParticipant(idParticipant);
-    setIdParticipant('');
+    selectedUsers.forEach(user => {
+      inviteParticipant(user.id);
+    })
     handleClose();
   };
 
-  // TEMPORARY
+  const handleChange = (event: React.SyntheticEvent, value: UserData[], reason: string, details?: AutocompleteChangeDetails<UserData> | undefined) => {
+    setSelectedUsers(value);
+  }
+
   useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
     Users.GetAll().then(users => {
-      console.log(users);
-    })
-  }, []);
+      if (active) {
+        setUsers(users);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [loading]);
+
+  React.useEffect(() => {
+    if (!openAutocomplete) {
+      setUsers([]);
+    }
+  }, [openAutocomplete]);
 
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Invite participant</DialogTitle>
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Recipient ID"
-          type="text"
-          fullWidth
-          variant="standard"
-          value={idParticipant}
-          onChange={handleChangeName}
+        <Autocomplete
+          multiple
+          onChange={handleChange}
+          sx={{ width: 300 }}
+          open={openAutocomplete}
+          onOpen={() => {
+            setOpenAutocomplete(true);
+          }}
+          onClose={() => {
+            setOpenAutocomplete(false);
+          }}
+          isOptionEqualToValue={(user, value) => user.username === value.username}
+          getOptionLabel={(user) => user.username}
+          getOptionDisabled={(user) => user.id === currentUser.id}
+          options={users}
+          loading={loading}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              margin="dense"
+              label="Username"
+              type="text"
+              fullWidth
+              variant="standard"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <React.Fragment>
+                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </React.Fragment>
+                ),
+              }}
+            />
+          )}
         />
       </DialogContent>
       <DialogActions>

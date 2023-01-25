@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   Avatar, Box, Button, Divider,
   IconButton, List, ListItem, ListItemAvatar,
-  ListItemButton, ListItemText, Paper, TextField, Typography
+  ListItemButton, ListItemIcon, ListItemText, Paper, TextField, Typography
 } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import GroupIcon from '@mui/icons-material/Group';
@@ -12,17 +12,24 @@ import ChatIcon from '@mui/icons-material/Chat';
 import VideoChatIcon from '@mui/icons-material/VideoChat';
 import SendIcon from '@mui/icons-material/Send';
 import AddIcon from '@mui/icons-material/Add';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import StarIcon from '@mui/icons-material/Star';
+import VideocamIcon from '@mui/icons-material/Videocam';
 
 import Loading from '../components/Loading';
 // import ChannelAsideMenu from '../components/ChannelAsideMenu';
 // import ChannelChat from '../components/ChannelChat';
 
-import { Channels } from '../api';
-import { ChannelData, MessageData, ShortMeetingData, ShortUserData } from '../interfaces/dto';
+import { ChannelInvitations, Channels, Meetings } from '../api';
+import { ChannelData, ChannelInvitationRequestData, CreateMeetingData, MessageData, ShortMeetingData, ShortUserData } from '../interfaces/dto';
 
 import { fakeAsync } from '../utils';
 // import * as styles from '../styles';
 import { useUser } from '../hooks/useUser';
+import { useChatHub } from '../hooks/useChatHub';
+import CreateMeetingDialog from '../components/CreateMeetingDialog';
+import InviteParticipantDialog from '../components/InviteParticipantDialog';
+// import { Link } from 'react-router-dom';
 
 
 const ChannelPage: React.FC = () => {
@@ -61,11 +68,11 @@ const ChannelPage: React.FC = () => {
       <ChannelHeader channel={channel} />
       <Divider />
       <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'auto' }}>
-        <MeetingList meetings={channel.meetings} />
+        <MeetingList meetings={channel.meetings} channelId={channel.id} />
         <Divider orientation='vertical' />
         <Chat chatId={channel.chat.id} messages={channel.chat.messages} />
         <Divider orientation='vertical' />
-        <UsersList users={channel.users} />
+        <UsersList users={channel.users} creator={channel.creator} channelId={channel.id} />
       </Box>
     </Paper >
   );
@@ -102,10 +109,31 @@ const ChannelHeader: React.FC<ChannelHeaderProps> = ({ channel }) => {
 
 interface MeetingListProps {
   meetings: ShortMeetingData[]
+  channelId: string
 }
 
-const MeetingList: React.FC<MeetingListProps> = ({ meetings }) => {
+const MeetingList: React.FC<MeetingListProps> = ({ meetings, channelId }) => {
   const [meetingsState, setMeetingsState] = useState<ShortMeetingData[]>(meetings);
+  const [openCreateMeeting, setOpenCreateMeeting] = useState<boolean>(false);
+
+  const createMeeting = (name: string) => {
+    const createData: CreateMeetingData = {
+      name,
+      channelId: channelId,
+      isInChannel: true
+    };
+    Meetings.Create(createData).then(meeting => {
+      setMeetingsState(prev => prev.concat(meeting));
+    });
+  };
+
+  const handleOpenCreateMeeting = () => {
+    setOpenCreateMeeting(true);
+  };
+
+  const handleCloseCreateMeeting = () => {
+    setOpenCreateMeeting(false);
+  };
 
   return (
     <Box sx={{
@@ -134,7 +162,7 @@ const MeetingList: React.FC<MeetingListProps> = ({ meetings }) => {
           Meetings
         </Typography>
         <Box flexGrow={1}></Box>
-        <IconButton size='small' color='primary'>
+        <IconButton size='small' color='primary' onClick={handleOpenCreateMeeting}>
           <AddIcon />
         </IconButton>
       </Paper>
@@ -157,19 +185,40 @@ const MeetingList: React.FC<MeetingListProps> = ({ meetings }) => {
           }
         },
       }}>
-        {meetingsState.map(meeting => {
-          return (
-            <ListItem disablePadding sx={{
-              color: 'text.secondary'
-            }}>
-              <ListItemButton>
-                <ListItemText primary={meeting.name} />
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
+        {meetingsState.map(meeting => <MeetingItem key={meeting.id} meeting={meeting} />)}
       </List>
+      <CreateMeetingDialog
+        open={openCreateMeeting}
+        handleClose={handleCloseCreateMeeting}
+        createMeeting={createMeeting}
+      />
     </Box>
+  );
+}
+
+interface MeetingItemProps {
+  meeting: ShortMeetingData
+}
+
+const MeetingItem: React.FC<MeetingItemProps> = ({ meeting }) => {
+  const { id, name } = meeting;
+  const navigate = useNavigate();
+
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    navigate(`/meeting/${id}`);
+  };
+
+  return (
+    <ListItem disablePadding sx={{
+      color: 'text.secondary'
+    }}>
+      <ListItemButton sx={{ gap: 2 }} onClick={handleClick}>
+        <ListItemIcon sx={{ minWidth: 0, color: 'info.main' }}>
+          <VideocamIcon fontSize='small' />
+        </ListItemIcon>
+        <ListItemText primary={name} />
+      </ListItemButton>
+    </ListItem>
   );
 }
 
@@ -179,7 +228,54 @@ interface ChatProps {
 }
 
 const Chat: React.FC<ChatProps> = ({ chatId, messages }) => {
+  const chatHub = useChatHub();
+
+  const [message, setMessage] = useState<string>('');
   const [messagesState, setMessagesState] = useState<MessageData[]>(messages);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null!);
+
+  const connectChatHub = useCallback(() => {
+    chatHub.JoinChat(chatId).then(() => {
+      console.log('Присоединился к чату');
+      chatHub.onReceiveMessage(message => {
+        setMessagesState(prev => prev.concat(message));
+      });
+    });
+  }, [chatHub, chatId]);
+
+  const leaveChatHub = useCallback(() => {
+    chatHub.LeaveChat(chatId).then(() => {
+      console.log('Покинул чат');
+      chatHub.offReceiveMessage();
+    });
+  }, [chatHub, chatId]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  useEffect(() => {
+    connectChatHub();
+    scrollToBottom();
+    return leaveChatHub;
+  }, [connectChatHub, leaveChatHub]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messagesState]);
+
+  const handleChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(event.target.value);
+  };
+
+  const handleSendMessage: React.FormEventHandler<HTMLFormElement> = event => {
+    event.preventDefault();
+    if (message !== '') {
+      chatHub.SendMessage(message, chatId);
+      setMessage('');
+    }
+  };
 
   return (
     <Box sx={{
@@ -228,19 +324,36 @@ const Chat: React.FC<ChatProps> = ({ chatId, messages }) => {
           }
         },
       }}>
-        {messagesState.map(message => <ChatMessage message={message} />)}
+        {messagesState.map(message => <ChatMessage key={message.id} message={message} />)}
+        <div ref={messagesEndRef} style={
+          {
+            float: "left",
+            clear: "both",
+          }} />
       </List>
-      <Paper square variant='outlined' sx={{
-        display: 'flex',
-        p: 2,
-        borderLeft: 'none',
-        borderRight: 'none',
-      }}>
-        <TextField variant='outlined' color='primary' fullWidth size='small' sx={{
-          bgcolor: 'action.selected',
-          borderRadius: '4px'
-        }} />
-        <Button>
+      <Paper
+        square
+        component='form'
+        onSubmit={handleSendMessage}
+        variant='outlined'
+        sx={{
+          display: 'flex',
+          p: 2,
+          borderLeft: 'none',
+          borderRight: 'none',
+        }}>
+        <TextField
+          value={message}
+          onChange={handleChangeMessage}
+          variant='outlined'
+          color='primary'
+          fullWidth
+          size='small'
+          sx={{
+            bgcolor: 'action.selected',
+            borderRadius: '4px'
+          }} />
+        <Button type='submit'>
           <SendIcon />
         </Button>
       </Paper>
@@ -288,7 +401,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         </ListItemAvatar>
         <ListItemText
           primary={
-            <Typography sx={{ pr: 6 }}>
+            <Typography sx={{ color: 'primary.main', cursor: 'default', pr: 6 }}>
               {message.username}
             </Typography>
           }
@@ -305,10 +418,31 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
 interface UsersListProps {
   users: ShortUserData[]
+  creator: ShortUserData
+  channelId: string
 }
 
-const UsersList: React.FC<UsersListProps> = ({ users }) => {
+const UsersList: React.FC<UsersListProps> = ({ users, creator, channelId }) => {
   const [usersState, setUsersState] = useState<ShortUserData[]>(users);
+  const [openInviteParticipant, setOpenInviteParticipant] = useState<boolean>(false);
+
+  const inviteParticipant = (recipientId: string) => {
+    const requestData: ChannelInvitationRequestData = {
+      channelId,
+      recipientId
+    };
+    ChannelInvitations.Create(requestData).then(() => {
+      console.log('Invited');
+    });
+  };
+
+  const handleCloseInviteParticipant = () => {
+    setOpenInviteParticipant(false);
+  }
+
+  const handleOpenInviteParticipant = () => {
+    setOpenInviteParticipant(true);
+  }
 
   return (
     <Box sx={{
@@ -336,7 +470,7 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
           Users
         </Typography>
         <Box flexGrow={1}></Box>
-        <IconButton size='small' color='primary'>
+        <IconButton size='small' color='primary' onClick={handleOpenInviteParticipant}>
           <AddIcon />
         </IconButton>
       </Paper>
@@ -361,16 +495,32 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
       }}>
         {usersState.map(user => {
           return (
-            <ListItem disablePadding sx={{
+            <ListItem key={user.id} disablePadding sx={{
               color: 'text.secondary'
             }}>
-              <ListItemButton>
+              <ListItemButton sx={{ gap: 2 }}>
+                {
+                  user.id === creator.id
+                    ?
+                    <ListItemIcon sx={{ minWidth: 0, color: 'warning.main' }}>
+                      <StarIcon fontSize='small' />
+                    </ListItemIcon>
+                    : <ListItemIcon sx={{ minWidth: 0, color: 'info.main' }}>
+                      <AssignmentIndIcon fontSize='small' />
+                    </ListItemIcon>
+                }
                 <ListItemText primary={user.username} />
+
               </ListItemButton>
             </ListItem>
           );
         })}
       </List>
+      <InviteParticipantDialog
+        open={openInviteParticipant}
+        handleClose={handleCloseInviteParticipant}
+        inviteParticipant={inviteParticipant}
+      />
     </Box>
   );
 }
