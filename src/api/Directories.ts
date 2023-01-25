@@ -13,7 +13,7 @@ export default class Directories {
   }
 
   public static async Get(directoryId: string) {
-    const url = path.join(ApiRoutes.Directories);
+    const url = path.join(ApiRoutes.Directories, directoryId);
     const response = await api.get(url);
     const data = response.data as DirectoryData;
     return data;

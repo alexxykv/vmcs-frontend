@@ -39,7 +39,7 @@ const SigninForm: React.FC<SigninFormProps> = () => {
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
-    auth.login(loginData, () => navigate('/main', { replace: true }));
+    auth.login(loginData, () => navigate('/dashboard', { replace: true }));
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);

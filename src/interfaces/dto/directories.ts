@@ -2,7 +2,7 @@ export interface DirectoryData {
   name: string
   directoryInJSON: string
   meetingId: string
-  directoryZip: number[]
+  directoryZip: string
 }
 
 export interface CreateDirectoryData {

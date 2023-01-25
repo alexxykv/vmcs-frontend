@@ -22,12 +22,20 @@ export default class MeetingHub extends Hub {
     this.Connection.invoke('LeaveMeeting', meetingId);
   }
 
+  public async toggleWebCamera(meetingId: string, isActive: boolean) {
+    this.Connection.invoke('ToggleWebCamera', meetingId, isActive);
+  }
+
   public async sendOffer(clientId: string, offer: RTCSessionDescriptionInit) {
     this.Connection.invoke('SendOffer', clientId, offer);
   }
 
   public async sendAnswer(clientId: string, answer: RTCSessionDescriptionInit) {
     this.Connection.invoke('SendAnswer', clientId, answer);
+  }
+
+  public async addTrack(meetingId: string, track: MediaStreamTrack) {
+    this.Connection.invoke('AddTrack', meetingId, track);
   }
 
   public async addIceCandidate(clientId: string, iceCandidate: RTCIceCandidate) {
@@ -52,6 +60,12 @@ export default class MeetingHub extends Hub {
     });
   }
 
+  public async onReceiveTrack(callback: (track: MediaStreamTrack) => void) {
+    this.Connection.on('ReceiveTrack', (track) => {
+      callback(track);
+    });
+  }
+
   public async onJoinClient(callback: (connectionId: string, username: string) => void) {
     this.Connection.on('JoinClient', (connectionId, username) => {
       callback(connectionId, username);
@@ -62,5 +76,15 @@ export default class MeetingHub extends Hub {
     this.Connection.on('LeaveClient', connectionId => {
       callback(connectionId);
     })
+  }
+
+  public async onToggleWebCamera(callback: (connectionId: string, isActive: boolean) => void) {
+    this.Connection.on('ToggleWebCamera', (connectionId, isActive) => {
+      callback(connectionId, isActive);
+    })
+  }
+
+  public async OffToggleWebCamera() {
+    this.Connection.off('ToggleWebCamera')
   }
 }

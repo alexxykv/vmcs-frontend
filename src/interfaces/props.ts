@@ -14,13 +14,16 @@ export interface MeetingPageProps { }
 export interface LoginPageProps { }
 
 export interface ToolsPanelProps {
-  toggleScreen: VoidFunction
+  toggleScreen: VoidFunction,
+  localStream: MediaStream,
+  rtc: WebRTCResult
 }
 
 export interface WebcamProps {
   stream: MediaStream
   username: string,
-  muted: boolean
+  muted: boolean,
+  connectionId: string
 }
 
 export interface SigninFormProps { }

@@ -47,7 +47,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
   }
 
   if (auth.status === 'Authorized') {
-    return <Navigate to="/main" state={{ from: location }} />;
+    return <Navigate to="/dashboard" state={{ from: location }} />;
   }
 
   return (

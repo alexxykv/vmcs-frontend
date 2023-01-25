@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import AceEditor from 'react-ace';
-import { ITextFile } from '../hubs/CodeSharingHub';
+import { IDirectory, ITextFile } from '../hubs/CodeSharingHub';
+import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 
 import 'ace-builds/src-noconflict/mode-jsx';
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
-import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
-import { useMeeting } from '../hooks/useMeeting';
 
 const languages = [
   'javascript',
@@ -49,29 +48,19 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 
 interface EditorProps {
   file: ITextFile
+  repository: IDirectory
 }
 
-const Editor: React.FC<EditorProps> = ({ file }) => {
-  const meeting = useMeeting();
+const Editor: React.FC<EditorProps> = ({ file, repository }) => {
   const codeHub = useCodeSharingHub();
   const [value, setValue] = useState<string>('');
 
   useEffect(() => {
-    console.log(file)
     setValue(file.text);
   }, [file, file.text]);
 
-  useEffect(() => {
-    codeHub.onChange((text, repositoryId, fileId) => {
-      if (file.id === fileId) {
-        setValue(text);
-      }
-    });
-  }, [codeHub, file.id]);
-
   const handleChange = (newValue: string) => {
-    console.log('change');
-    codeHub.change(newValue, meeting.repositoryId, file.id);
+    codeHub.change(newValue, repository.id, file.id);
     setValue(newValue);
   };
 

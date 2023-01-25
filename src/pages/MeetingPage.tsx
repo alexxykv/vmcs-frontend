@@ -63,7 +63,7 @@ const MeetingPage: React.FC = () => {
 const MeetingPageWithContext: React.FC = () => {
   const meeting = useMeeting();
   const rtc = useWebRTC(meeting.id);
-  const [screen, setScreen] = useState<ScreenType>('CodeShare');
+  const [screen, setScreen] = useState<ScreenType>('VideoChat');
 
   const toggleScreen = () => {
     switch (screen) {
@@ -82,7 +82,7 @@ const MeetingPageWithContext: React.FC = () => {
   return (
     <Container disableGutters maxWidth={false} sx={{ display: 'flex' }}>
       {renderScreen()}
-      <ToolsPanel toggleScreen={toggleScreen} />
+      <ToolsPanel toggleScreen={toggleScreen} localStream={rtc.localStream} rtc={rtc} />
     </Container>
   );
 }
