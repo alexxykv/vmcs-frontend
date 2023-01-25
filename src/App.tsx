@@ -21,15 +21,26 @@ import ChatHubProvider from './providers/ChatHubProvider';
 import CodeSharingProvider from './providers/CodeSharingProvider';
 import MeetingHubProvider from './providers/MeetingHubProvider';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { PaletteMode } from '@mui/material';
+import Cookies from 'js-cookie';
+
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 
 const App: React.FC = () => {
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const themeMode = Cookies.get('theme');
+  if (themeMode === undefined) {
+    Cookies.set('theme', 'light');
+  }
+  const [mode, setMode] = useState<PaletteMode>(themeMode ? themeMode as PaletteMode : 'light');
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode(prev => {
+          const newMode = prev === 'light' ? 'dark' : 'light';
+          Cookies.set('theme', newMode);
+          return newMode;
+        });
       },
     }),
     [],

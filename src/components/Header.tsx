@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, Box, IconButton, Toolbar } from '@mui/material';
+import { Badge, Box, IconButton, Toolbar, useTheme } from '@mui/material';
 import AppBar from './AppBar';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -14,6 +14,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ open, toggleOpen }) => {
+  const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
 
   return (
@@ -30,7 +31,10 @@ const Header: React.FC<HeaderProps> = ({ open, toggleOpen }) => {
         </IconButton>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ mr: 2 }}>
-          <MaterialUISwitch onClick={colorMode.toggleColorMode} />
+          <MaterialUISwitch
+            defaultChecked={theme.palette.mode === 'dark'}
+            onClick={colorMode.toggleColorMode}
+          />
           <IconButton
             size="large"
             color="inherit"
