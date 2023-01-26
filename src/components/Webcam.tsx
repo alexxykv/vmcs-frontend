@@ -1,7 +1,8 @@
-import { Box } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useMeetingHub } from '../hooks/useMeetingHub';
 import { WebcamProps } from '../interfaces/props';
+import FaceIcon from '@mui/icons-material/Face';
 
 import * as styles from '../styles';
 
@@ -43,13 +44,28 @@ const Webcam: React.FC<WebcamProps> = ({ stream, username, connectionId }) => {
   }, [])
 
   return (
-    <Box sx={styles.webcam.box}>
+    <Paper elevation={6} sx={styles.webcam.box}>
       <Box sx={styles.webcam.usernameBox}>{username}</Box>
       <Box sx={styles.webcam.videoBox}>
-        {camOn ? '' : 'Вебкамера отключена'}
-        <video width='100%' height='100%' ref={videoRef} autoPlay muted={true} hidden={!camOn} />
+        {
+          camOn
+            ? <></>
+            : <FaceIcon sx={{
+              height: '25%',
+              width: '25%',
+            }} />
+        }
+        <video
+          ref={videoRef}
+          autoPlay
+          muted={true}
+          hidden={!camOn}
+          style={{
+            width: '100%',
+            borderRadius: '4px'
+          }} />
       </Box>
-    </Box>
+    </Paper>
   )
 }
 
