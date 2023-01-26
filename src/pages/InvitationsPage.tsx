@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Avatar, Box, Container, IconButton,
-  List, ListItem, ListItemAvatar, ListItemText
+  Avatar, Box, IconButton,
+  List, ListItem, ListItemAvatar, ListItemText, Paper, Typography
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import Loading from '../components/Loading';
 
 import { ChannelInvitationData } from '../interfaces/dto';
@@ -52,14 +53,38 @@ const InvitationsPage: React.FC = () => {
     });
   };
 
-  if (uploadedData === false) {
-    return <Loading />
-  }
+  const render = () => {
+    if (invitations.size === 0) {
+      return (
+        <Box sx={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2,
+          p: 2
+        }}>
+          <SentimentVeryDissatisfiedIcon sx={{
+            color: 'primary.dark',
+            height: '15%',
+            minHeight: 80,
+            width: '15%',
+            minWidth: 80,
+          }} />
+          <Typography sx={{
+            textAlign: 'center',
+            color: 'primary.dark',
+            cursor: 'default'
+          }}>
+            You haven't been invited anywhere yet
+          </Typography>
+        </Box>
+      );
+    }
 
-  return (
-    <Container maxWidth={false} sx={{
-      display: 'flex',
-    }}>
+    return (
       <List sx={{ width: '100%' }}>
         {
           Array.from(invitations.values()).map(invitation => {
@@ -72,7 +97,24 @@ const InvitationsPage: React.FC = () => {
           })
         }
       </List>
-    </Container>
+    );
+  }
+
+  if (uploadedData === false) {
+    return <Loading />
+  }
+
+  return (
+    <Paper square sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      flexGrow: 1,
+      width: '100%',
+      height: '100%',
+      minWidth: 240
+    }}>
+      {render()}
+    </Paper>
   );
 }
 
