@@ -372,17 +372,30 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     minute: '2-digit'
   });
 
+  const [avatarSrc, setAvatarSrc] = useState<string>('');
+
+  useEffect(() => {
+    if (user.id === message.userId) {
+      setAvatarSrc(user.avatarUri);
+    } else {
+      // TODO
+      // Users.GetById(message.userId).then(user => {
+      //   setAvatarSrc(user.avatarSrc);
+      // });
+    }
+  }, [user.id, user.avatarUri, message.userId]);
+
   return (
     <Paper elevation={4} sx={{
       display: 'flex',
       width: 'fit-content',
-      minWidth: 'fit-content',
+      minWidth: '30%',
       maxWidth: '60%',
       my: 1,
       mr: 2,
       ml: user.id === message.userId ? 'auto' : 2,
     }}>
-      <ListItem>
+      <ListItem alignItems='flex-start'>
         <Typography sx={{
           position: 'absolute',
           fontSize: '0.75rem',
@@ -397,7 +410,10 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
           {time}
         </Typography>
         <ListItemAvatar>
-          <Avatar>{message.username[0]}</Avatar>
+          <Avatar
+            src={avatarSrc}>
+            {message.username[0]}
+          </Avatar>
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -406,9 +422,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             </Typography>
           }
           secondary={
-            <span style={{ wordWrap: 'break-word' }}>
+            <Typography
+              component='span'
+              variant='body2'
+              sx={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
+            >
               {message.text}
-            </span>
+            </Typography>
           }
         />
       </ListItem>
