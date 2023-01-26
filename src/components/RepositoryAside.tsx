@@ -117,7 +117,14 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
       //   text
       // };
       // setFiles(prev => new Map(prev).set(fileId.toString(), newFile));
-
+      console.log(codeHub.Connection.connectionId);
+      console.log(changeInfo.cliendId);
+      
+      if (changeInfo.cliendId === codeHub.Connection.connectionId || (changeInfo.insertedString === '' && changeInfo.charsDeleted === 0)){
+        console.log('NE ONCHANGE');
+        return;
+      }
+      console.log("ONCHANGE")
       const file = files.get(changeInfo.fileId.toString()) as ITextFile;
 
       let text = file.text;

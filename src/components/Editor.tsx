@@ -65,7 +65,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files }) =>
   const handleChange = (newValue: string) => {
     codeHub.change(newValue, repository.id, file.id);
     setValue(newValue);
-    
+
     const text = newValue;
     const newFile: ITextFile = {
       ...file,

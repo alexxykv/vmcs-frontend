@@ -7,6 +7,7 @@ export interface ChangeInfo {
   action: number
   insertedString: string
   charsDeleted: number
+  cliendId: string
 }
 
 export interface IDirectory {
