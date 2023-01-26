@@ -64,6 +64,24 @@ const Editor: React.FC<EditorProps> = ({ file, repository }) => {
     setValue(newValue);
   };
 
+  // const findChanges = (oldText: string, newText: string) => {
+  //   let difPos = 0;
+  //   let maxLength = Math.max(oldText.length, newText.length);
+  //   let array = new Array(maxLength);
+  //   array.forEach(function (i) {
+  //     if (i > oldText.length - 1 || i > newText.length - 1 || oldText[i] != newText[i]){
+  //       difPos = i;
+  //       return;
+  //     }
+    
+  //   let toTake = (newText.length - difPos) - (oldText.length - difPos);
+
+  //   if (oldText.length < newText.length){
+  //     return 
+  //   }
+  // });
+  // };
+
   return (
     <AceEditor
       mode='python'
@@ -75,7 +93,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository }) => {
       enableBasicAutocompletion={true}
       enableLiveAutocompletion={true}
       enableSnippets={true}
-      setOptions={{ useWorker: false, }}
+      setOptions={{ useWorker: false }}
       showGutter={true}
       showPrintMargin={false}
       style={{ display: 'flex', flexGrow: 1, height: '100%' }}
