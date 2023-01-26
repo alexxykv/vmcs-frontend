@@ -20,7 +20,7 @@ import Loading from '../components/Loading';
 // import ChannelAsideMenu from '../components/ChannelAsideMenu';
 // import ChannelChat from '../components/ChannelChat';
 
-import { ChannelInvitations, Channels, Meetings, Users } from '../api';
+import { ChannelInvitations, Channels, Meetings } from '../api';
 import { ChannelData, ChannelInvitationRequestData, CreateMeetingData, MessageData, ShortMeetingData, ShortUserData } from '../interfaces/dto';
 
 import { fakeAsync } from '../utils';
@@ -389,13 +389,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     <Paper elevation={4} sx={{
       display: 'flex',
       width: 'fit-content',
-      minWidth: 'fit-content',
+      minWidth: '30%',
       maxWidth: '60%',
       my: 1,
       mr: 2,
       ml: user.id === message.userId ? 'auto' : 2,
     }}>
-      <ListItem>
+      <ListItem alignItems='flex-start'>
         <Typography sx={{
           position: 'absolute',
           fontSize: '0.75rem',
@@ -422,9 +422,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             </Typography>
           }
           secondary={
-            <span style={{ wordWrap: 'break-word' }}>
+            <Typography
+              component='span'
+              variant='body2'
+              sx={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
+            >
               {message.text}
-            </span>
+            </Typography>
           }
         />
       </ListItem>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Avatar, Box, Button, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ImageIcon from '@mui/icons-material/Image';
@@ -7,15 +7,12 @@ import { useUser } from '../hooks/useUser';
 
 const AccountPage: React.FC = () => {
   const user = useUser();
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       const file = files[0];
-      console.log(file)
       user.uploadImage(file);
-      // setSelectedImage(file);
     }
   }
 
