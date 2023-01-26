@@ -6,6 +6,7 @@ import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import 'ace-builds/src-noconflict/mode-jsx';
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
+import { text } from 'stream/consumers';
 
 const languages = [
   'javascript',
@@ -49,9 +50,11 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 interface EditorProps {
   file: ITextFile
   repository: IDirectory
+  setFiles: React.Dispatch<React.SetStateAction<Map<string, ITextFile>>>
+  files: Map<string, ITextFile>
 }
 
-const Editor: React.FC<EditorProps> = ({ file, repository }) => {
+const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files }) => {
   const codeHub = useCodeSharingHub();
   const [value, setValue] = useState<string>('');
 
@@ -62,7 +65,32 @@ const Editor: React.FC<EditorProps> = ({ file, repository }) => {
   const handleChange = (newValue: string) => {
     codeHub.change(newValue, repository.id, file.id);
     setValue(newValue);
+
+    const text = newValue;
+    const newFile: ITextFile = {
+      ...file,
+      text
+    };
+    setFiles(prev => new Map(prev).set(file.id.toString(), newFile));
   };
+
+  // const findChanges = (oldText: string, newText: string) => {
+  //   let difPos = 0;
+  //   let maxLength = Math.max(oldText.length, newText.length);
+  //   let array = new Array(maxLength);
+  //   array.forEach(function (i) {
+  //     if (i > oldText.length - 1 || i > newText.length - 1 || oldText[i] != newText[i]){
+  //       difPos = i;
+  //       return;
+  //     }
+    
+  //   let toTake = (newText.length - difPos) - (oldText.length - difPos);
+
+  //   if (oldText.length < newText.length){
+  //     return 
+  //   }
+  // });
+  // };
 
   return (
     <AceEditor
@@ -75,7 +103,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository }) => {
       enableBasicAutocompletion={true}
       enableLiveAutocompletion={true}
       enableSnippets={true}
-      setOptions={{ useWorker: false, }}
+      setOptions={{ useWorker: false }}
       showGutter={true}
       showPrintMargin={false}
       style={{ display: 'flex', flexGrow: 1, height: '100%' }}

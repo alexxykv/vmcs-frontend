@@ -22,14 +22,15 @@ import { relative } from 'path';
 interface RepositoryAsideProps {
   repository: IDirectory
   selectFile: (file: ITextFile) => void
+  setFiles: React.Dispatch<React.SetStateAction<Map<string, ITextFile>>>
+  files: Map<string, ITextFile>
 }
 
-const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFile }) => {
+const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFile, setFiles, files }) => {
   const navigate = useNavigate();
   const codeHub = useCodeSharingHub();
   const user = useUser();
   const [directory, setDirectory] = useState<IFolder>(repository.rootFolder);
-  const [files, setFiles] = useState<Map<string, ITextFile>>(new Map());
   const [folders, setFolders] = useState<Map<string, IFolder>>(new Map());
   const [selectedNode, setSelectedNode] = useState<string>(directory.id.toString());
   const [selectedFile, setSelectedFile] = useState<string>('');
@@ -109,17 +110,44 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
       updateDirectory(newFile);
     });
 
-    codeHub.onChange((text, repositoryId, fileId) => {
-      const file = files.get(fileId.toString()) as ITextFile;
+    codeHub.onChange((changeInfo) => {
+      // const file = files.get(fileId.toString()) as ITextFile;
+      // const newFile: ITextFile = {
+      //   ...file,
+      //   text
+      // };
+      // setFiles(prev => new Map(prev).set(fileId.toString(), newFile));
+      console.log(codeHub.Connection.connectionId);
+      console.log(changeInfo.cliendId);
+      
+      if (changeInfo.cliendId === codeHub.Connection.connectionId || (changeInfo.insertedString === '' && changeInfo.charsDeleted === 0)){
+        console.log('NE ONCHANGE');
+        return;
+      }
+      console.log("ONCHANGE")
+      const file = files.get(changeInfo.fileId.toString()) as ITextFile;
+
+      let text = file.text;
+      console.log(changeInfo)
+
+      if (changeInfo.action === 0){
+        text = text.substring(0, changeInfo.position) + changeInfo.insertedString + text.substring(changeInfo.position, text.length);
+      }
+
+      if (changeInfo.action === 1){
+        text = text.substring(0, changeInfo.position) + text.substring(changeInfo.position + changeInfo.charsDeleted, text.length);
+        console.log(text)
+      }
+
       const newFile: ITextFile = {
         ...file,
         text
       };
-      setFiles(prev => new Map(prev).set(fileId.toString(), newFile));
+      setFiles(prev => new Map(prev).set(changeInfo.fileId.toString(), newFile));
 
       ///// TODO: Change it
-      console.log(fileId, selectedFile)
-      if (fileId === parseInt(selectedFile)) {
+      // console.log(fileId, selectedFile)
+      if (changeInfo.fileId === parseInt(selectedFile)) {
         selectFile(newFile);
       }
     });
