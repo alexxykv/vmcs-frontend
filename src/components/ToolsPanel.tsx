@@ -97,16 +97,16 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, local
 
   const renderMic = () => {
     if (micOn) {
-      return <MicIcon fontSize='large' />
+      return <MicIcon fontSize='medium' />
     }
-    return <MicOffIcon fontSize='large' />
+    return <MicOffIcon fontSize='medium' />
   };
 
   const renderCam = () => {
     if (camOn) {
-      return <VideocamIcon fontSize='large' />
+      return <VideocamIcon fontSize='medium' />
     }
-    return <VideocamOffIcon fontSize='large' />
+    return <VideocamOffIcon fontSize='medium' />
   };
 
   return (
@@ -114,12 +114,12 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, local
       <Box sx={styles.toolsPanel.toolItemsBox}>
         <ToolItem>
           <IconButton onClick={toggleScreen}>
-            <CodeIcon fontSize='large' />
+            <CodeIcon fontSize='medium' />
           </IconButton>
         </ToolItem>
         <ToolItem>
           <IconButton>
-            <ScreenShareIcon fontSize='large' />
+            <ScreenShareIcon fontSize='medium' />
           </IconButton>
         </ToolItem>
         <ToolItem>
@@ -136,8 +136,8 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, local
           <IconButton onClick={handleOpenChat}>
             {
               openChat
-                ? <CommentIcon fontSize='large' />
-                : <CommentsDisabledIcon fontSize='large' />
+                ? <CommentIcon fontSize='medium' />
+                : <CommentsDisabledIcon fontSize='medium' />
             }
           </IconButton>
         </ToolItem>
@@ -146,7 +146,7 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, local
         }} />
         <ToolItem>
           <IconButton color='error' onClick={handleClickEndCall}>
-            <CallEndIcon fontSize='large'></CallEndIcon>
+            <CallEndIcon fontSize='medium'></CallEndIcon>
           </IconButton>
         </ToolItem>
       </Box>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { TreeItem, TreeView } from '@mui/lab';
-import { Box, ButtonGroup, IconButton, TextField } from '@mui/material';
+import { Paper, ButtonGroup, IconButton, TextField, Button, InputAdornment } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
@@ -113,7 +113,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     codeHub.onChange((text, directoryId, fileId) => {
       const file = files.get(fileId.toString()) as ITextFile;
 
-      if (text === file.text){
+      if (text === file.text) {
         return;
       }
 
@@ -254,40 +254,90 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    <Paper
+      square
+      variant='outlined'
+      sx={{
+        minWidth: 240,
+        maxWidth: 240,
+        display: 'flex',
+        flexDirection: 'column',
+        p: 2,
+        gap: 2,
+        borderBottom: 'none',
+        borderLeft: 'none',
+        borderTop: 'none'
+      }}>
       <TreeView
         selected={selectedNode}
         onNodeSelect={handleSelectNode}
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
-        sx={{ maxHeight: '600px', p: 2, minWidth: 200, maxWidth: 400, overflowY: 'auto' }}
+        sx={{
+          flexGrow: 1,
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '4px'
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'transparent',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-track': {
+            borderRadius: '4px',
+          },
+          '&:hover': {
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: 'primary.light'
+            }
+          },
+        }}
       >
         {renderTreeDirectory(directory)}
       </TreeView>
-      <ButtonGroup sx={{ justifyContent: 'center' }}>
-        <IconButton onClick={handleClickAddFile}>
-          <NoteAddIcon />
-        </IconButton>
-        <IconButton onClick={handleClickAddFolder}>
-          <CreateNewFolderIcon />
-        </IconButton>
-      </ButtonGroup>
       <TextField
+        size='small'
         value={name}
         onChange={handleChangeName}
+        InputProps={{
+          endAdornment:
+            <InputAdornment position='end'>
+              <IconButton color='primary' onClick={handleClickAddFile}>
+                <NoteAddIcon />
+              </IconButton>
+              <IconButton color='primary' onClick={handleClickAddFolder}>
+                <CreateNewFolderIcon />
+              </IconButton>
+            </InputAdornment>
+        }}
+        sx={{
+          backgroundColor: 'action.hover'
+        }}
       />
-      <ButtonGroup>
-        <IconButton onClick={handleClickDownloadZip}>
-          <FolderZipIcon />
-        </IconButton>
-        <IconButton onClick={handleClickSaveRepository} >
-          <SaveIcon />
-        </IconButton>
-        <IconButton onClick={handleClickPushToGithub}>
-          <GitHubIcon />
-        </IconButton>
-      </ButtonGroup>
-    </Box>
+      <Paper
+        elevation={4}
+        sx={{
+          p: 1,
+        }}>
+        <ButtonGroup fullWidth orientation='vertical' variant='outlined' color='primary' size='small'>
+          <Button
+            onClick={handleClickSaveRepository}
+            startIcon={<SaveIcon />} >
+            Save
+          </Button>
+          <Button
+            onClick={handleClickDownloadZip}
+            startIcon={<FolderZipIcon />}>
+            Download zip
+          </Button>
+          <Button
+            onClick={handleClickPushToGithub}
+            startIcon={<GitHubIcon />}>
+            Push to GitHub
+          </Button>
+        </ButtonGroup>
+      </Paper>
+    </Paper>
   );
 }
 
