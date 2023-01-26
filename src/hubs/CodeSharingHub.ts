@@ -1,15 +1,5 @@
 import Hub from "./Hub";
 
-export interface ChangeInfo {
-  dirId: string
-  fileId: number
-  position: number
-  action: number
-  insertedString: string
-  charsDeleted: number
-  cliendId: string
-}
-
 export interface IDirectory {
   id: string
   name: string
@@ -89,9 +79,9 @@ export default class CodeSharingHub extends Hub {
     return this.Connection.invoke('Change', text, directoryId, fileId);
   }
 
-  onChange(callback: (changeInfo: ChangeInfo) => void) {
-    this.Connection.on('Change', (changeInfo) => {
-      callback(changeInfo);
+  onChange(callback: (text: string, directoryId: string, fileId: number) => void) {
+    this.Connection.on('Change', (text, directoryId, fileId) => {
+      callback(text, directoryId, fileId);
     });
   }
 
