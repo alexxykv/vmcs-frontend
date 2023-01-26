@@ -19,7 +19,9 @@ const UserProvider: React.FC<WithChildrenProps> = ({ children }) => {
   }, [auth.status]);
 
   const uploadImage = useCallback((image: File) => {
-    Users.UploadAvatar(image).then(() => {
+    const formData = new FormData();
+    formData.append('image', image);
+    Users.UploadAvatar(formData).then(() => {
       setUserData(prev => {
         return {
           ...prev,
