@@ -24,7 +24,7 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%' }}>
+    <Box sx={{ display: 'flex', flexGrow: 1, height: '500px' }}>
       <RepositoryAside
         repository={repository}
         selectFile={selectFile}

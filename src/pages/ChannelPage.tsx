@@ -239,7 +239,6 @@ const Chat: React.FC<ChatProps> = ({ chatId, messages }) => {
     chatHub.JoinChat(chatId).then(() => {
       console.log('Присоединился к чату');
       chatHub.onReceiveMessage(message => {
-        console.log(message)
         setMessagesState(prev => prev.concat(message));
       });
     });
@@ -379,7 +378,10 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     if (user.id === message.user.id) {
       setAvatarSrc(user.avatarUri);
     } else {
-      setAvatarSrc(message.user.avatarUri);
+      const avatarUri = message.user.avatarUri ?
+      new URL(message.user.avatarUri, process.env.REACT_APP_HOST_URL).href
+      : '';
+      setAvatarSrc(avatarUri);
     }
   }, [user.id, user.avatarUri, message.user.id, message.user.avatarUri]);
 
