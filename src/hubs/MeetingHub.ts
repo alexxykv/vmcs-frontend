@@ -22,6 +22,10 @@ export default class MeetingHub extends Hub {
     this.Connection.invoke('LeaveMeeting', meetingId);
   }
 
+  public async toggleMic(meetingId: string) {
+    this.Connection.invoke('ToggleMic', meetingId);
+  }
+
   public async toggleWebCamera(meetingId: string, isActive: boolean) {
     this.Connection.invoke('ToggleWebCamera', meetingId, isActive);
   }
@@ -81,6 +85,12 @@ export default class MeetingHub extends Hub {
   public async onToggleWebCamera(callback: (connectionId: string, isActive: boolean) => void) {
     this.Connection.on('ToggleWebCamera', (connectionId, isActive) => {
       callback(connectionId, isActive);
+    })
+  }
+
+  public async onToggleMic(callback: (connectionId: string) => void) {
+    this.Connection.on('ToggleMic', (connectionId) => {
+      callback(connectionId);
     })
   }
 

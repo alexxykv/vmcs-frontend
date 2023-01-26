@@ -48,6 +48,9 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen, localStream, rtc 
         audioTrack.enabled = true;
         setMicOn(true);
       }
+    } else {
+      setMicOn(false);
+      alert('Connect a audio capturing device.')
     }
   }
 

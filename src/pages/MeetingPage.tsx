@@ -75,9 +75,13 @@ const MeetingPageWithContext: React.FC = () => {
 
   const renderScreen = () => {
     switch (screen) {
-      case 'VideoChat': return <VideoChatScreen rtc={rtc} messages={messages} />;
+      case 'VideoChat': return <VideoChatScreen rtc={rtc} />;
       case 'CodeShare': return <CodeShareScreen />;
     }
+  }
+
+  if (rtc.localStream === null || rtc.localConnectionId === null) {
+    return <>Загрузка</>
   }
 
   return (
@@ -86,7 +90,7 @@ const MeetingPageWithContext: React.FC = () => {
       <ToolsPanel toggleScreen={toggleScreen} localStream={rtc.localStream} rtc={rtc} />
       {
         Array.from(rtc.remoteStreams).map(([connectionId, stream]) => {
-          return <Audio stream={stream} />;
+          return <Audio stream={stream} connectionId={connectionId} />;
         })
       }
     </Container>
