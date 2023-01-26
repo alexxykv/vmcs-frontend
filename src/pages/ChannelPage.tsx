@@ -20,7 +20,7 @@ import Loading from '../components/Loading';
 // import ChannelAsideMenu from '../components/ChannelAsideMenu';
 // import ChannelChat from '../components/ChannelChat';
 
-import { ChannelInvitations, Channels, Meetings } from '../api';
+import { ChannelInvitations, Channels, Meetings, Users } from '../api';
 import { ChannelData, ChannelInvitationRequestData, CreateMeetingData, MessageData, ShortMeetingData, ShortUserData } from '../interfaces/dto';
 
 import { fakeAsync } from '../utils';
@@ -372,6 +372,19 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     minute: '2-digit'
   });
 
+  const [avatarSrc, setAvatarSrc] = useState<string>('');
+
+  useEffect(() => {
+    if (user.id === message.userId) {
+      setAvatarSrc(user.avatarUri);
+    } else {
+      // TODO
+      // Users.GetById(message.userId).then(user => {
+      //   setAvatarSrc(user.avatarSrc);
+      // });
+    }
+  }, [user.id, user.avatarUri, message.userId]);
+
   return (
     <Paper elevation={4} sx={{
       display: 'flex',
@@ -397,7 +410,10 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
           {time}
         </Typography>
         <ListItemAvatar>
-          <Avatar>{message.username[0]}</Avatar>
+          <Avatar
+            src={avatarSrc}>
+            {message.username[0]}
+          </Avatar>
         </ListItemAvatar>
         <ListItemText
           primary={
