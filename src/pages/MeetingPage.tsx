@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Container, Paper } from '@mui/material';
+import { Box, Container, Paper } from '@mui/material';
 import CodeShareScreen from '../components/CodeShareScreen';
 import VideoChatScreen from '../components/VideoChatScreen';
 import ToolsPanel from '../components/ToolsPanel';
@@ -13,6 +13,7 @@ import { MeetingData } from '../interfaces/dto';
 import { useWebRTC } from '../hooks/useWebRTC';
 import { useMeeting } from '../hooks/useMeeting';
 import MeetingContext from '../contexts/MeetingContext';
+import MeetingChat from '../components/MeetingChat';
 
 
 type ScreenType = 'VideoChat' | 'CodeShare';
@@ -74,20 +75,29 @@ const MeetingPageWithContext: React.FC = () => {
   return (
     <Paper square sx={{
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       flexGrow: 1,
       width: '100%',
       height: '100%',
       overflow: 'auto'
     }}>
-      {renderScreen()}
-      <ToolsPanel toggleChat={toggleChat} toggleScreen={toggleScreen} localStream={rtc.localStream} rtc={rtc} />
-      {
-        // НЕ ТРОГАТЬ!!!
-        Array.from(rtc.remoteStreams).map(([connectionId, stream]) => {
-          return <Audio stream={stream} connectionId={connectionId} />;
-        })
-      }
+      <Box sx={{
+        position: 'relative',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        overflow: 'auto'
+      }}>
+        {renderScreen()}
+        <ToolsPanel toggleChat={toggleChat} toggleScreen={toggleScreen} localStream={rtc.localStream} rtc={rtc} />
+        {
+          // НЕ ТРОГАТЬ!!!
+          Array.from(rtc.remoteStreams).map(([connectionId, stream]) => {
+            return <Audio stream={stream} connectionId={connectionId} />;
+          })
+        }
+      </Box>
+      <MeetingChat open={openChat} />
     </Paper>
   );
 }
