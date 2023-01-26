@@ -52,28 +52,26 @@ const InvitationsPage: React.FC = () => {
     });
   };
 
+  if (uploadedData === false) {
+    return <Loading />
+  }
+
   return (
     <Container maxWidth={false} sx={{
       display: 'flex',
     }}>
-      {
-        uploadedData === false
-          ? <Loading />
-          : <>
-            <List sx={{ width: '100%' }}>
-              {
-                Array.from(invitations.values()).map(invitation => {
-                  return (
-                    <InvitationItem
-                      invitation={invitation}
-                      accept={acceptInvitation}
-                      decline={declineInvitation} />
-                  );
-                })
-              }
-            </List>
-          </>
-      }
+      <List sx={{ width: '100%' }}>
+        {
+          Array.from(invitations.values()).map(invitation => {
+            return (
+              <InvitationItem
+                invitation={invitation}
+                accept={acceptInvitation}
+                decline={declineInvitation} />
+            );
+          })
+        }
+      </List>
     </Container>
   );
 }

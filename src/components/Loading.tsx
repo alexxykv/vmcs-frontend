@@ -1,13 +1,21 @@
 import React from 'react';
-import { Box, CircularProgress } from '@mui/material';
-import * as styles from '../styles';
+import { Paper, CircularProgress } from '@mui/material';
+// import * as styles from '../styles';
 
 
 const Loading: React.FC = () => {
   return (
-    <Box sx={styles.loading.box}>
+    <Paper square sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexGrow: 1,
+      width: '100%',
+      height: '100%',
+    }}>
       <CircularProgress />
-    </Box>
+    </Paper>
   );
 }
 

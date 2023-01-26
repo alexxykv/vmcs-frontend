@@ -7,7 +7,7 @@ import Layout from './components/Layout';
 import WelcomePage from './pages/WelcomePage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
-import ProfilePage from './pages/ProfilePage';
+import AccountPage from './pages/AccountPage';
 import MeetingPage from './pages/MeetingPage';
 import ChannelPage from './pages/ChannelPage';
 import ChannelsPage from './pages/ChannelsPage';
@@ -87,7 +87,7 @@ const Routing: React.FC = () => {
     <Routes>
       <Route path='/' element={<WelcomePage />} />
       <Route element={<PrivateRoute />}>
-        <Route path='/profile' element={<ProfilePage />} />
+        <Route path='/profile' element={<AccountPage />} />
         <Route path='/channels/:id' element={<ChannelPage />} />
         <Route path='/meeting/:id' element={<MeetingPage />} />
         <Route path='/invitations' element={<InvitationsPage />} />
