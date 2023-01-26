@@ -5,7 +5,9 @@ import { LoginData, RegisterData, AuthStatusType } from "./dto/auth";
 import { ChannelData } from "./dto/channels";
 import { UserData } from "./dto/users";
 
-export interface UserContextType extends UserData { }
+export interface UserContextType extends UserData { 
+  uploadImage: (image: File) => void
+}
 
 export interface ChannelContextType extends ChannelData { }
 

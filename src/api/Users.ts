@@ -53,4 +53,10 @@ export default class Users {
     const response = await api.delete(url);
     return response.data;
   }
+
+  public static async UploadAvatar(image: any) {
+    const url = path.join(ApiRoutes.Users, 'upload-avatar');
+    const response = await api.post(url, image);
+    return response.data;
+  }
 }
