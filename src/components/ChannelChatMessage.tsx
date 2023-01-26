@@ -18,13 +18,13 @@ const ChannelChatMessage: React.FC<ChannelChatMessageProps> = ({ message }) => {
   });
 
   return (
-    <Box sx={{ ...styles.channelChatMessage.box, marginLeft: user.id === message.userId ? 'auto' : 0 }}>
+    <Box sx={{ ...styles.channelChatMessage.box, marginLeft: user.id === message.user.id ? 'auto' : 0 }}>
       <Box sx={styles.channelChatMessage.header}>
         <Avatar sx={styles.channelChatMessage.headerAvatar}>
-          {message.username[0]}
+          {message.user.username[0]}
         </Avatar>
         <Typography sx={styles.channelChatMessage.headerUsername}>
-          {message.username}
+          {message.user.username}
         </Typography>
         <Typography sx={styles.channelChatMessage.headerTime}>
           {time}

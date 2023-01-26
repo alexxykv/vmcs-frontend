@@ -6,12 +6,18 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderZipIcon from '@mui/icons-material/FolderZip';
+import SaveIcon from '@mui/icons-material/Save';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 import { IFolder, IDirectory, ITextFile, TextFileDTO } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
-import { Directories } from '../api';
+import { Directories, Users } from '../api';
 import { saveAs as saveZip } from 'file-saver';
-
+import Github from '../api/Github';
+import { PushToRepositoryData } from '../interfaces/dto';
+import { useUser } from '../hooks/useUser';
+import { useNavigate } from "react-router-dom";
+import { relative } from 'path';
 
 interface RepositoryAsideProps {
   repository: IDirectory
@@ -19,7 +25,9 @@ interface RepositoryAsideProps {
 }
 
 const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFile }) => {
+  const navigate = useNavigate();
   const codeHub = useCodeSharingHub();
+  const user = useUser();
   const [directory, setDirectory] = useState<IFolder>(repository.rootFolder);
   const [files, setFiles] = useState<Map<string, ITextFile>>(new Map());
   const [folders, setFolders] = useState<Map<string, IFolder>>(new Map());
@@ -167,6 +175,32 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     setName(event.target.value);
   };
 
+  const handleClickSaveRepository = () => {
+    codeHub.saveRepository(repository.id);
+  }
+
+  const handleClickPushToGithub = () => {
+    const data: PushToRepositoryData = {
+      repositoryName: repository.name,
+      directoryId: repository.id,
+      message: "Commited by VMCS"
+    }
+
+    codeHub.saveRepository(repository.id).then(() => {
+      Users.IsUserHaveAccessToken().then(isHaveToken => {
+        console.log(isHaveToken)
+        if (!isHaveToken) {
+          const redirectUri = `${process.env.REACT_APP_HOST_URL}/github/signin?userId=${user.id}`;
+          const encodedRedirectUri = encodeURIComponent(redirectUri);
+          const url = `https://github.com/login/oauth/authorize?client_id=${Github.CLIENT_ID}&redirect_uri=${encodedRedirectUri}&scope=repo&response_type=code`;
+          window.open(url, '_blank');
+        } else {
+          Github.PushToRepository(data);
+        }
+      })
+    })
+  }
+
   const handleClickDownloadZip = useCallback(() => {
     codeHub.saveRepository(repository.id).then(() => {
       Directories.Get(repository.id).then((directory) => {
@@ -174,7 +208,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
           byteNumbers[i] = byteCharacters.charCodeAt(i);
-        } 
+        }
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray]);
         saveZip(blob, `${directory.name}.zip`);
@@ -213,14 +247,22 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
         <IconButton onClick={handleClickAddFolder}>
           <CreateNewFolderIcon />
         </IconButton>
-        <IconButton onClick={handleClickDownloadZip}>
-          <FolderZipIcon />
-        </IconButton>
       </ButtonGroup>
       <TextField
         value={name}
         onChange={handleChangeName}
       />
+      <ButtonGroup>
+        <IconButton onClick={handleClickDownloadZip}>
+          <FolderZipIcon />
+        </IconButton>
+        <IconButton onClick={handleClickSaveRepository} >
+          <SaveIcon />
+        </IconButton>
+        <IconButton onClick={handleClickPushToGithub}>
+          <GitHubIcon />
+        </IconButton>
+      </ButtonGroup>
     </Box>
   );
 }

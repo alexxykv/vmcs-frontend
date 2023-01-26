@@ -6,8 +6,9 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }>(({ theme, open }) => ({
   flexGrow: 1,
   maxHeight: '100vh',
-  padding: theme.spacing(2),
-  paddingTop: theme.spacing(10),
+  // padding: theme.spacing(2),
+  paddingTop: theme.spacing(8),
+  // paddingTop: theme.spacing(10),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
