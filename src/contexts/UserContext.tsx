@@ -5,7 +5,9 @@ export const defaultUserContext: UserContextType = {
   id: '',
   login: '',
   username: '',
-  email: ''
+  email: '',
+  avatarUri: '',
+  uploadImage: (image: File) => { }
 };
 const UserContext = createContext(defaultUserContext);
 

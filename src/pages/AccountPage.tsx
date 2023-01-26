@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, Box, Button, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ImageIcon from '@mui/icons-material/Image';
@@ -7,6 +7,17 @@ import { useUser } from '../hooks/useUser';
 
 const AccountPage: React.FC = () => {
   const user = useUser();
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const file = files[0];
+      console.log(file)
+      user.uploadImage(file);
+      // setSelectedImage(file);
+    }
+  }
 
   return (
     <Paper square sx={{
@@ -58,7 +69,7 @@ const AccountPage: React.FC = () => {
           pt: 0,
           gap: 2
         }}>
-          <Avatar sx={{
+          <Avatar src={user.avatarUri} sx={{
             width: '80px',
             height: '80px',
           }} />
@@ -72,6 +83,7 @@ const AccountPage: React.FC = () => {
           </Typography>
           <Box flexGrow={1} />
           <Button
+            component="label"
             variant='contained'
             color='primary'
             startIcon={<ImageIcon />}
@@ -80,6 +92,12 @@ const AccountPage: React.FC = () => {
               alignSelf: 'center'
             }}>
             Change profile image
+            <input
+              hidden
+              accept="image/*"
+              type="file"
+              onChange={handleChange}
+            />
           </Button>
         </Box>
         <Paper variant='outlined' sx={{

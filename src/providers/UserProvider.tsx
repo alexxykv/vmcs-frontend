@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Users } from '../api';
 import UserContext, { defaultUserContext } from '../contexts/UserContext';
 import { UserData } from '../interfaces/dto/users';
 import { WithChildrenProps } from '../interfaces/props';
 import { useAuth } from '../hooks/useAuth';
+import { UserContextType } from '../interfaces/contexts';
 
 const UserProvider: React.FC<WithChildrenProps> = ({ children }) => {
   const auth = useAuth();
@@ -17,7 +18,21 @@ const UserProvider: React.FC<WithChildrenProps> = ({ children }) => {
     }
   }, [auth.status]);
 
-  const value: UserData = { ...userData }
+  const uploadImage = useCallback((image: File) => {
+    Users.UploadAvatar(image).then(() => {
+      setUserData(prev => {
+        return {
+          ...prev,
+          avatarUri: URL.createObjectURL(image)
+        }
+      });
+    })
+  }, []);
+
+  const value: UserContextType = {
+    ...userData,
+    uploadImage
+  };
 
   return (
     <UserContext.Provider value={value}>
