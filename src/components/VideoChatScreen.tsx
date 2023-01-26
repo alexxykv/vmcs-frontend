@@ -46,7 +46,7 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ rtc, openChat }) => {
           })
         }
       </WebcamBox>
-      <MeetingChat open={openChat}/>
+      
     </Paper>
   );
 }

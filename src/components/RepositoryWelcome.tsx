@@ -3,6 +3,8 @@ import {
   Box, Button, ButtonGroup, Container, Dialog,
   DialogActions, DialogContent, DialogTitle, TextField, Typography
 } from '@mui/material';
+import CreateIcon from '@mui/icons-material/Create';
+import UploadIcon from '@mui/icons-material/Upload';
 import { useMeeting } from '../hooks/useMeeting';
 import { CreateDirectoryData } from '../interfaces/dto';
 
@@ -30,13 +32,43 @@ const RepositoryWelcome: React.FC<RepositoryWelcomeProps> = ({ onCreateRepositor
   };
 
   return (
-    <Container>
-      <Box p={2}>
-        <Typography mb={2}>The repository does not exist yet.</Typography>
-        <ButtonGroup>
-          <Button onClick={() => setOpenCreate(true)}>Create</Button>
-          <Button>Upload</Button>
-        </ButtonGroup>
+    <Box sx={{
+      display: 'flex',
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      p: 2,
+    }}>
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2
+      }}>
+        <Typography sx={{
+          cursor: 'default',
+          userSelect: 'none',
+          textAlign: 'center'
+        }}>
+          The repository does not exist yet.
+        </Typography>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          p: 2,
+          gap: 1
+        }}>
+          <Button
+            startIcon={<CreateIcon />}
+            variant='contained'
+            onClick={() => setOpenCreate(true)}>
+            Create
+          </Button>
+          <Button
+            startIcon={<UploadIcon />}
+            variant='contained'>
+            Upload
+          </Button>
+        </Box>
       </Box>
 
       <CreateRepositoryDialog
@@ -44,7 +76,7 @@ const RepositoryWelcome: React.FC<RepositoryWelcomeProps> = ({ onCreateRepositor
         onClose={handleCloseCreateRepository}
         create={createRepository}
       />
-    </Container>
+    </Box>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Paper } from '@mui/material';
 import Editor from './Editor';
 import { IDirectory, ITextFile } from '../hubs/CodeSharingHub';
 import RepositoryAside from './RepositoryAside';
@@ -21,11 +21,20 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
     if (selectedFile === null) {
       return <SelectFile />
     }
-    return <Editor repository={repository} file={selectedFile} setFiles={setFiles} files={files} />;
+    return <Editor
+      repository={repository}
+      file={selectedFile}
+      setFiles={setFiles}
+      files={files}
+    />;
   };
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '500px' }}>
+    <Box sx={{
+      display: 'flex',
+      flexGrow: 1,
+      height: '100%'
+    }}>
       <RepositoryAside
         repository={repository}
         selectFile={selectFile}
@@ -45,7 +54,11 @@ const SelectFile: React.FC = () => {
       justifyContent: 'center',
       alignItems: 'center'
     }}>
-      <Typography>
+      <Typography
+        sx={{
+          cursor: 'default',
+          userSelect: 'none'
+        }}>
         Select file
       </Typography>
     </Box>
