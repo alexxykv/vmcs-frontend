@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Container } from '@mui/material';
+import { Container, Paper } from '@mui/material';
 import CodeShareScreen from '../components/CodeShareScreen';
 import VideoChatScreen from '../components/VideoChatScreen';
 import ToolsPanel from '../components/ToolsPanel';
@@ -9,31 +9,13 @@ import Loading from '../components/Loading';
 import Audio from '../components/Audio';
 
 import { Meetings } from '../api';
-import { MeetingData, ShortMessageData } from '../interfaces/dto';
+import { MeetingData } from '../interfaces/dto';
 import { useWebRTC } from '../hooks/useWebRTC';
 import { useMeeting } from '../hooks/useMeeting';
 import MeetingContext from '../contexts/MeetingContext';
 
 
 type ScreenType = 'VideoChat' | 'CodeShare';
-
-const messages: ShortMessageData[] = [
-  {
-    id: '1',
-    text: 'Всем привет!',
-    username: 'Иван Мишурин'
-  },
-  {
-    id: '2',
-    text: 'Ну привет...',
-    username: 'Максим Цветков'
-  },
-  {
-    id: '3',
-    text: 'Здарова, парни!',
-    username: 'Александр Коновалов'
-  }
-]
 
 const MeetingPage: React.FC = () => {
   const { id } = useParams();
@@ -65,6 +47,11 @@ const MeetingPageWithContext: React.FC = () => {
   const meeting = useMeeting();
   const rtc = useWebRTC(meeting.id);
   const [screen, setScreen] = useState<ScreenType>('VideoChat');
+  const [openChat, setOpenChat] = useState<boolean>(false);
+
+  const toggleChat = () => {
+    setOpenChat(prev => !prev);
+  }
 
   const toggleScreen = () => {
     switch (screen) {
@@ -75,25 +62,33 @@ const MeetingPageWithContext: React.FC = () => {
 
   const renderScreen = () => {
     switch (screen) {
-      case 'VideoChat': return <VideoChatScreen rtc={rtc} />;
+      case 'VideoChat': return <VideoChatScreen rtc={rtc} openChat={openChat} />;
       case 'CodeShare': return <CodeShareScreen />;
     }
-  }
+  };
 
   if (rtc.localStream === null || rtc.localConnectionId === null) {
-    return <>Загрузка</>
+    return <Loading />
   }
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ display: 'flex' }}>
+    <Paper square sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      flexGrow: 1,
+      width: '100%',
+      height: '100%',
+      overflow: 'auto'
+    }}>
       {renderScreen()}
-      <ToolsPanel toggleScreen={toggleScreen} localStream={rtc.localStream} rtc={rtc} />
+      <ToolsPanel toggleChat={toggleChat} toggleScreen={toggleScreen} localStream={rtc.localStream} rtc={rtc} />
       {
+        // НЕ ТРОГАТЬ!!!
         Array.from(rtc.remoteStreams).map(([connectionId, stream]) => {
           return <Audio stream={stream} connectionId={connectionId} />;
         })
       }
-    </Container>
+    </Paper>
   );
 }
 

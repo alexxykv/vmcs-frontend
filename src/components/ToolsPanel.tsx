@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, IconButton } from '@mui/material';
+import { Box, Divider, IconButton, Paper } from '@mui/material';
 import ToolItem from './ToolItem';
 import { ToolsPanelProps } from '../interfaces/props';
 
@@ -8,7 +8,8 @@ import VideocamIcon from '@mui/icons-material/Videocam';
 import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import CodeIcon from '@mui/icons-material/Code';
 import CallEndIcon from '@mui/icons-material/CallEnd';
-import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import CommentIcon from '@mui/icons-material/Comment';
+import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 
@@ -17,7 +18,7 @@ import { useMeetingHub } from '../hooks/useMeetingHub';
 import { useMeeting } from '../hooks/useMeeting';
 
 
-const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen, localStream, rtc }) => {
+const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, localStream, rtc }) => {
   const [audioTrack, setAudioTrack] = useState<MediaStreamTrack | null>(null);
   const [videoTrack, setVideoTrack] = useState<MediaStreamTrack | null>(null);
   const [micOn, setMicOn] = useState<boolean>(true);
@@ -83,29 +84,29 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen, localStream, rtc 
 
   const renderMic = () => {
     if (micOn) {
-      return <MicIcon fontSize='large' htmlColor='#5685c7' />
+      return <MicIcon fontSize='large'/>
     }
-    return <MicOffIcon fontSize='large' htmlColor='#5685c7' />
+    return <MicOffIcon fontSize='large'/>
   };
 
   const renderCam = () => {
     if (camOn) {
-      return <VideocamIcon fontSize='large' htmlColor='#5685c7' />
+      return <VideocamIcon fontSize='large'/>
     }
-    return <VideocamOffIcon fontSize='large' htmlColor='#5685c7' />
+    return <VideocamOffIcon fontSize='large'/>
   };
 
   return (
-    <Box sx={styles.toolsPanel.box}>
+    <Paper elevation={6} sx={styles.toolsPanel.box}>
       <Box sx={styles.toolsPanel.toolItemsBox}>
         <ToolItem>
           <IconButton onClick={toggleScreen}>
-            <CodeIcon fontSize='large' htmlColor='#5685c7' />
+            <CodeIcon fontSize='large'/>
           </IconButton>
         </ToolItem>
         <ToolItem>
           <IconButton>
-            <ScreenShareIcon fontSize='large' htmlColor='#5685c7' />
+            <ScreenShareIcon fontSize='large'/>
           </IconButton>
         </ToolItem>
         <ToolItem>
@@ -119,17 +120,20 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleScreen, localStream, rtc 
           </IconButton>
         </ToolItem>
         <ToolItem>
-          <IconButton>
-            <ChatOutlinedIcon fontSize='large' htmlColor='#5685c7' />
+          <IconButton onClick={toggleChat}>
+            <CommentIcon fontSize='large'/>
           </IconButton>
         </ToolItem>
-        <ToolItem style={{ borderLeft: 'solid 1px gray' }}>
-          <IconButton>
-            <CallEndIcon htmlColor='red' fontSize='large'></CallEndIcon>
+        <Divider orientation='vertical' sx={{
+          height: 40
+        }} />
+        <ToolItem>
+          <IconButton color='error'>
+            <CallEndIcon fontSize='large'></CallEndIcon>
           </IconButton>
         </ToolItem>
       </Box>
-    </Box>
+    </Paper>
   );
 }
 

@@ -9,5 +9,5 @@ export const webcamsBox: React.CSSProperties | SxProps = {
   display: 'flex',
   padding: '15px',
   flexGrow: 1,
-  backgroundColor: '#161616',
+  // backgroundColor: '#161616',
 }

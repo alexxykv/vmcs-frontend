@@ -1,15 +1,15 @@
 import { SxProps } from "@mui/material"
 
 export const box: React.CSSProperties | SxProps = {
-  width: '500px',
-  height: '70px',
+  zIndex: 1234,
+  // width: '500px',
+  // height: '70px',
   position: 'absolute',
   bottom: '25px',
   left: '50%',
-  borderRadius: '10px',
-  backgroundColor: '#353535',
+  borderRadius: 2,
+  backgroundColor: 'primary.dark',
   transform: 'translate(-50%, 0)',
-  zIndex: '100'
 }
 
 export const toolItemsBox: React.CSSProperties | SxProps = {
@@ -17,4 +17,7 @@ export const toolItemsBox: React.CSSProperties | SxProps = {
   justifyContent: 'space-evenly',
   alignItems: 'center',
   height: '100%',
+  gap: 2,
+  py: 1,
+  px: 2
 }

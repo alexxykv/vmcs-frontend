@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Message from './Message';
-import { Box, IconButton, Input } from '@mui/material';
+import { Box, Button, IconButton, Input, List, Paper, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send'
 import { MeetingChatProps } from '../interfaces/props';
 
@@ -10,7 +10,7 @@ import { MessageData } from '../interfaces/dto';
 import { useMeeting } from '../hooks/useMeeting';
 
 
-const MeetingChat: React.FC<MeetingChatProps> = () => {
+const MeetingChat: React.FC<MeetingChatProps> = ({ open }) => {
   const chatHub = useChatHub();
   const meeting = useMeeting();
 
@@ -62,19 +62,70 @@ const MeetingChat: React.FC<MeetingChatProps> = () => {
   };
 
   return (
-    <Box sx={styles.meetingChat.box}>
-      <Box sx={styles.meetingChat.messagesBox}>
-        {
-          messagesState.map(message => <Message key={message.id} message={message} />)
-        }
-      </Box>
-      <Box component='form' onSubmit={handleSendMessage} sx={styles.meetingChat.sendMessageBox}>
-        <Input fullWidth disableUnderline placeholder='Send message?' style={{ color: 'white' }} value={message} onChange={handleChangeMessage} />
-        <IconButton type='submit'>
-          <SendIcon htmlColor='white' />
-        </IconButton>
-      </Box>
-    </Box>
+    <Paper square elevation={6} sx={{
+      display: open ? 'flex' : 'none',
+      flexDirection: 'column',
+      flexGrow: 1,
+      minWidth: 240,
+      width: '25%',
+      maxWidth: '25%',
+    }}>
+      <List disablePadding sx={{
+        display: 'flex',
+        flexGrow: 1,
+        flexDirection: 'column',
+        overflowY: 'auto',
+        '&::-webkit-scrollbar': {
+          width: '4px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'transparent',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-track': {
+          borderRadius: '4px',
+        },
+        '&:hover': {
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'primary.light'
+          }
+        },
+      }}>
+        {messagesState.map(message => <Message key={message.id} message={message} />)}
+        <div ref={messagesEndRef} style={
+          {
+            float: "left",
+            clear: "both",
+          }} />
+      </List>
+      <Paper
+        square
+        variant='outlined'
+        component='form'
+        onSubmit={handleSendMessage}
+        sx={{
+          display: 'flex',
+          p: 2,
+          borderLeft: 'none',
+          borderRight: 'none',
+          borderBottom: 'none'
+        }}>
+        <TextField
+          value={message}
+          onChange={handleChangeMessage}
+          variant='outlined'
+          color='primary'
+          fullWidth
+          size='small'
+          sx={{
+            bgcolor: 'action.selected',
+            borderRadius: '4px'
+          }} />
+        <Button type='submit'>
+          <SendIcon />
+        </Button>
+      </Paper>
+    </Paper>
   );
 }
 

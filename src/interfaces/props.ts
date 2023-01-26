@@ -14,6 +14,7 @@ export interface MeetingPageProps { }
 export interface LoginPageProps { }
 
 export interface ToolsPanelProps {
+  toggleChat: VoidFunction
   toggleScreen: VoidFunction,
   localStream: MediaStream,
   rtc: WebRTCResult
@@ -36,10 +37,13 @@ export interface SignupFormProps { }
 
 export interface InputFieldProps { }
 
-export interface MeetingChatProps { }
+export interface MeetingChatProps {
+  open: boolean
+ }
 
 export interface VideoChatScreenProps {
   rtc: WebRTCResult
+  openChat: boolean
 }
 
 export interface WithChildrenProps {
