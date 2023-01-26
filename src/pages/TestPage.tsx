@@ -76,7 +76,7 @@ const TestPage: React.FC = () => {
         </div>
       </div>
 
-      <div className='messageContainer'>
+      {/* <div className='messageContainer'>
         {
           messages.map((message) => {
             return (
@@ -84,7 +84,7 @@ const TestPage: React.FC = () => {
             );
           })
         }
-      </div>
+      </div> */}
     </>
   );
 }

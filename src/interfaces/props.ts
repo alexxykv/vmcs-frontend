@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { ShortChannelData } from './dto/channels';
-import { MessageData, ShortMessageData } from './dto/messages';
+import { MessageData } from './dto/messages';
 import { WebRTCResult } from './hooks';
 
 export interface MessageProps {
-  shortMessage: ShortMessageData
+  message: MessageData
 }
 
 export interface ChatProps { }
