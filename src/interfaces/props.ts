@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { ShortChannelData } from './dto/channels';
-import { ShortMessageData } from './dto/messages';
+import { MessageData, ShortMessageData } from './dto/messages';
 import { WebRTCResult } from './hooks';
 
 export interface MessageProps {
@@ -36,12 +36,9 @@ export interface SignupFormProps { }
 
 export interface InputFieldProps { }
 
-export interface MeetingChatProps { 
-  messages: ShortMessageData[]
-}
+export interface MeetingChatProps { }
 
 export interface VideoChatScreenProps {
-  messages: ShortMessageData[]
   rtc: WebRTCResult
 }
 

@@ -46,7 +46,7 @@ const Webcam: React.FC<WebcamProps> = ({ stream, username, connectionId }) => {
     <Box sx={styles.webcam.box}>
       <Box sx={styles.webcam.usernameBox}>{username}</Box>
       <Box sx={styles.webcam.videoBox}>
-        {camOn ? '' : 'Вебка не работает'}
+        {camOn ? '' : 'Вебкамера отключена'}
         <video width='100%' height='100%' ref={videoRef} autoPlay muted={true} hidden={!camOn} />
       </Box>
     </Box>

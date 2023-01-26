@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Box, Container } from '@mui/material';
 import MeetingChat from './MeetingChat';
@@ -8,9 +8,11 @@ import { useUser } from '../hooks/useUser';
 import { VideoChatScreenProps } from '../interfaces/props';
 
 import * as styles from '../styles';
+import { useMeeting } from '../hooks/useMeeting';
+import { MessageData } from '../interfaces/dto';
 
 
-const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages, rtc }) => {
+const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ rtc }) => {
   const user = useUser();
 
   if (rtc.localStream === null || rtc.localConnectionId === null) {
@@ -32,7 +34,7 @@ const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ messages, rtc }) => {
           })
         }
       </Box>
-      <MeetingChat messages={messages} />
+      <MeetingChat />
     </Container>
   );
 }

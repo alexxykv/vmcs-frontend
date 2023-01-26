@@ -75,7 +75,7 @@ const MeetingPageWithContext: React.FC = () => {
 
   const renderScreen = () => {
     switch (screen) {
-      case 'VideoChat': return <VideoChatScreen rtc={rtc} messages={messages} />;
+      case 'VideoChat': return <VideoChatScreen rtc={rtc} />;
       case 'CodeShare': return <CodeShareScreen />;
     }
   }
