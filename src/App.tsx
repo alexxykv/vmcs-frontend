@@ -7,7 +7,7 @@ import Layout from './components/Layout';
 import WelcomePage from './pages/WelcomePage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
-import ProfilePage from './pages/ProfilePage';
+import AccountPage from './pages/AccountPage';
 import MeetingPage from './pages/MeetingPage';
 import ChannelPage from './pages/ChannelPage';
 import ChannelsPage from './pages/ChannelsPage';
@@ -21,15 +21,26 @@ import ChatHubProvider from './providers/ChatHubProvider';
 import CodeSharingProvider from './providers/CodeSharingProvider';
 import MeetingHubProvider from './providers/MeetingHubProvider';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { PaletteMode } from '@mui/material';
+import Cookies from 'js-cookie';
+
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 
 const App: React.FC = () => {
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const themeMode = Cookies.get('theme');
+  if (themeMode === undefined) {
+    Cookies.set('theme', 'light');
+  }
+  const [mode, setMode] = useState<PaletteMode>(themeMode ? themeMode as PaletteMode : 'light');
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode(prev => {
+          const newMode = prev === 'light' ? 'dark' : 'light';
+          Cookies.set('theme', newMode);
+          return newMode;
+        });
       },
     }),
     [],
@@ -76,7 +87,7 @@ const Routing: React.FC = () => {
     <Routes>
       <Route path='/' element={<WelcomePage />} />
       <Route element={<PrivateRoute />}>
-        <Route path='/profile' element={<ProfilePage />} />
+        <Route path='/profile' element={<AccountPage />} />
         <Route path='/channels/:id' element={<ChannelPage />} />
         <Route path='/meeting/:id' element={<MeetingPage />} />
         <Route path='/invitations' element={<InvitationsPage />} />

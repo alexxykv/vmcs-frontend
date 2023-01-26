@@ -6,6 +6,7 @@ import CodeShareScreen from '../components/CodeShareScreen';
 import VideoChatScreen from '../components/VideoChatScreen';
 import ToolsPanel from '../components/ToolsPanel';
 import Loading from '../components/Loading';
+import Audio from '../components/Audio';
 
 import { Meetings } from '../api';
 import { MeetingData, ShortMessageData } from '../interfaces/dto';
@@ -74,15 +75,24 @@ const MeetingPageWithContext: React.FC = () => {
 
   const renderScreen = () => {
     switch (screen) {
-      case 'VideoChat': return <VideoChatScreen rtc={rtc} messages={messages} />;
+      case 'VideoChat': return <VideoChatScreen rtc={rtc} />;
       case 'CodeShare': return <CodeShareScreen />;
     }
+  }
+
+  if (rtc.localStream === null || rtc.localConnectionId === null) {
+    return <>Загрузка</>
   }
 
   return (
     <Container disableGutters maxWidth={false} sx={{ display: 'flex' }}>
       {renderScreen()}
       <ToolsPanel toggleScreen={toggleScreen} localStream={rtc.localStream} rtc={rtc} />
+      {
+        Array.from(rtc.remoteStreams).map(([connectionId, stream]) => {
+          return <Audio stream={stream} connectionId={connectionId} />;
+        })
+      }
     </Container>
   );
 }

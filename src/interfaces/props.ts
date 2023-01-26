@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { ShortChannelData } from './dto/channels';
-import { ShortMessageData } from './dto/messages';
+import { MessageData } from './dto/messages';
 import { WebRTCResult } from './hooks';
 
 export interface MessageProps {
-  shortMessage: ShortMessageData
+  message: MessageData
 }
 
 export interface ChatProps { }
@@ -21,8 +21,12 @@ export interface ToolsPanelProps {
 
 export interface WebcamProps {
   stream: MediaStream
-  username: string,
-  muted: boolean,
+  username: string
+  connectionId: string
+}
+
+export interface AudioProps {
+  stream: MediaStream
   connectionId: string
 }
 
@@ -32,12 +36,9 @@ export interface SignupFormProps { }
 
 export interface InputFieldProps { }
 
-export interface MeetingChatProps { 
-  messages: ShortMessageData[]
-}
+export interface MeetingChatProps { }
 
 export interface VideoChatScreenProps {
-  messages: ShortMessageData[]
   rtc: WebRTCResult
 }
 

@@ -36,18 +36,16 @@ const DashboardPage: React.FC = () => {
 
   return (
     <>
-      <Box
-        sx={{
+      <Paper square sx={{ minHeight: '100%', p: 2 }}>
+        <Box sx={{
           display: 'flex',
           flexWrap: 'wrap',
           gap: 2,
-        }}
-      >
-        <ChannelItemCreate openDialog={() => setOpenCreateChannel(true)}/>
-        {
-          channels.map(channel => <ChannelItem key={channel.id} channel={channel} />)
-        }
-      </Box>
+        }}>
+          <ChannelItemCreate openDialog={() => setOpenCreateChannel(true)} />
+          {channels.map(channel => <ChannelItem key={channel.id} channel={channel} />)}
+        </Box>
+      </Paper>
       <CreateChannelDialog
         open={openCreateChannel}
         handleClose={handleCloseCreateChannel}
@@ -106,8 +104,8 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel }) => {
           backgroundColor: 'primary.main',
           cursor: 'pointer'
         }
-
-      }}>
+      }}
+    >
       <Stack
         direction='column'
         justifyContent='center'
@@ -117,7 +115,7 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel }) => {
         <Box sx={{ display: 'flex', height: '50%', alignItems: 'center' }}>
           <Avatar sx={{ width: 56, height: 56 }} />
         </Box>
-        <Typography variant='h6' component='div' sx={{
+        <Typography variant='h6' component='div' fontWeight={400} sx={{
           alignItems: 'start',
           textAlign: 'center',
           height: '50%',

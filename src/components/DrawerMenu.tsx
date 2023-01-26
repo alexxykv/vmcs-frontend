@@ -92,8 +92,8 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
         padding={2}
         sx={{ cursor: 'default' }}
       >
-        <Avatar sx={{ width: 72, height: 72, mb: 1 }} />
-        <Typography variant='h5' component='div' >
+        <Avatar src={user.avatarUri} sx={{ width: 72, height: 72, mb: 1 }} />
+        <Typography variant='h5' component='div' fontWeight={500}>
           {user.username}
         </Typography>
         <Typography variant='body2' color='text.secondary'>

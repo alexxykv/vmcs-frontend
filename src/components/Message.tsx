@@ -5,7 +5,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import * as styles from '../styles';
 
 
-const Message: React.FC<MessageProps> = ({ shortMessage }) => {
+const Message: React.FC<MessageProps> = ({ message }) => {
   return (
     <Box sx={styles.message.box}>
       <Box sx={styles.message.avatarBox}>
@@ -13,11 +13,11 @@ const Message: React.FC<MessageProps> = ({ shortMessage }) => {
       </Box>
       <Box sx={styles.message.contentBox}>
         <Box sx={styles.message.headerBox}>
-          <Typography sx={styles.message.username}>{shortMessage.username}</Typography>
+          <Typography sx={styles.message.username}>{message.user.username}</Typography>
           <Typography sx={styles.message.time}>15:38</Typography>
         </Box>
         <Box sx={styles.message.mainBox}>
-          <Typography sx={styles.message.text}>{shortMessage.text}</Typography>
+          <Typography sx={styles.message.text}>{message.text}</Typography>
         </Box>
       </Box>
     </Box>
