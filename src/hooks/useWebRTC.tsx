@@ -17,12 +17,6 @@ export const useWebRTC = (meetingId: string) => {
   const signalingHub = useMeetingHub();
 
   useEffect(() => {
-    setInterval(() => {
-      console.log(remoteStreams);
-    }, 5000)
-  }, [])
-
-  useEffect(() => {
     navigator.mediaDevices.enumerateDevices().then(devices => {
       const cams = devices.filter(device => device.kind === 'videoinput');
       const mics = devices.filter(device => device.kind === 'audioinput');
