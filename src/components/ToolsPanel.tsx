@@ -16,13 +16,17 @@ import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import * as styles from '../styles';
 import { useMeetingHub } from '../hooks/useMeetingHub';
 import { useMeeting } from '../hooks/useMeeting';
+import { useNavigate } from 'react-router-dom';
 
 
 const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, localStream, rtc }) => {
+  const navigate = useNavigate();
+
   const [audioTrack, setAudioTrack] = useState<MediaStreamTrack | null>(null);
   const [videoTrack, setVideoTrack] = useState<MediaStreamTrack | null>(null);
   const [micOn, setMicOn] = useState<boolean>(true);
   const [camOn, setCamOn] = useState<boolean>(false);
+  const [openChat, setOpenChat] = useState<boolean>(false);
 
   const meetingHub = useMeetingHub();
   const meeting = useMeeting();
@@ -65,35 +69,44 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, local
         setCamOn(true);
       }
       meetingHub.toggleWebCamera(meeting.id, videoTrack.enabled);
-    // } else {
-    //   navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-    //     const videoTracks = stream.getVideoTracks();
-    //     stream.getTracks().forEach(track => {
-    //       localStream.addTrack(track);
-    //       rtc.peerConnections.forEach(pc => {
-    //         pc.addTrack(track, localStream);
-    //       })
-    //     })
-    //     setVideoTrack(videoTracks[0])
-    //     meetingHub.toggleWebCamera(meeting.id, true);
-    //   })
+      // } else {
+      //   navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+      //     const videoTracks = stream.getVideoTracks();
+      //     stream.getTracks().forEach(track => {
+      //       localStream.addTrack(track);
+      //       rtc.peerConnections.forEach(pc => {
+      //         pc.addTrack(track, localStream);
+      //       })
+      //     })
+      //     setVideoTrack(videoTracks[0])
+      //     meetingHub.toggleWebCamera(meeting.id, true);
+      //   })
     } else {
       alert('Connect a video capturing device.')
     }
   }
 
+  const handleClickEndCall: React.MouseEventHandler<HTMLButtonElement> = event => {
+    navigate(-1);
+  };
+
+  const handleOpenChat = () => {
+    toggleChat();
+    setOpenChat(prev => !prev);
+  };
+
   const renderMic = () => {
     if (micOn) {
-      return <MicIcon fontSize='large'/>
+      return <MicIcon fontSize='large' />
     }
-    return <MicOffIcon fontSize='large'/>
+    return <MicOffIcon fontSize='large' />
   };
 
   const renderCam = () => {
     if (camOn) {
-      return <VideocamIcon fontSize='large'/>
+      return <VideocamIcon fontSize='large' />
     }
-    return <VideocamOffIcon fontSize='large'/>
+    return <VideocamOffIcon fontSize='large' />
   };
 
   return (
@@ -101,12 +114,12 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, local
       <Box sx={styles.toolsPanel.toolItemsBox}>
         <ToolItem>
           <IconButton onClick={toggleScreen}>
-            <CodeIcon fontSize='large'/>
+            <CodeIcon fontSize='large' />
           </IconButton>
         </ToolItem>
         <ToolItem>
           <IconButton>
-            <ScreenShareIcon fontSize='large'/>
+            <ScreenShareIcon fontSize='large' />
           </IconButton>
         </ToolItem>
         <ToolItem>
@@ -120,15 +133,19 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, local
           </IconButton>
         </ToolItem>
         <ToolItem>
-          <IconButton onClick={toggleChat}>
-            <CommentIcon fontSize='large'/>
+          <IconButton onClick={handleOpenChat}>
+            {
+              openChat
+                ? <CommentIcon fontSize='large' />
+                : <CommentsDisabledIcon fontSize='large' />
+            }
           </IconButton>
         </ToolItem>
         <Divider orientation='vertical' sx={{
           height: 40
         }} />
         <ToolItem>
-          <IconButton color='error'>
+          <IconButton color='error' onClick={handleClickEndCall}>
             <CallEndIcon fontSize='large'></CallEndIcon>
           </IconButton>
         </ToolItem>
