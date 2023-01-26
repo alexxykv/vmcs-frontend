@@ -22,14 +22,15 @@ import { relative } from 'path';
 interface RepositoryAsideProps {
   repository: IDirectory
   selectFile: (file: ITextFile) => void
+  setFiles: React.Dispatch<React.SetStateAction<Map<string, ITextFile>>>
+  files: Map<string, ITextFile>
 }
 
-const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFile }) => {
+const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFile, setFiles, files }) => {
   const navigate = useNavigate();
   const codeHub = useCodeSharingHub();
   const user = useUser();
   const [directory, setDirectory] = useState<IFolder>(repository.rootFolder);
-  const [files, setFiles] = useState<Map<string, ITextFile>>(new Map());
   const [folders, setFolders] = useState<Map<string, IFolder>>(new Map());
   const [selectedNode, setSelectedNode] = useState<string>(directory.id.toString());
   const [selectedFile, setSelectedFile] = useState<string>('');

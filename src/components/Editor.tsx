@@ -6,6 +6,7 @@ import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import 'ace-builds/src-noconflict/mode-jsx';
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
+import { text } from 'stream/consumers';
 
 const languages = [
   'javascript',
@@ -49,9 +50,11 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 interface EditorProps {
   file: ITextFile
   repository: IDirectory
+  setFiles: React.Dispatch<React.SetStateAction<Map<string, ITextFile>>>
+  files: Map<string, ITextFile>
 }
 
-const Editor: React.FC<EditorProps> = ({ file, repository }) => {
+const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files }) => {
   const codeHub = useCodeSharingHub();
   const [value, setValue] = useState<string>('');
 
@@ -62,6 +65,13 @@ const Editor: React.FC<EditorProps> = ({ file, repository }) => {
   const handleChange = (newValue: string) => {
     codeHub.change(newValue, repository.id, file.id);
     setValue(newValue);
+    
+    const text = newValue;
+    const newFile: ITextFile = {
+      ...file,
+      text
+    };
+    setFiles(prev => new Map(prev).set(file.id.toString(), newFile));
   };
 
   // const findChanges = (oldText: string, newText: string) => {

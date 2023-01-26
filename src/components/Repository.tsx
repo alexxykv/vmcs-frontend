@@ -11,6 +11,7 @@ interface RepositoryProps {
 
 const Repository: React.FC<RepositoryProps> = ({ repository }) => {
   const [selectedFile, setSelectedFile] = useState<ITextFile | null>(null);
+  const [files, setFiles] = useState<Map<string, ITextFile>>(new Map());
 
   const selectFile = (file: ITextFile) => {
     setSelectedFile(file);
@@ -20,7 +21,7 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
     if (selectedFile === null) {
       return <SelectFile />
     }
-    return <Editor repository={repository} file={selectedFile} />;
+    return <Editor repository={repository} file={selectedFile} setFiles={setFiles} files={files} />;
   };
 
   return (
@@ -28,6 +29,8 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
       <RepositoryAside
         repository={repository}
         selectFile={selectFile}
+        setFiles={setFiles}
+        files={files}
       />
       {renderFileEditor()}
     </Box>
