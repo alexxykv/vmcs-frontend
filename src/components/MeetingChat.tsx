@@ -65,7 +65,7 @@ const MeetingChat: React.FC<MeetingChatProps> = () => {
     <Box sx={styles.meetingChat.box}>
       <Box sx={styles.meetingChat.messagesBox}>
         {
-          messagesState.map(message => <Message key={message.id} shortMessage={message} />)
+          messagesState.map(message => <Message key={message.id} message={message} />)
         }
       </Box>
       <Box component='form' onSubmit={handleSendMessage} sx={styles.meetingChat.sendMessageBox}>

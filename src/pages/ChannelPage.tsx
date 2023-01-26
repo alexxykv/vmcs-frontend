@@ -239,6 +239,7 @@ const Chat: React.FC<ChatProps> = ({ chatId, messages }) => {
     chatHub.JoinChat(chatId).then(() => {
       console.log('Присоединился к чату');
       chatHub.onReceiveMessage(message => {
+        console.log(message)
         setMessagesState(prev => prev.concat(message));
       });
     });
@@ -375,15 +376,12 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const [avatarSrc, setAvatarSrc] = useState<string>('');
 
   useEffect(() => {
-    if (user.id === message.userId) {
+    if (user.id === message.user.id) {
       setAvatarSrc(user.avatarUri);
     } else {
-      // TODO
-      // Users.GetById(message.userId).then(user => {
-      //   setAvatarSrc(user.avatarSrc);
-      // });
+      setAvatarSrc(message.user.avatarUri);
     }
-  }, [user.id, user.avatarUri, message.userId]);
+  }, [user.id, user.avatarUri, message.user.id, message.user.avatarUri]);
 
   return (
     <Paper elevation={4} sx={{
@@ -393,7 +391,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       maxWidth: '60%',
       my: 1,
       mr: 2,
-      ml: user.id === message.userId ? 'auto' : 2,
+      ml: user.id === message.user.id ? 'auto' : 2,
     }}>
       <ListItem alignItems='flex-start'>
         <Typography sx={{
@@ -412,13 +410,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         <ListItemAvatar>
           <Avatar
             src={avatarSrc}>
-            {message.username[0]}
+            {message.user.username[0]}
           </Avatar>
         </ListItemAvatar>
         <ListItemText
           primary={
             <Typography sx={{ color: 'primary.main', cursor: 'default', pr: 6 }}>
-              {message.username}
+              {message.user.username}
             </Typography>
           }
           secondary={

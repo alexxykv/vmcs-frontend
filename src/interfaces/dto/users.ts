@@ -9,6 +9,7 @@ export interface UserData {
 export interface ShortUserData {
   id: string
   username: string
+  avatarUri: string
 }
 
 export interface ChangeUserData {

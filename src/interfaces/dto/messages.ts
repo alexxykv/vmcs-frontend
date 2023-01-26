@@ -1,3 +1,5 @@
+import { ShortUserData } from "./users"
+
 export interface ShortMessageData {
   id: string
   username: string
@@ -6,9 +8,8 @@ export interface ShortMessageData {
 
 export interface MessageData {
   id: string
-  userId: string
   chatId: string
-  username: string
+  user: ShortUserData
   text: string
   modifiedAt: string
 }
