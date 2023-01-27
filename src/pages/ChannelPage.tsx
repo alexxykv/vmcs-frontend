@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider,
-  IconButton, List, ListItem, ListItemAvatar,
+  IconButton, List, Link, ListItem, ListItemAvatar,
   ListItemButton, ListItemIcon, ListItemText, Paper, TextField, Typography
 } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -273,17 +273,17 @@ interface MeetingItemProps {
 
 const MeetingItem: React.FC<MeetingItemProps> = ({ meeting }) => {
   const { id, name } = meeting;
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
-    navigate(`/meeting/${id}`);
-  };
+  // const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+  //   navigate(`/meeting/${id}`);
+  // };
 
   return (
-    <ListItem disablePadding sx={{
+    <ListItem component={Link} href={`/meeting/${id}`} disablePadding sx={{
       color: 'text.secondary'
     }}>
-      <ListItemButton sx={{ gap: 2 }} onClick={handleClick}>
+      <ListItemButton sx={{ gap: 2 }}>
         <ListItemIcon sx={{ minWidth: 0, color: 'info.main' }}>
           <VideocamIcon fontSize='small' />
         </ListItemIcon>
