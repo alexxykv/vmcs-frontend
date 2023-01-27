@@ -4,18 +4,22 @@ import { useHub } from '../hooks/useHub';
 import ChatHub from '../hubs/ChatHub';
 import { WithChildrenProps } from '../interfaces/props';
 import ChatHubContext from '../contexts/ChatHubContext';
+import { useAuth } from '../hooks/useAuth';
 
 
 const ChatHubProvider: React.FC<WithChildrenProps> = ({ children }) => {
+  const auth = useAuth();
   const chatHub = useHub(ChatHub, Endpoints.ChatHub);
 
   useEffect(() => {
-    chatHub.start();
-
+    if (auth.status === 'Authorized') {
+      chatHub.Connection.start();
+    }
+    
     return () => {
-      chatHub.stop();
+      chatHub.Connection.stop();
     };
-  }, [chatHub]);
+  }, [chatHub, auth.status]);
 
   return (
     <ChatHubContext.Provider value={chatHub}>

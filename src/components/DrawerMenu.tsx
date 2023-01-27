@@ -111,10 +111,10 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
         {
           menuItems.map(item => {
             return (
-              <>
+              <React.Fragment key={item.text}>
                 {item.text === 'Logout' ? <Divider /> : <></>}
-                <MenuItem key={item.text} {...item} />
-              </>
+                <MenuItem {...item} />
+              </React.Fragment>
             );
           })
         }
