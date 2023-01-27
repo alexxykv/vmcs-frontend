@@ -93,7 +93,7 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
         sx={{ cursor: 'default' }}
       >
         <Avatar src={user.avatarUri} sx={{ width: 72, height: 72, mb: 1 }} />
-        <Typography variant='h5' component='div' fontWeight={500}>
+        <Typography variant='h5' component='div' fontWeight={500} textAlign='center'>
           {user.username}
         </Typography>
         <Typography variant='body2' color='text.secondary'>
@@ -111,10 +111,10 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
         {
           menuItems.map(item => {
             return (
-              <>
+              <React.Fragment key={item.text}>
                 {item.text === 'Logout' ? <Divider /> : <></>}
-                <MenuItem key={item.text} {...item} />
-              </>
+                <MenuItem {...item} />
+              </React.Fragment>
             );
           })
         }

@@ -9,12 +9,14 @@ export interface ChannelData {
   chat: ShortChatData
   users: Array<ShortUserData>
   meetings: Array<ShortMeetingData>
+  avatarUri: string
 }
 
 export interface ShortChannelData {
   id: string
   name: string
   chatId: string
+  avatarUri: string
 }
 
 export interface CreateChannelData {

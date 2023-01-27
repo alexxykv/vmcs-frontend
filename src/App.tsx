@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
@@ -23,6 +23,7 @@ import MeetingHubProvider from './providers/MeetingHubProvider';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { PaletteMode } from '@mui/material';
 import Cookies from 'js-cookie';
+import { useAuth } from './hooks/useAuth';
 
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
@@ -83,9 +84,11 @@ const App: React.FC = () => {
 }
 
 const Routing: React.FC = () => {
+  const auth = useAuth();
+
   return (
     <Routes>
-      <Route path='/' element={<WelcomePage />} />
+      <Route path='/' element={<Navigate to={auth.status === 'Authorized' ? '/dashboard' : '/login'} />} />
       <Route element={<PrivateRoute />}>
         <Route path='/profile' element={<AccountPage />} />
         <Route path='/channels/:id' element={<ChannelPage />} />
@@ -94,7 +97,11 @@ const Routing: React.FC = () => {
         <Route path='/dashboard' element={<DashboardPage />} />
       </Route>
       <Route path='/login' element={<LoginPage />} />
-      <Route path='*' element={<NotFoundPage />} />
+      <Route path='*' element={
+        auth.status === 'Authorized'
+          ? <NotFoundPage />
+          : <Navigate to={'/login'} />
+      } />
     </Routes>
   );
 }

@@ -23,4 +23,10 @@ export default class Channels {
     const response = await api.delete(url);
     return response.data;
   }
+
+  public static async UploadAvatar(formData: FormData) {
+    const url = path.join(ApiRoutes.Channels, 'upload-avatar');
+    const response = await api.post(url, formData);
+    return response.data;
+  }
 }
