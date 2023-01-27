@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ open, toggleOpen }) => {
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ mr: 2 }}>
           <MaterialUISwitch
-            defaultChecked={theme.palette.mode === 'dark'}
+            checked={theme.palette.mode === 'dark'}
             onClick={colorMode.toggleColorMode}
           />
           <IconButton

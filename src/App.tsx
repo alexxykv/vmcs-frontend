@@ -85,7 +85,7 @@ const App: React.FC = () => {
 const Routing: React.FC = () => {
   return (
     <Routes>
-      <Route path='/' element={<WelcomePage />} />
+      {/* <Route path='/' element={<WelcomePage />} /> */}
       <Route element={<PrivateRoute />}>
         <Route path='/profile' element={<AccountPage />} />
         <Route path='/channels/:id' element={<ChannelPage />} />
