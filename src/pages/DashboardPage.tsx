@@ -87,6 +87,9 @@ interface ChannelItemProps {
 
 const ChannelItem: React.FC<ChannelItemProps> = ({ channel }) => {
   const navigate = useNavigate();
+  const avatarUri = channel.avatarUri ?
+    new URL(channel.avatarUri, process.env.REACT_APP_HOST_URL).href
+    : '';
 
   const handleClick = () => {
     navigate(`/channels/${channel.id}`);
@@ -113,7 +116,14 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel }) => {
         padding={1}
         flexGrow={1}>
         <Box sx={{ display: 'flex', height: '50%', alignItems: 'center' }}>
-          <Avatar sx={{ width: 56, height: 56 }} />
+          <Avatar
+            src={avatarUri}
+            sx={{
+              width: 56,
+              height: 56
+            }}>
+            {channel.name[0]}
+          </Avatar>
         </Box>
         <Typography variant='h6' component='div' fontWeight={400} sx={{
           alignItems: 'start',

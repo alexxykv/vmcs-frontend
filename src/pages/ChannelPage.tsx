@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import {
-  Avatar, Box, Button, Divider,
+  Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider,
   IconButton, List, ListItem, ListItemAvatar,
   ListItemButton, ListItemIcon, ListItemText, Paper, TextField, Typography
 } from '@mui/material';
@@ -15,6 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import StarIcon from '@mui/icons-material/Star';
 import VideocamIcon from '@mui/icons-material/Videocam';
+import ImageIcon from '@mui/icons-material/Image';
 
 import Loading from '../components/Loading';
 // import ChannelAsideMenu from '../components/ChannelAsideMenu';
@@ -42,9 +43,17 @@ const ChannelPage: React.FC = () => {
   const uploadChannelData = useCallback(() => {
     fakeAsync(() => {
       Channels.Get(channelId).then(channel => {
-        setChannel(channel);
+        const avatarUri = channel.avatarUri ?
+          new URL(channel.avatarUri, process.env.REACT_APP_HOST_URL).href
+          : '';
+        setChannel(prev => {
+          return {
+            ...channel,
+            avatarUri
+          }
+        });
       }).catch(() => {
-        navigate('/channels', { replace: true });
+        navigate('/dashboard', { replace: true });
       });
     });
   }, [navigate, channelId]);
@@ -65,7 +74,7 @@ const ChannelPage: React.FC = () => {
       width: '100%',
       height: '100%',
     }}>
-      <ChannelHeader channel={channel} />
+      <ChannelHeader channel={channel} setChannel={setChannel} />
       <Divider />
       <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'auto' }}>
         <MeetingList meetings={channel.meetings} channelId={channel.id} />
@@ -80,9 +89,35 @@ const ChannelPage: React.FC = () => {
 
 interface ChannelHeaderProps {
   channel: ChannelData
+  setChannel: React.Dispatch<React.SetStateAction<ChannelData>>
 }
 
-const ChannelHeader: React.FC<ChannelHeaderProps> = ({ channel }) => {
+const ChannelHeader: React.FC<ChannelHeaderProps> = ({ channel, setChannel }) => {
+  const [openSettings, setOpenSettings] = useState<boolean>(false);
+
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
+  };
+
+  const handleChangeImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const image = files[0];
+      const formData = new FormData();
+      formData.append('channelId', channel.id);
+      formData.append('image', image);
+      Channels.UploadAvatar(formData).then(() => {
+        setChannel(prev => {
+          return {
+            ...prev,
+            avatarUri: URL.createObjectURL(image)
+          }
+        });
+        setOpenSettings(false);
+      });
+    }
+  }
+
   return (
     <Box sx={{
       display: 'flex',
@@ -90,7 +125,14 @@ const ChannelHeader: React.FC<ChannelHeaderProps> = ({ channel }) => {
       p: 2,
       gap: 2
     }}>
-      <Avatar sx={{ width: '48px', height: '48px' }}>{channel.name[0]}</Avatar>
+      <Avatar
+        src={channel.avatarUri}
+        sx={{
+          width: '48px',
+          height: '48px'
+        }}>
+        {channel.name[0]}
+      </Avatar>
       <Typography variant='h5' component='div' sx={{
         textOverflow: 'ellipsis',
         overflow: 'hidden',
@@ -100,9 +142,38 @@ const ChannelHeader: React.FC<ChannelHeaderProps> = ({ channel }) => {
         {channel.name}
       </Typography>
       <Box sx={{ flexGrow: 1 }} />
-      <IconButton size='large'>
+      <IconButton
+        size='large'
+        onClick={() => setOpenSettings(true)}
+      >
         <SettingsIcon />
       </IconButton>
+
+      <Dialog open={openSettings} onClose={handleCloseSettings}>
+        <DialogTitle>Channel settings</DialogTitle>
+        <DialogContent>
+          <Button
+            component="label"
+            variant='contained'
+            color='primary'
+            startIcon={<ImageIcon />}
+            sx={{
+              height: 'min-content',
+              alignSelf: 'center'
+            }}>
+            Change channel image
+            <input
+              hidden
+              accept="image/*"
+              type="file"
+              onChange={handleChangeImage}
+            />
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseSettings}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
@@ -379,8 +450,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       setAvatarSrc(user.avatarUri);
     } else {
       const avatarUri = message.user.avatarUri ?
-      new URL(message.user.avatarUri, process.env.REACT_APP_HOST_URL).href
-      : '';
+        new URL(message.user.avatarUri, process.env.REACT_APP_HOST_URL).href
+        : '';
       setAvatarSrc(avatarUri);
     }
   }, [user.id, user.avatarUri, message.user.id, message.user.avatarUri]);
