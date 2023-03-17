@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import AceEditor from 'react-ace';
-import { IDirectory, ITextFile } from '../hubs/CodeSharingHub';
+import { ChangeDTO, IDirectory, ITextFile } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 
 import 'ace-builds/src-noconflict/mode-jsx';
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
+import { version } from 'os';
 
 const languages = [
   'javascript',
@@ -51,9 +52,10 @@ interface EditorProps {
   repository: IDirectory
   setFiles: React.Dispatch<React.SetStateAction<Map<string, ITextFile>>>
   files: Map<string, ITextFile>
+  fileVersionControl: Map<number, any[]>
 }
 
-const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files }) => {
+const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, fileVersionControl }) => {
   const codeHub = useCodeSharingHub();
   const [value, setValue] = useState<string>('');
 
@@ -62,7 +64,12 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files }) =>
   }, [file, file.text]);
 
   const handleChange = (newValue: string) => {
-    codeHub.change(newValue, repository.id, file.id);
+    const dto: ChangeDTO = { 
+      directoryId: repository.id,
+      fileId: file.id,
+      change: 
+    }
+    codeHub.change(dto);
     setValue(newValue);
 
     const text = newValue;
@@ -71,6 +78,12 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files }) =>
       text
     };
     setFiles(prev => new Map(prev).set(file.id.toString(), newFile));
+
+    function CreateChange(){
+      let versionId = (fileVersionControl.get(file.id) as any[])[0];
+      
+
+    };
   };
 
   return (
