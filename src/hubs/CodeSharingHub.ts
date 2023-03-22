@@ -1,3 +1,4 @@
+import { json } from "stream/consumers";
 import Hub from "./Hub";
 
 export interface IDirectory {
@@ -39,6 +40,22 @@ export interface FolderReturnDTO {
   folders: IFolder[]
 }
 
+export interface ChangeDTO {
+  directoryId: string
+  fileId: number
+  change: Change
+  connectionId: string
+}
+
+export interface Change {
+  position: number
+  action: number
+  insertedString: string
+  charsDeleted: number
+  versionId: number
+  changeId: number
+}
+
 
 export default class CodeSharingHub extends Hub {
   createFile(file: TextFileDTO, folderId: number, directoryId: string) {
@@ -75,13 +92,14 @@ export default class CodeSharingHub extends Hub {
     });
   }
 
-  change(text: string, directoryId: string, fileId: number) {
-    return this.Connection.invoke('Change', text, directoryId, fileId);
+  change(change: ChangeDTO) {
+    console.log(change);
+    return this.Connection.invoke('Change', JSON.stringify(change));
   }
 
-  onChange(callback: (text: string, directoryId: string, fileId: number) => void) {
-    this.Connection.on('Change', (text, directoryId, fileId) => {
-      callback(text, directoryId, fileId);
+  onChange(callback: (change: ChangeDTO) => void) {
+    this.Connection.on('Change', (change) => {
+      callback(change);
     });
   }
 

@@ -15,6 +15,7 @@ const CodeShareScreen: React.FC = () => {
   const [repository, setRepository] = useState<IDirectory | null>(null);
   const [repositoryId, setRepositoryId] = useState<string>(meeting.repositoryId);
 
+
   const repositoryExist = useCallback(() => {
     return repositoryId !== null;
   }, [repositoryId]);

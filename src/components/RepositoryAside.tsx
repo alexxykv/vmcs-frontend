@@ -9,7 +9,7 @@ import FolderZipIcon from '@mui/icons-material/FolderZip';
 import SaveIcon from '@mui/icons-material/Save';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
-import { IFolder, IDirectory, ITextFile, TextFileDTO } from '../hubs/CodeSharingHub';
+import { IFolder, IDirectory, ITextFile, TextFileDTO, ChangeDTO, Change } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import { Directories, Users } from '../api';
 import { saveAs as saveZip } from 'file-saver';
@@ -24,9 +24,12 @@ interface RepositoryAsideProps {
   selectFile: (file: ITextFile) => void
   setFiles: React.Dispatch<React.SetStateAction<Map<string, ITextFile>>>
   files: Map<string, ITextFile>
+  fileVersionControl: Map<number, any[]>
+  setFileVersionControl: React.Dispatch<React.SetStateAction<Map<number, any[]>>>
 }
 
-const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFile, setFiles, files }) => {
+
+const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFile, setFiles, files, fileVersionControl, setFileVersionControl}) => {
   const navigate = useNavigate();
   const codeHub = useCodeSharingHub();
   const user = useUser();
@@ -102,6 +105,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     codeHub.onCreateFile((file) => {
       const id = file.id.toString();
       // TODO: TextFileReturnDTO -> ITextFile
+      fileVersionControl.set(file.id, [0, []]);
       const newFile: ITextFile = {
         ...file,
         isDeleted: false
@@ -110,18 +114,77 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
       updateDirectory(newFile);
     });
 
-    codeHub.onChange((text, directoryId, fileId) => {
-      const file = files.get(fileId.toString()) as ITextFile;
-
-      if (text === file.text) {
-        return;
+    codeHub.onChange((change: ChangeDTO) => {
+      const transformChange = () => {
+        localChanges.forEach(element => {
+          if (element.position <= ch.position) {
+            switch (element.action) {
+              case 0:
+                ch.position -= element.charsDeleted;
+                break;
+              case 1:
+                ch.position += element.insertedString.length;
+                break;
+            }
+          }
+          else{
+            switch (ch.action) {
+              case 0:
+                element.position -= ch.charsDeleted;
+                break;
+              case 1:
+                element.position -= ch.insertedString.length;
+                break;
+            }
+          }
+        });
       }
+      const applyChange = () => {
+        let text = file.text;
+        switch (ch.action) {
+          case 0:
+            text = text.substring(0, ch.position) + text.substring(ch.position + ch.charsDeleted);
+            break;
+          case 1:
+            text = text.substring(0, ch.position) + ch.insertedString + text.substring(ch.position + ch.insertedString.length);
+            break;
+        }
+        return text;
+      }
+
+
+      const file = files.get(change.fileId.toString()) as ITextFile;
+
+      const fvc = fileVersionControl.get(file.id) as any[];
+      const localChanges: Change[] = fvc[1];
+      const ch = change.change;
+
+      if (change.connectionId === codeHub.Connection.connectionId)
+      {
+
+        let ackdChangeIndex = 0;
+        const acknowledgedChange = localChanges.filter((change: Change, index: number) => {
+          ackdChangeIndex = index;
+          return change.changeId === ch.changeId;
+        });
+
+        if (acknowledgedChange.length !== 0) {
+          localChanges.splice(ackdChangeIndex, 1);
+          setFileVersionControl(prev => prev.set(file.id, [change.change.versionId, localChanges]));
+          return;
+        }
+      }
+      
+      transformChange();
+      let changedText = applyChange();
+      setFileVersionControl(prev => prev.set(file.id, [change.change.versionId, localChanges]));
+
 
       const newFile: ITextFile = {
         ...file,
-        text
+        text: changedText
       };
-      setFiles(prev => new Map(prev).set(fileId.toString(), newFile));
+      setFiles(prev => new Map(prev).set(change.fileId.toString(), newFile));
 
       // if (changeInfo.cliendId === codeHub.Connection.connectionId || (changeInfo.insertedString === '' && changeInfo.charsDeleted === 0)){
       //   console.log('NE ONCHANGE');
@@ -143,7 +206,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
       // TODO: Change it
       // console.log(fileId, selectedFile)
-      if (fileId === parseInt(selectedFile)) {
+      if (change.fileId === parseInt(selectedFile)) {
         selectFile(newFile);
       }
     });
@@ -157,6 +220,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
   const addFile = useCallback((name: string, parentId: string) => {
     const file: TextFileDTO = { name, text: '' };
+    
     codeHub.createFile(file, parseInt(parentId), repository.id);
   }, [codeHub, repository.id]);
 
