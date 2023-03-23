@@ -7,6 +7,7 @@ import 'ace-builds/src-noconflict/mode-jsx';
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
 import { truncate } from 'fs';
+import { Input } from '@mui/material';
 
 const languages = [
   'javascript',
@@ -74,15 +75,15 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
       let curVersion = fvc[0];
       let changeId = incrementor;
       setIncrementor(prev => prev + 1);
-      for (var i = 0; i < maxLength; i++){
-        if (i > oldText.length - 1 || i > newText.length - 1 || oldText[i] != newText[i]){
+      for (var i = 0; i < maxLength; i++) {
+        if (i > oldText.length - 1 || i > newText.length - 1 || oldText[i] != newText[i]) {
           difPos = i;
           break;
         }
       }
 
       let toTake = (newText.length - difPos) - (oldText.length - difPos);
-      
+
       let change: Change = {
         position: difPos,
         versionId: curVersion,
@@ -91,7 +92,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
         insertedString: "",
         changeId: changeId
       };
-      if (oldText.length < newText.length){
+      if (oldText.length < newText.length) {
         change.action = 1;
         change.insertedString = newText.substring(difPos, toTake + difPos);
         change.charsDeleted = -1;
@@ -103,8 +104,8 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
       fileVersionControl.set(file.id, [curVersion, newChanges]);
       return change;
     };
-    
-    const dto: ChangeDTO = { 
+
+    const dto: ChangeDTO = {
       directoryId: repository.id,
       fileId: file.id,
       change: findChange(value, newValue),
@@ -129,22 +130,21 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
   };
 
   return (
-    <AceEditor
-      mode='python'
-      theme='monokai'
-      value={value}
-      onChange={handleChange}
-      fontSize={14}
-      highlightActiveLine={true}
-      enableBasicAutocompletion={true}
-      enableLiveAutocompletion={true}
-      enableSnippets={true}
-      setOptions={{ useWorker: false }}
-      showGutter={true}
-      showPrintMargin={false}
-      debounceChangePeriod={250}
-      style={{ display: 'flex', flexGrow: 1, height: '100%' }}
-    />
+      <AceEditor
+        mode='python'
+        theme='monokai'
+        value={value}
+        onChange={handleChange}
+        fontSize={14}
+        highlightActiveLine={true}
+        enableBasicAutocompletion={true}
+        enableLiveAutocompletion={true}
+        enableSnippets={true}
+        setOptions={{ useWorker: false }}
+        showGutter={true}
+        showPrintMargin={false}
+        style={{ display: 'flex', flexGrow: 1, height: '100%' }}
+      />
   );
 }
 
