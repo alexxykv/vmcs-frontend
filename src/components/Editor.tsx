@@ -110,7 +110,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
       connectionId: codeHub.Connection.connectionId as string
     }
 
-    log += `CHANGE:\n\tAction: ${dto.change.action}\n\tCharsDeleted: ${dto.change.charsDeleted}\n\tInsertedString: ${dto.change.insertedString}\n\tPosition: ${dto.change.position}\n\tVersionId: ${dto.change.versionId}\n************************`;
+    log += `CHANGE:\n\tAction: ${dto.change.action}\n\tChangeId:${dto.change.changeId}\n\tCharsDeleted: ${dto.change.charsDeleted}\n\tInsertedString: ${dto.change.insertedString}\n\tPosition: ${dto.change.position}\n\tVersionId: ${dto.change.versionId}\n************************`;
 
     codeHub.change(dto);
     setValue(newValue);

@@ -116,7 +116,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     });
 
     codeHub.onChange((change: ChangeDTO) => {
-      let log = `RESPONSE\n************************\nAction: ${change.change.action}\nCurrent Connection id: ${codeHub.Connection.connectionId}\nConnection id: ${change.connectionId}\nCharsDeleted: ${change.change.charsDeleted}\nInsertedString: ${change.change.insertedString}\nPosition: ${change.change.position}\nVersionId: ${change.change.versionId}\n`;
+      let log = `RESPONSE\n************************\nAction: ${change.change.action}\nChangeId: ${change.change.changeId}}\nCurrent Connection id: ${codeHub.Connection.connectionId}\nConnection id: ${change.connectionId}\nCharsDeleted: ${change.change.charsDeleted}\nInsertedString: ${change.change.insertedString}\nPosition: ${change.change.position}\nVersionId: ${change.change.versionId}\n`;
       const transformChange = () => {
         localChanges.forEach(element => {
           if (element.position < ch.position) {
@@ -166,7 +166,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
       localChanges.forEach(x => {
         let b = x as Change;
-        log += `\n\tAction: ${b.action}\n\tCharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
+        log += `\n\tAction: ${b.action}\n\tChangeId:${b.changeId}\n\tCharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
         log += `\n`
       });
 
@@ -190,10 +190,11 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
           log += `\n\nNEW LocalChanges:`
           localChangesNew.forEach(x => {
             let b = x as Change;
-            log += `\n\tAction: ${b.action}\n\tCharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
+            log += `\n\tAction: ${b.action}\n\tChangeId:${b.changeId}\n\tCharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
             log += `\n`
           });
-          log += `************************`;
+          log += `\nFVC[0]: ${fvc2[0]}`
+          log += `\n************************`;
           log += `\nКонечный текст:`
           console.log(log);
 
@@ -213,8 +214,9 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
         log += `\n\tAction: ${b.action}\n\tCharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
         log += `\n`
       });
+      log += `\nFVC[0]: ${fvc2[0]}`
       log += `\nКонечный текст: ${changedText}`
-      log += `************************`;
+      log += `\n************************`;
       console.log(log);
 
       const newFile: ITextFile = {
