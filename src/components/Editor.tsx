@@ -6,6 +6,7 @@ import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import 'ace-builds/src-noconflict/mode-jsx';
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
+import { truncate } from 'fs';
 
 const languages = [
   'javascript',
@@ -141,6 +142,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
       setOptions={{ useWorker: false }}
       showGutter={true}
       showPrintMargin={false}
+      debounceChangePeriod={250}
       style={{ display: 'flex', flexGrow: 1, height: '100%' }}
     />
   );

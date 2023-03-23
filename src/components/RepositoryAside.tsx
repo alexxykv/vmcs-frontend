@@ -215,7 +215,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
       log += `\n\nNEW LocalChanges:`
       localChangesNew.forEach(x => {
         let b = x as Change;
-        log += `\n\tAction: ${b.action}\n\tCharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
+        log += `\n\tAction: ${b.action}\n\tChangeId: ${b.changeId}CharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
         log += `\n`
       });
       log += `\nFVC[0]: ${fvc2[0]}`
