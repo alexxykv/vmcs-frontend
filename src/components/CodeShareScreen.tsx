@@ -4,7 +4,7 @@ import Repository from './Repository';
 import RepositoryWelcome from './RepositoryWelcome';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import { useMeeting } from '../hooks/useMeeting';
-import { IDirectory } from '../hubs/CodeSharingHub';
+import { IDirectory, IFolder } from '../hubs/CodeSharingHub';
 import { Directories } from '../api';
 import { CreateDirectoryData } from '../interfaces/dto';
 
@@ -14,6 +14,7 @@ const CodeShareScreen: React.FC = () => {
   const codeHub = useCodeSharingHub();
   const [repository, setRepository] = useState<IDirectory | null>(null);
   const [repositoryId, setRepositoryId] = useState<string>(meeting.repositoryId);
+  const [fileVersionControl, setFileVersionControl] = useState<Map<number, any[]>>(new Map());
 
 
   const repositoryExist = useCallback(() => {
@@ -29,9 +30,24 @@ const CodeShareScreen: React.FC = () => {
     });
     codeHub.onConnectToRepository(directory => {
       console.log(directory)
+      let fvc = new Map<number, any[]>();
+      addFilesFromFolderRec(directory.rootFolder);
+      
       setRepository(directory);
+      setFileVersionControl(fvc);
+
+      function addFilesFromFolderRec(folder: IFolder ){
+        folder.files.forEach(element => {
+          fvc.set(element.id, [element.versionId, []]);
+        });
+        folder.folders.forEach(element => {
+          addFilesFromFolderRec(element);
+        });
+    }
     });
   }, [codeHub]);
+
+  
 
   const disconnectRepository = useCallback(() => {
     codeHub.offConnectToRepository();
@@ -54,7 +70,7 @@ const CodeShareScreen: React.FC = () => {
   const render = () => {
     if (repositoryExist()) {
       if (repository) {
-        return <Repository repository={repository} />
+        return <Repository repository={repository} fileVersionControl={fileVersionControl} setFileVersionControl = {setFileVersionControl} />
       }
       return <Loading />
     }

@@ -6,13 +6,15 @@ import RepositoryAside from './RepositoryAside';
 
 
 interface RepositoryProps {
-  repository: IDirectory
+  repository: IDirectory,
+  fileVersionControl: Map<number, any[]>,
+  setFileVersionControl: React.Dispatch<React.SetStateAction<Map<number, any[]>>>
 }
 
-const Repository: React.FC<RepositoryProps> = ({ repository }) => {
+const Repository: React.FC<RepositoryProps> = ({ repository, fileVersionControl, setFileVersionControl}) => {
   const [selectedFile, setSelectedFile] = useState<ITextFile | null>(null);
   const [files, setFiles] = useState<Map<string, ITextFile>>(new Map());
-  const [fileVersionControl, setFileVersionControl] = useState<Map<number, any[]>>(new Map());
+  
 
 
   const selectFile = (file: ITextFile) => {

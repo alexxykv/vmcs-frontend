@@ -105,7 +105,8 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     codeHub.onCreateFile((file) => {
       const id = file.id.toString();
       // TODO: TextFileReturnDTO -> ITextFile
-      fileVersionControl.set(file.id, [0, []]);
+      fileVersionControl.set(file.id, [file.versionId, []]);
+      setFileVersionControl(fileVersionControl);
       const newFile: ITextFile = {
         ...file,
         isDeleted: false
@@ -154,7 +155,9 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
 
       const file = files.get(change.fileId.toString()) as ITextFile;
-
+      getFiles(directory).forEach(element => {
+        console.log(element);
+      });
       const fvc = fileVersionControl.get(file.id) as any[];
       const localChanges: Change[] = fvc[1];
       const ch = change.change;

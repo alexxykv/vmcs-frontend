@@ -13,6 +13,7 @@ export interface ITextFile {
   name: string
   text: string
   isDeleted: boolean
+  versionId: number
 }
 
 export interface IFolder {
@@ -26,6 +27,7 @@ export interface TextFileReturnDTO {
   id: number
   name: string
   text: string
+  versionId: number
 }
 
 export interface TextFileDTO {
@@ -93,7 +95,6 @@ export default class CodeSharingHub extends Hub {
   }
 
   change(change: ChangeDTO) {
-    console.log(change);
     return this.Connection.invoke('Change', JSON.stringify(change));
   }
 

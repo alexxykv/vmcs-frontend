@@ -73,7 +73,6 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
       let changeId = incrementor;
       setIncrementor(prev => prev + 1);
       for (var i = 0; i < maxLength; i++){
-        console.log("ebababa" + i);
         if (i > oldText.length - 1 || i > newText.length - 1 || oldText[i] != newText[i]){
           difPos = i;
           break;
@@ -95,9 +94,6 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
         change.insertedString = newText.substring(difPos, toTake + difPos);
         change.charsDeleted = -1;
       }
-      console.log(value);
-      console.log(newValue);
-      console.log(change)
 
       let newChanges = fvc[1] as Array<Change>;
       newChanges.push(change);
