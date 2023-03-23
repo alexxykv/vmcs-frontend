@@ -143,6 +143,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
         setOptions={{ useWorker: false }}
         showGutter={true}
         showPrintMargin={false}
+        debounceChangePeriod={100}
         style={{ display: 'flex', flexGrow: 1, height: '100%' }}
       />
   );
