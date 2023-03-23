@@ -59,6 +59,7 @@ interface EditorProps {
 const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, fileVersionControl }) => {
   const codeHub = useCodeSharingHub();
   const [value, setValue] = useState<string>('');
+  const [oldValue, setOldValue] = useState<string>('');
   const [incrementor, setIncrementor] = useState<number>(0);
   const [canChange, setCanChange] = useState<boolean>(true);
 
@@ -75,12 +76,13 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
     }
 
     setCanChange(false);
+    setOldValue(newValue);
 
     setTimeout(() => {
       setCanChange(true);
     }, 750);
 
-    let log = `SEND\n************************\nNew value: ${newValue}\nOld value: ${value}\nConnection id: ${codeHub.Connection.connectionId}\n`;
+    let log = `SEND\n************************\nNew value: ${newValue}\nOld value: ${oldValue}\nConnection id: ${codeHub.Connection.connectionId}\n`;
 
     const findChange: (oldText: string, newText: string) => Change = (oldText: string, newText: string) => {
       let difPos = 0;
@@ -122,7 +124,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
     const dto: ChangeDTO = {
       directoryId: repository.id,
       fileId: file.id,
-      change: findChange(value, newValue),
+      change: findChange(oldValue, newValue),
       connectionId: codeHub.Connection.connectionId as string
     }
 
