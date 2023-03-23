@@ -60,12 +60,26 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
   const codeHub = useCodeSharingHub();
   const [value, setValue] = useState<string>('');
   const [incrementor, setIncrementor] = useState<number>(0);
+  const [canChange, setCanChange] = useState<boolean>(true);
 
   useEffect(() => {
     setValue(file.text);
   }, [file, file.text]);
 
   const handleChange = (newValue: string) => {
+    setValue(newValue);
+    console.log(canChange);
+
+    if (!canChange){
+      return
+    }
+
+    setCanChange(false);
+
+    setTimeout(() => {
+      setCanChange(true);
+    }, 750);
+
     let log = `SEND\n************************\nNew value: ${newValue}\nOld value: ${value}\nConnection id: ${codeHub.Connection.connectionId}\n`;
 
     const findChange: (oldText: string, newText: string) => Change = (oldText: string, newText: string) => {
@@ -115,7 +129,6 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
     log += `CHANGE:\n\tAction: ${dto.change.action}\n\tChangeId:${dto.change.changeId}\n\tCharsDeleted: ${dto.change.charsDeleted}\n\tInsertedString: ${dto.change.insertedString}\n\tPosition: ${dto.change.position}\n\tVersionId: ${dto.change.versionId}\n************************`;
 
     codeHub.change(dto);
-    setValue(newValue);
 
     log += `\nКонечный текст: ${newValue}`
 
@@ -143,7 +156,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
         setOptions={{ useWorker: false }}
         showGutter={true}
         showPrintMargin={false}
-        debounceChangePeriod={100}
+        // debounceChangePeriod={100}
         style={{ display: 'flex', flexGrow: 1, height: '100%' }}
       />
   );
