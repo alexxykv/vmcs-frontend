@@ -116,7 +116,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     });
 
     codeHub.onChange((change: ChangeDTO) => {
-      let log = `RESPONSE\n************************\nAction: ${change.change.action}\nChangeId: ${change.change.changeId}}\nCurrent Connection id: ${codeHub.Connection.connectionId}\nConnection id: ${change.connectionId}\nCharsDeleted: ${change.change.charsDeleted}\nInsertedString: ${change.change.insertedString}\nPosition: ${change.change.position}\nVersionId: ${change.change.versionId}\n`;
+      let log = `RESPONSE\n************************\nAction: ${change.change.action}\nChangeId: ${change.change.changeId}\nCurrent Connection id: ${codeHub.Connection.connectionId}\nConnection id: ${change.connectionId}\nCharsDeleted: ${change.change.charsDeleted}\nInsertedString: ${change.change.insertedString}\nPosition: ${change.change.position}\nVersionId: ${change.change.versionId}\n`;
       const transformChange = () => {
         localChanges.forEach(element => {
           if (element.position < ch.position) {
@@ -177,8 +177,12 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
         let ackdChangeIndex = 0;
         const acknowledgedChange = localChanges.filter((change: Change, index: number) => {
-          ackdChangeIndex = index;
-          return change.changeId === ch.changeId;
+          if (change.changeId === ch.changeId)
+          {
+            ackdChangeIndex = index;
+            return true;
+          }
+          return false;
         });
 
         if (acknowledgedChange.length !== 0) {
