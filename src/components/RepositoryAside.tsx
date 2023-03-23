@@ -118,7 +118,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     codeHub.onChange((change: ChangeDTO) => {
       const transformChange = () => {
         localChanges.forEach(element => {
-          if (element.position <= ch.position) {
+          if (element.position < ch.position) {
             switch (element.action) {
               case 0:
                 ch.position -= element.charsDeleted;
@@ -147,7 +147,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
             text = text.substring(0, ch.position) + text.substring(ch.position + ch.charsDeleted);
             break;
           case 1:
-            text = text.substring(0, ch.position) + ch.insertedString + text.substring(ch.position + ch.insertedString.length);
+            text = text.substring(0, ch.position) + ch.insertedString + text.substring(ch.position);
             break;
         }
         return text;

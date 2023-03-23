@@ -95,6 +95,9 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
         change.charsDeleted = -1;
       }
 
+      console.log(value);
+      console.log(newValue);
+
       let newChanges = fvc[1] as Array<Change>;
       newChanges.push(change);
 
