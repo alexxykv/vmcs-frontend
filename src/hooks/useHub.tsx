@@ -10,7 +10,7 @@ export function useHub<TypeHub>(
   constructor: new (connection: signalR.HubConnection) => TypeHub,
   endpoint: Endpoints): TypeHub {
     console.log(process.env.REACT_APP_HOST_URL as string);
-  const connectionURL = new URL(path.join(endpoint), "https://8wg1qmj8-5001.euw.devtunnels.ms/").toString();
+  const connectionURL = new URL(path.join(endpoint), process.env.REACT_APP_HOST_URL as string).toString();
   
   const hubConnection = useHubConnection(connectionURL);
 

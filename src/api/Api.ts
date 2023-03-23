@@ -4,8 +4,7 @@ import LocalStorageKeys from '../enums/LocalStorageKeys';
 
 
 export const api = axios.create({
-  //poemnyat
-  baseURL: "https://8wg1qmj8-5001.euw.devtunnels.ms/",
+  baseURL: process.env.REACT_APP_HOST_URL,
 });
 
 export function setToken(token: string): void {
