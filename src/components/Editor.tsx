@@ -6,7 +6,6 @@ import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 import 'ace-builds/src-noconflict/mode-jsx';
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
-import { version } from 'os';
 
 const languages = [
   'javascript',
@@ -65,6 +64,8 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
   }, [file, file.text]);
 
   const handleChange = (newValue: string) => {
+    let log = `SEND\n************************\nNew value: ${newValue}\nOld value: ${value}\nConnection id: ${codeHub.Connection.connectionId}\n`;
+
     const findChange: (oldText: string, newText: string) => Change = (oldText: string, newText: string) => {
       let difPos = 0;
       let maxLength = Math.max(oldText.length, newText.length);
@@ -95,15 +96,11 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
         change.charsDeleted = -1;
       }
 
-      console.log(value);
-      console.log(newValue);
-
       let newChanges = fvc[1] as Array<Change>;
       newChanges.push(change);
 
       fileVersionControl.set(file.id, [curVersion, newChanges]);
       return change;
-    ;
     };
     
     const dto: ChangeDTO = { 
@@ -112,8 +109,13 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
       change: findChange(value, newValue),
       connectionId: codeHub.Connection.connectionId as string
     }
+
+    log += `CHANGE:\n\tAction: ${dto.change.action}\n\tCharsDeleted: ${dto.change.charsDeleted}\n\tInsertedString: ${dto.change.insertedString}\n\tPosition: ${dto.change.position}\n\tVersionId: ${dto.change.versionId}\n************************`;
+
     codeHub.change(dto);
     setValue(newValue);
+
+    log += `\nКонечный текст: ${newValue}`
 
     const text = newValue;
     const newFile: ITextFile = {
@@ -122,13 +124,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
     };
     setFiles(prev => new Map(prev).set(file.id.toString(), newFile));
 
-  
-
-    function CreateChange(){
-      let versionId = (fileVersionControl.get(file.id) as any[])[0];
-      
-
-    };
+    console.log(log);
   };
 
   return (

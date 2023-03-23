@@ -116,6 +116,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     });
 
     codeHub.onChange((change: ChangeDTO) => {
+      let log = `RESPONSE\n************************\nAction: ${change.change.action}\nCurrent Connection id: ${codeHub.Connection.connectionId}\nConnection id: ${change.connectionId}\nCharsDeleted: ${change.change.charsDeleted}\nInsertedString: ${change.change.insertedString}\nPosition: ${change.change.position}\nVersionId: ${change.change.versionId}\n`;
       const transformChange = () => {
         localChanges.forEach(element => {
           if (element.position < ch.position) {
@@ -155,11 +156,20 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
 
 
       const file = files.get(change.fileId.toString()) as ITextFile;
-      getFiles(directory).forEach(element => {
-        console.log(element);
-      });
+      // getFiles(directory).forEach(element => {
+      //   console.log(element);
+      // });
       const fvc = fileVersionControl.get(file.id) as any[];
       const localChanges: Change[] = fvc[1];
+      
+      log += `\nCURRENT LocalChanges:`
+
+      localChanges.forEach(x => {
+        let b = x as Change;
+        log += `\n\tAction: ${b.action}\n\tCharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
+        log += `\n`
+      });
+
       const ch = change.change;
 
       if (change.connectionId === codeHub.Connection.connectionId)
@@ -174,6 +184,19 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
         if (acknowledgedChange.length !== 0) {
           localChanges.splice(ackdChangeIndex, 1);
           setFileVersionControl(prev => prev.set(file.id, [change.change.versionId, localChanges]));
+          
+          const fvc2 = fileVersionControl.get(file.id) as any[];
+          const localChangesNew: Change[] = fvc2[1]; 
+          log += `\n\nNEW LocalChanges:`
+          localChangesNew.forEach(x => {
+            let b = x as Change;
+            log += `\n\tAction: ${b.action}\n\tCharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
+            log += `\n`
+          });
+          log += `************************`;
+          log += `\nКонечный текст:`
+          console.log(log);
+
           return;
         }
       }
@@ -181,7 +204,18 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
       transformChange();
       let changedText = applyChange();
       setFileVersionControl(prev => prev.set(file.id, [change.change.versionId, localChanges]));
-
+      
+      const fvc2 = fileVersionControl.get(file.id) as any[];
+      const localChangesNew: Change[] = fvc2[1]; 
+      log += `\n\nNEW LocalChanges:`
+      localChangesNew.forEach(x => {
+        let b = x as Change;
+        log += `\n\tAction: ${b.action}\n\tCharsDeleted: ${b.charsDeleted}\n\tInsertedString: ${b.insertedString}\n\tPosition: ${b.position}\n\tVersionId: ${b.versionId}`;
+        log += `\n`
+      });
+      log += `\nКонечный текст: ${changedText}`
+      log += `************************`;
+      console.log(log);
 
       const newFile: ITextFile = {
         ...file,
