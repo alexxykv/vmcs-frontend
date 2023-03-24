@@ -1,52 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import AceEditor from 'react-ace';
+// import AceEditor from 'react-ace';
+
+import CodeMirror from '@uiw/react-codemirror';
+
 import { Change, ChangeDTO, IDirectory, ITextFile } from '../hubs/CodeSharingHub';
 import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
 
-import 'ace-builds/src-noconflict/mode-jsx';
-import 'ace-builds/src-min-noconflict/ext-searchbox';
-import 'ace-builds/src-min-noconflict/ext-language_tools';
+// import 'ace-builds/src-noconflict/mode-jsx';
+// import 'ace-builds/src-min-noconflict/ext-searchbox';
+// import 'ace-builds/src-min-noconflict/ext-language_tools';
 import { truncate } from 'fs';
 import { Input } from '@mui/material';
 
-const languages = [
-  'javascript',
-  'java',
-  'python',
-  'xml',
-  'ruby',
-  'sass',
-  'markdown',
-  'mysql',
-  'json',
-  'html',
-  'handlebars',
-  'golang',
-  'csharp',
-  'elixir',
-  'typescript',
-  'css'
-];
+// const languages = [
+//   'javascript',
+//   'java',
+//   'python',
+//   'xml',
+//   'ruby',
+//   'sass',
+//   'markdown',
+//   'mysql',
+//   'json',
+//   'html',
+//   'handlebars',
+//   'golang',
+//   'csharp',
+//   'elixir',
+//   'typescript',
+//   'css'
+// ];
 
-const themes = [
-  'monokai',
-  'github',
-  'tomorrow',
-  'kuroir',
-  'twilight',
-  'xcode',
-  'textmate',
-  'solarized_dark',
-  'solarized_light',
-  'terminal'
-];
+// const themes = [
+//   'monokai',
+//   'github',
+//   'tomorrow',
+//   'kuroir',
+//   'twilight',
+//   'xcode',
+//   'textmate',
+//   'solarized_dark',
+//   'solarized_light',
+//   'terminal'
+// ];
 
-languages.forEach(lang => {
-  require(`ace-builds/src-noconflict/mode-${lang}`);
-  require(`ace-builds/src-noconflict/snippets/${lang}`);
-});
+// languages.forEach(lang => {
+//   require(`ace-builds/src-noconflict/mode-${lang}`);
+//   require(`ace-builds/src-noconflict/snippets/${lang}`);
+// });
 
-themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
+// themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 
 interface EditorProps {
   file: ITextFile
@@ -68,19 +71,18 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
   }, [file, file.text]);
 
   const handleChange = (newValue: string) => {
-    setValue(newValue);
-    console.log(canChange);
+    // console.log(canChange);
 
-    if (!canChange){
-      return
-    }
+    // if (!canChange){
+    //   return
+    // }
 
-    setCanChange(false);
-    setOldValue(newValue);
+    // setCanChange(false);
+    // setOldValue(newValue);
 
-    setTimeout(() => {
-      setCanChange(true);
-    }, 750);
+    // setTimeout(() => {
+    //   setCanChange(true);
+    // }, 0);
 
     let log = `SEND\n************************\nNew value: ${newValue}\nOld value: ${oldValue}\nConnection id: ${codeHub.Connection.connectionId}\n`;
 
@@ -124,12 +126,13 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
     const dto: ChangeDTO = {
       directoryId: repository.id,
       fileId: file.id,
-      change: findChange(oldValue, newValue),
+      change: findChange(value, newValue),
       connectionId: codeHub.Connection.connectionId as string
     }
 
     log += `CHANGE:\n\tAction: ${dto.change.action}\n\tChangeId:${dto.change.changeId}\n\tCharsDeleted: ${dto.change.charsDeleted}\n\tInsertedString: ${dto.change.insertedString}\n\tPosition: ${dto.change.position}\n\tVersionId: ${dto.change.versionId}\n************************`;
-
+    
+    setValue(newValue);
     codeHub.change(dto);
 
     log += `\nКонечный текст: ${newValue}`
@@ -145,22 +148,28 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
   };
 
   return (
-      <AceEditor
-        mode='python'
-        theme='monokai'
-        value={value}
-        onChange={handleChange}
-        fontSize={14}
-        highlightActiveLine={true}
-        enableBasicAutocompletion={true}
-        enableLiveAutocompletion={true}
-        enableSnippets={true}
-        setOptions={{ useWorker: false }}
-        showGutter={true}
-        showPrintMargin={false}
-        // debounceChangePeriod={100}
-        style={{ display: 'flex', flexGrow: 1, height: '100%' }}
-      />
+      // <AceEditor
+      //   mode='python'
+      //   theme='monokai'
+      //   value={value}
+      //   onChange={handleChange}
+      //   fontSize={14}
+      //   highlightActiveLine={true}
+      //   enableBasicAutocompletion={true}
+      //   enableLiveAutocompletion={true}
+      //   enableSnippets={true}
+      //   setOptions={{ useWorker: false }}
+      //   showGutter={true}
+      //   showPrintMargin={false}
+      //   // debounceChangePeriod={100}
+      //   style={{ display: 'flex', flexGrow: 1, height: '100%' }}
+      // />
+      <CodeMirror
+      value={value}
+      height='400px'
+      width='400px'
+      onChange={handleChange}
+    />
   );
 }
 
