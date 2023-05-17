@@ -1,18 +1,18 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Loading from "./Loading";
-import Repository from "./Repository";
-import RepositoryWelcome from "./RepositoryWelcome";
-import { useCodeSharingHub, useMeeting } from "../hooks";
-import { CreateDirectoryData, IDirectory, IFolder } from "../interfaces/dto";
-import { Directories } from "../api";
+import React, { useCallback, useEffect, useState } from 'react';
+import Loading from './Loading';
+import Repository from './Repository';
+import RepositoryWelcome from './RepositoryWelcome';
+import { useCodeSharingHub, useMeeting } from '../hooks';
+import { CreateDirectoryData, IDirectory } from '../interfaces/dto';
+import { Directories } from '../api';
+import { connectCodeshare, socket } from '../codeshare/socket';
+
 
 const CodeShareScreen: React.FC = () => {
   const meeting = useMeeting();
   const codeHub = useCodeSharingHub();
   const [repository, setRepository] = useState<IDirectory | null>(null);
   const [repositoryId, setRepositoryId] = useState<string>(meeting.repositoryId);
-  const [fileVersionControl, setFileVersionControl] = useState<Map<number, any[]>>(new Map());
-
 
   const repositoryExist = useCallback(() => {
     return repositoryId !== null;
@@ -27,24 +27,10 @@ const CodeShareScreen: React.FC = () => {
     });
     codeHub.onConnectToRepository(directory => {
       console.log(directory)
-      let fvc = new Map<number, any[]>();
-      addFilesFromFolderRec(directory.rootFolder);
-      
       setRepository(directory);
-      setFileVersionControl(fvc);
-
-      function addFilesFromFolderRec(folder: IFolder ){
-        folder.files.forEach(element => {
-          fvc.set(element.id, [element.versionId, []]);
-        });
-        folder.folders.forEach(element => {
-          addFilesFromFolderRec(element);
-        });
-    }
+      connectCodeshare(directory);
     });
   }, [codeHub]);
-
-  
 
   const disconnectRepository = useCallback(() => {
     codeHub.offConnectToRepository();
@@ -67,7 +53,7 @@ const CodeShareScreen: React.FC = () => {
   const render = () => {
     if (repositoryExist()) {
       if (repository) {
-        return <Repository repository={repository} fileVersionControl={fileVersionControl} setFileVersionControl = {setFileVersionControl} />
+        return <Repository repository={repository} />
       }
       return <Loading />
     }
