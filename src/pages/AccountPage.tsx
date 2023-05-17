@@ -1,9 +1,8 @@
-import React from 'react';
-import { Avatar, Box, Button, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import ImageIcon from '@mui/icons-material/Image';
-import { useUser } from '../hooks/useUser';
-
+import React from "react";
+import { Avatar, Box, Button, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import ImageIcon from "@mui/icons-material/Image";
+import { useUser } from "../hooks";
 
 const AccountPage: React.FC = () => {
   const user = useUser();
@@ -80,7 +79,7 @@ const AccountPage: React.FC = () => {
           </Typography>
           <Box flexGrow={1} />
           <Button
-            component="label"
+            component='label'
             variant='contained'
             color='primary'
             startIcon={<ImageIcon />}
@@ -91,8 +90,8 @@ const AccountPage: React.FC = () => {
             Change profile image
             <input
               hidden
-              accept="image/*"
-              type="file"
+              accept='image/*'
+              type='file'
               onChange={handleChange}
             />
           </Button>

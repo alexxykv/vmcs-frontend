@@ -1,7 +1,7 @@
-import { cleanup } from '@testing-library/react';
-import { useState, useEffect } from 'react';
-import { WebRTCResult } from '../interfaces/hooks';
-import { useMeetingHub } from './useMeetingHub';
+import { cleanup } from "@testing-library/react";
+import { useState, useEffect } from "react";
+import { WebRTCResult } from "../interfaces/Hooks";
+import { useMeetingHub } from "./useMeetingHub";
 
 
 const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }

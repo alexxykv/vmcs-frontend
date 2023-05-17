@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import { Avatar, Box, Grid, Paper, Typography } from '@mui/material';
-import ControlPointIcon from '@mui/icons-material/ControlPoint';
-import BaseLink from './BaseLink';
+import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import BaseLink from "./BaseLink";
 
-import { ChannelItemProps } from '../interfaces/props';
-import { ShortChannelData } from '../interfaces/dto/channels';
+import { ChannelItemProps } from "../interfaces/Props";
+import { ShortChannelData } from "../interfaces/dto";
 
-import * as styles from '../styles';
+import * as styles from "../styles";
 
 const ChannelItem: React.FC<ChannelItemProps> = ({ channel, onClick }) => {
   const channelData = channel as ShortChannelData;
@@ -20,7 +20,7 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel, onClick }) => {
           ? <BaseLink style={styles.channelItem.link} key={channelData.id} to={`/channels/${channelData.id}`}>
             <Paper elevation={10} sx={styles.channelItem.paper}>
               <Box sx={styles.channelItem.contentBox}>
-                <Avatar sx={styles.channelItem.image} variant="square"></Avatar>
+                <Avatar sx={styles.channelItem.image} variant='square'></Avatar>
                 <Typography sx={styles.channelItem.name}>{channelData.name}</Typography>
               </Box>
             </Paper>

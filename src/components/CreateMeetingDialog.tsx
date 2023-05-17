@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import React, { useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 
 interface CreateMeetingDialogProps {
   open: boolean
@@ -26,11 +26,11 @@ const CreateMeetingDialog: React.FC<CreateMeetingDialogProps> = ({ open, handleC
       <DialogContent>
         <TextField
           autoFocus
-          margin="dense"
-          label="Meeting name"
-          type="text"
+          margin='dense'
+          label='Meeting name'
+          type='text'
           fullWidth
-          variant="standard"
+          variant='standard'
           value={name}
           onChange={handleChangeName}
         />

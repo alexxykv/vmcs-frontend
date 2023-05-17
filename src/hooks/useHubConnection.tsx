@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 import * as signalR from "@microsoft/signalr";
 
-import LocalStorageKeys from '../enums/LocalStorageKeys';
-import { JWTData } from '../interfaces/dto/auth';
+import { LocalStorageKeys } from "../enums";
+import { JWTData } from "../interfaces/dto";
 
 
 export const useHubConnection = (connectionURL: string): signalR.HubConnection => {
@@ -11,13 +11,11 @@ export const useHubConnection = (connectionURL: string): signalR.HubConnection =
 
   const hubConnection = useMemo(() => {
     return new signalR.HubConnectionBuilder()
-      .withUrl(connectionURL, { 
+      .withUrl(connectionURL, {
         accessTokenFactory: () => jwtData.token,
-        // skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets
       })
       .withAutomaticReconnect()
-      // .configureLogging(signalR.LogLevel.None)
       .build();
   }, [connectionURL, jwtData.token]);
 

@@ -1,18 +1,17 @@
-import axios from 'axios';
-import { JWTData } from '../interfaces/dto/auth';
-import LocalStorageKeys from '../enums/LocalStorageKeys';
-
+import axios from "axios";
+import { JWTData } from "../interfaces/dto";
+import { LocalStorageKeys } from "../enums";
 
 export const api = axios.create({
   baseURL: process.env.REACT_APP_HOST_URL,
 });
 
 export function setToken(token: string): void {
-  api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
 export function deleteToken(): void {
-  delete api.defaults.headers.common["Authorization"];
+  delete api.defaults.headers.common['Authorization'];
 }
 
 function checkJWT(): void {

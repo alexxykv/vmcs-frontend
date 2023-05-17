@@ -1,6 +1,6 @@
-import React from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import React from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks";
 
 
 const PrivateRoute: React.FC = () => {
@@ -8,7 +8,7 @@ const PrivateRoute: React.FC = () => {
   const location = useLocation();
 
   if (auth.status === 'Anonymous') {
-    return <Navigate to="/login" state={{ from: location }} />;
+    return <Navigate to='/login' state={{ from: location }} />;
   }
 
   return <Outlet />;

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Avatar, Box, Divider, Typography } from '@mui/material';
-import { useUser } from "../hooks/useUser";
+import React from "react";
+import { Avatar, Box, Divider, Typography } from "@mui/material";
+import { useUser } from "../hooks";
 import { MessageData } from "../interfaces/dto";
 
-import * as styles from '../styles';
+import * as styles from "../styles";
 
 
 interface ChannelChatMessageProps {

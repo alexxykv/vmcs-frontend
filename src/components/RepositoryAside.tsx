@@ -1,23 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { TreeItem, TreeView } from '@mui/lab';
-import { Paper, ButtonGroup, IconButton, TextField, Button, InputAdornment } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
-import FolderZipIcon from '@mui/icons-material/FolderZip';
-import SaveIcon from '@mui/icons-material/Save';
-import GitHubIcon from '@mui/icons-material/GitHub';
+import React, { useState, useEffect, useCallback } from "react";
+import { TreeItem, TreeView } from "@mui/lab";
+import { Paper, ButtonGroup, IconButton, TextField, Button, InputAdornment } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+import FolderZipIcon from "@mui/icons-material/FolderZip";
+import SaveIcon from "@mui/icons-material/Save";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
-import { IFolder, IDirectory, ITextFile, TextFileDTO, ChangeDTO, Change } from '../hubs/CodeSharingHub';
-import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
-import { Directories, Users } from '../api';
-import { saveAs as saveZip } from 'file-saver';
-import Github from '../api/Github';
-import { PushToRepositoryData } from '../interfaces/dto';
-import { useUser } from '../hooks/useUser';
+import { Directories, Github, Users } from "../api";
+import { saveAs as saveZip } from "file-saver";
 import { useNavigate } from "react-router-dom";
-import { relative } from 'path';
+import { Change, ChangeDTO, IDirectory, IFolder, ITextFile, PushToRepositoryData, TextFileDTO } from "../interfaces/dto";
+import { useCodeSharingHub, useUser } from "../hooks";
 
 interface RepositoryAsideProps {
   repository: IDirectory
@@ -233,7 +229,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
       //   console.log('NE ONCHANGE');
       //   return;
       // }
-      // console.log("ONCHANGE")
+      // console.log('ONCHANGE')
       // const file = files.get(changeInfo.fileId.toString()) as ITextFile;
 
       // let text = file.text;
@@ -314,7 +310,7 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     const data: PushToRepositoryData = {
       repositoryName: repository.name,
       directoryId: repository.id,
-      message: "Commited by VMCS"
+      message: 'Commited by VMCS'
     }
 
     codeHub.saveRepository(repository.id).then(() => {

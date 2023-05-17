@@ -1,6 +1,5 @@
 import Hub from "./Hub";
 
-
 export default class MeetingHub extends Hub {
   //#region Test Methods
   public async SendMessageToMeeting(data: string[]) {

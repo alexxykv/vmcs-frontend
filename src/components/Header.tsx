@@ -1,11 +1,11 @@
-import React from 'react';
-import { Badge, Box, IconButton, Toolbar, useTheme } from '@mui/material';
-import AppBar from './AppBar';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MaterialUISwitch from './MaterialUISwitch ';
-import { ColorModeContext } from '../App';
+import React from "react";
+import { Badge, Box, IconButton, Toolbar, useTheme } from "@mui/material";
+import AppBar from "./AppBar";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MaterialUISwitch from "./MaterialUISwitch ";
+import { ColorModeContext } from "../App";
 
 
 interface HeaderProps {
@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ open, toggleOpen }) => {
   const colorMode = React.useContext(ColorModeContext);
 
   return (
-    <AppBar open={open} position="fixed">
+    <AppBar open={open} position='fixed'>
       <Toolbar disableGutters sx={{
         minHeight: '64px'
       }}>
@@ -36,10 +36,10 @@ const Header: React.FC<HeaderProps> = ({ open, toggleOpen }) => {
             onClick={colorMode.toggleColorMode}
           />
           <IconButton
-            size="large"
-            color="inherit"
+            size='large'
+            color='inherit'
           >
-            <Badge badgeContent={0} color="error">
+            <Badge badgeContent={0} color='error'>
               <NotificationsIcon />
             </Badge>
           </IconButton>

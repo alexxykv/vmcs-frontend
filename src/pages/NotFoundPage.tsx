@@ -1,6 +1,6 @@
-import React from 'react';
-import { Paper, Typography } from '@mui/material';
-import ErrorIcon from '@mui/icons-material/Error';
+import React from "react";
+import { Paper, Typography } from "@mui/material";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const NotFoundPage: React.FC = () => {
   return (

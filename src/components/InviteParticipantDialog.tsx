@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Autocomplete, AutocompleteChangeDetails, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import { Users } from '../api';
-import { UserData } from '../interfaces/dto';
-import { useUser } from '../hooks/useUser';
+import React, { useEffect, useState } from "react";
+import { Autocomplete, AutocompleteChangeDetails, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Users } from "../api";
+import { UserData } from "../interfaces/dto";
+import { useUser } from "../hooks";
 
 
 interface InviteParticipantDialogProps {
@@ -78,16 +78,16 @@ const InviteParticipantDialog: React.FC<InviteParticipantDialogProps> = (
           renderInput={(params) => (
             <TextField
               {...params}
-              margin="dense"
-              label="Username"
-              type="text"
+              margin='dense'
+              label='Username'
+              type='text'
               fullWidth
-              variant="standard"
+              variant='standard'
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (
                   <React.Fragment>
-                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {loading ? <CircularProgress color='inherit' size={20} /> : null}
                     {params.InputProps.endAdornment}
                   </React.Fragment>
                 ),

@@ -1,10 +1,10 @@
-import { Box, Paper } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
-import { useMeetingHub } from '../hooks/useMeetingHub';
-import { WebcamProps } from '../interfaces/props';
-import FaceIcon from '@mui/icons-material/Face';
+import { Box, Paper } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { useMeetingHub } from "../hooks";
+import { WebcamProps } from "../interfaces/Props";
+import FaceIcon from "@mui/icons-material/Face";
 
-import * as styles from '../styles';
+import * as styles from "../styles";
 
 
 const Webcam: React.FC<WebcamProps> = ({ stream, username, connectionId }) => {

@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import React from "react";
 
-import { Box, Container, Paper } from '@mui/material';
-import MeetingChat from './MeetingChat';
-import Webcam from './Webcam';
+import { Box, Paper } from "@mui/material";
+import Webcam from "./Webcam";
 
-import { useUser } from '../hooks/useUser';
-import { VideoChatScreenProps, WithChildrenProps } from '../interfaces/props';
+import { useUser } from "../hooks/useUser";
+import { VideoChatScreenProps, WithChildrenProps } from "../interfaces/Props";
 
-import * as styles from '../styles';
-import { useMeeting } from '../hooks/useMeeting';
-import { MessageData } from '../interfaces/dto';
-import Loading from './Loading';
+import Loading from "./Loading";
 
 
 const VideoChatScreen: React.FC<VideoChatScreenProps> = ({ rtc, openChat }) => {

@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Avatar, Box, IconButton,
   List, ListItem, ListItemAvatar, ListItemText, Paper, Typography
-} from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import Loading from '../components/Loading';
+} from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 
-import { ChannelInvitationData } from '../interfaces/dto';
-import { Users, ChannelInvitations } from '../api';
-import { fakeAsync } from '../utils';
+import { ChannelInvitationData } from "../interfaces/dto";
+import { Users, ChannelInvitations } from "../api";
+import { fakeAsync } from "../utils";
+import { Loading } from "../components";
 
 
 const InvitationsPage: React.FC = () => {

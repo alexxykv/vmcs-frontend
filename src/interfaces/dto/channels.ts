@@ -1,6 +1,6 @@
-import { ShortChatData } from "./chats"
-import { ShortMeetingData } from "./meetings"
-import { ShortUserData } from "./users"
+import { ShortChatData } from "./Chats"
+import { ShortMeetingData } from "./Meetings"
+import { ShortUserData } from "./Users"
 
 export interface ChannelData {
   id: string

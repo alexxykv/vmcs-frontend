@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 import { Box, Divider, Typography } from "@mui/material";
-import * as styles from '../styles';
+import * as styles from "../styles";
 
 const ChannelsPageAside: React.FC = () => {
   return (

@@ -1,5 +1,5 @@
-import { Link, LinkProps } from 'react-router-dom';
-import styled from '@emotion/styled'
+import { Link, LinkProps } from "react-router-dom";
+import styled from "@emotion/styled"
 
 
 const StyledLink = styled(Link)`

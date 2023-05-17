@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { ShortMessageData } from '../interfaces/dto/messages';
-import { ChatProps } from '../interfaces/props';
+import React, { useState } from "react";
+import { ShortMessageData } from "../interfaces/dto";
 
-
-const Chat: React.FC<ChatProps> = () => {
+const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Array<ShortMessageData>>([]);
   const [message, setMessage] = useState<Array<ShortMessageData>>();
 

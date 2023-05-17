@@ -1,5 +1,5 @@
 enum CookieKeys {
-    AuthStatus = 'auth_status'
+  AuthStatus = 'auth_status'
 }
 
 export default CookieKeys;

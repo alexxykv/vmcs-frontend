@@ -1,6 +1,5 @@
 import { styled } from "@mui/material";
 
-
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({

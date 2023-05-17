@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Divider, IconButton, Paper } from '@mui/material';
-import ToolItem from './ToolItem';
-import { ToolsPanelProps } from '../interfaces/props';
+import React, { useEffect, useState } from "react";
+import { Box, Divider, IconButton, Paper } from "@mui/material";
+import ToolItem from "./ToolItem";
+import { ToolsPanelProps } from "../interfaces/Props";
 
-import MicIcon from '@mui/icons-material/Mic';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import ScreenShareIcon from '@mui/icons-material/ScreenShare';
-import CodeIcon from '@mui/icons-material/Code';
-import CallEndIcon from '@mui/icons-material/CallEnd';
-import CommentIcon from '@mui/icons-material/Comment';
-import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
-import MicOffIcon from '@mui/icons-material/MicOff';
-import VideocamOffIcon from '@mui/icons-material/VideocamOff';
+import MicIcon from "@mui/icons-material/Mic";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import ScreenShareIcon from "@mui/icons-material/ScreenShare";
+import CodeIcon from "@mui/icons-material/Code";
+import CallEndIcon from "@mui/icons-material/CallEnd";
+import CommentIcon from "@mui/icons-material/Comment";
+import CommentsDisabledIcon from "@mui/icons-material/CommentsDisabled";
+import MicOffIcon from "@mui/icons-material/MicOff";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 
-import * as styles from '../styles';
-import { useMeetingHub } from '../hooks/useMeetingHub';
-import { useMeeting } from '../hooks/useMeeting';
-import { useNavigate } from 'react-router-dom';
+import * as styles from "../styles";
+import { useNavigate } from "react-router-dom";
+import { useMeeting, useMeetingHub } from "../hooks";
 
 
 const ToolsPanel: React.FC<ToolsPanelProps> = ({ toggleChat, toggleScreen, localStream, rtc }) => {

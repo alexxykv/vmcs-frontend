@@ -1,4 +1,4 @@
-import { ShortUserData } from "./users"
+import { ShortUserData } from "./Users"
 
 export interface ShortMessageData {
   id: string

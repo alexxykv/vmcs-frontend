@@ -1,30 +1,18 @@
-import React, { useMemo, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
-import PrivateRoute from './components/PrivateRoute';
-import Layout from './components/Layout';
-
-import WelcomePage from './pages/WelcomePage';
-import LoginPage from './pages/LoginPage';
-import MainPage from './pages/MainPage';
-import AccountPage from './pages/AccountPage';
-import MeetingPage from './pages/MeetingPage';
-import ChannelPage from './pages/ChannelPage';
-import ChannelsPage from './pages/ChannelsPage';
-import NotFoundPage from './pages/NotFoundPage';
-import InvitationsPage from './pages/InvitationsPage';
-import DashboardPage from './pages/DashboardPage';
-
-import AuthProvider from './providers/AuthProvider';
-import UserProvider from './providers/UserProvider';
-import ChatHubProvider from './providers/ChatHubProvider';
-import CodeSharingProvider from './providers/CodeSharingProvider';
-import MeetingHubProvider from './providers/MeetingHubProvider';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { PaletteMode } from '@mui/material';
-import Cookies from 'js-cookie';
-import { useAuth } from './hooks/useAuth';
-
+import React, { useMemo, useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { PaletteMode } from "@mui/material";
+import Cookies from "js-cookie";
+import { useAuth } from "./hooks";
+import {
+  AccountPage, ChannelPage, DashboardPage,
+  InvitationsPage, LoginPage, MeetingPage, NotFoundPage
+} from "./pages";
+import {
+  AuthProvider, ChatHubProvider, CodeSharingProvider,
+  MeetingHubProvider, MeetingProvider, UserProvider
+} from "./contexts";
+import { Layout, PrivateRoute } from "./components";
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 
@@ -92,7 +80,7 @@ const Routing: React.FC = () => {
       <Route element={<PrivateRoute />}>
         <Route path='/profile' element={<AccountPage />} />
         <Route path='/channels/:id' element={<ChannelPage />} />
-        <Route path='/meeting/:id' element={<MeetingPage />} />
+        <Route path='/meeting/:id' element={<MeetingProvider><MeetingPage /></MeetingProvider>} />
         <Route path='/invitations' element={<InvitationsPage />} />
         <Route path='/dashboard' element={<DashboardPage />} />
       </Route>

@@ -1,15 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 
-import { Container, Grid } from '@mui/material';
-import ChannelItem from '../components/ChannelItem';
-import ChannelsPageAside from '../components/ChannelsPageAside';
+import { Container, Grid } from "@mui/material";
 
-import { Users, Channels } from '../api';
-import { CreateChannelData, ShortChannelData } from '../interfaces/dto/channels';
-
-import * as styles from '../styles';
-import CreateChannelDialog from '../components/CreateChannelDialog';
-
+import { Users, Channels } from "../api";
+import { CreateChannelData, ShortChannelData } from "../interfaces/dto";
+import { ChannelItem, ChannelsPageAside, CreateChannelDialog } from "../components";
+import * as styles from "../styles";
 
 const ChannelsPage: React.FC = () => {
   const [channels, setChannels] = useState<ShortChannelData[]>([]);

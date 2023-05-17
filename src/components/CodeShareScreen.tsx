@@ -1,13 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Loading from './Loading';
-import Repository from './Repository';
-import RepositoryWelcome from './RepositoryWelcome';
-import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
-import { useMeeting } from '../hooks/useMeeting';
-import { IDirectory, IFolder } from '../hubs/CodeSharingHub';
-import { Directories } from '../api';
-import { CreateDirectoryData } from '../interfaces/dto';
-
+import React, { useCallback, useEffect, useState } from "react";
+import Loading from "./Loading";
+import Repository from "./Repository";
+import RepositoryWelcome from "./RepositoryWelcome";
+import { useCodeSharingHub, useMeeting } from "../hooks";
+import { CreateDirectoryData, IDirectory, IFolder } from "../interfaces/dto";
+import { Directories } from "../api";
 
 const CodeShareScreen: React.FC = () => {
   const meeting = useMeeting();

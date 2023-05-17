@@ -1,7 +1,17 @@
 import { createContext } from "react";
-import { MeetingHubContextType } from "../interfaces/contexts";
+import { MeetingHubContextType } from "../interfaces/Contexts";
+import { WithChildrenProps } from "../interfaces/Props";
+import { useHub } from "../hooks";
+import { MeetingHub } from "../hubs";
 
-export const defaultMeetingHubContext: MeetingHubContextType = null!;
-const MeetingHubContext = createContext<MeetingHubContextType>(defaultMeetingHubContext);
+export const MeetingHubContext = createContext<MeetingHubContextType>(null!);
 
-export default MeetingHubContext;
+export const MeetingHubProvider: React.FC<WithChildrenProps> = ({ children }) => {
+  const meetingHub = useHub(MeetingHub);
+
+  return (
+    <MeetingHubContext.Provider value={meetingHub}>
+      {children}
+    </MeetingHubContext.Provider>
+  );
+}

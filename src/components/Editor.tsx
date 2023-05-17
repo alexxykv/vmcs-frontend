@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
-// import AceEditor from 'react-ace';
+import React, { useState, useEffect } from "react";
+// import AceEditor from "react-ace";
 
-import CodeMirror from '@uiw/react-codemirror';
+import CodeMirror from "@uiw/react-codemirror";
+import { Change, ChangeDTO, IDirectory, ITextFile } from "../interfaces/dto";
+import { useCodeSharingHub } from "../hooks";
 
-import { Change, ChangeDTO, IDirectory, ITextFile } from '../hubs/CodeSharingHub';
-import { useCodeSharingHub } from '../hooks/useCodeSharingHub';
+// import "ace-builds/src-noconflict/mode-jsx";
+// import "ace-builds/src-min-noconflict/ext-searchbox";
+// import "ace-builds/src-min-noconflict/ext-language_tools";
 
-// import 'ace-builds/src-noconflict/mode-jsx';
-// import 'ace-builds/src-min-noconflict/ext-searchbox';
-// import 'ace-builds/src-min-noconflict/ext-language_tools';
-import { truncate } from 'fs';
-import { Input } from '@mui/material';
 
 // const languages = [
 //   'javascript',
@@ -107,7 +105,7 @@ const Editor: React.FC<EditorProps> = ({ file, repository, setFiles, files, file
         versionId: curVersion,
         action: 0,
         charsDeleted: -1 * toTake,
-        insertedString: "",
+        insertedString: '',
         changeId: changeId
       };
       if (oldText.length < newText.length) {

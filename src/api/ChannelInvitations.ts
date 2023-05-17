@@ -1,7 +1,7 @@
-import path from "path";
-import ApiRoutes from "../enums/ApiRoutes";
-import { ChannelInvitationRequestData } from "../interfaces/dto/channelInvitations";
-import { api } from "./Api";
+import path from 'path';
+import { api } from './Api';
+import { ApiRoutes } from '../enums';
+import { ChannelInvitationRequestData } from '../interfaces/dto';
 
 
 export default class ChannelInvitations {

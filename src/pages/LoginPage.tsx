@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 
-import { Box, Button, Grid, Paper, Typography } from '@mui/material';
-import SigninForm from '../components/SigninForm';
-import SignupForm from '../components/SignupForm';
-
-import { useAuth } from '../hooks/useAuth';
-import { LoginPageProps } from '../interfaces/props';
-
-import * as styles from '../styles';
-
+import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import { useAuth } from "../hooks";
+import * as styles from "../styles";
+import { SigninForm, SignupForm } from "../components";
 
 type FormType = 'Signin' | 'Signup';
 
-const LoginPage: React.FC<LoginPageProps> = () => {
+const LoginPage: React.FC = () => {
   const auth = useAuth();
   const location = useLocation();
   const [form, setForm] = useState<FormType>('Signin');
@@ -47,7 +42,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
   }
 
   if (auth.status === 'Authorized') {
-    return <Navigate to="/dashboard" state={{ from: location }} />;
+    return <Navigate to='/dashboard' state={{ from: location }} />;
   }
 
   return (

@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Avatar, Box, Paper, Stack, Typography } from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import CreateChannelDialog from '../components/CreateChannelDialog';
-
-import { Channels, Users } from '../api';
-import { CreateChannelData, ShortChannelData } from '../interfaces/dto';
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { Channels, Users } from "../api";
+import { CreateChannelData, ShortChannelData } from "../interfaces/dto";
+import { CreateChannelDialog } from "../components";
 
 
 const DashboardPage: React.FC = () => {

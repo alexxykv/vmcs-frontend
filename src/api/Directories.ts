@@ -1,8 +1,7 @@
-import { api } from "./Api";
-import ApiRoutes from "../enums/ApiRoutes";
-import path from "path";
+import { ApiRoutes } from "../enums";
 import { CreateDirectoryData, DirectoryData } from "../interfaces/dto";
-
+import { api } from "./Api";
+import path from "path";
 
 export default class Directories {
   public static async Create(createData: CreateDirectoryData) {

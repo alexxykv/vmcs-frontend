@@ -1,17 +1,11 @@
-import { ReactNode } from 'react';
-import { ShortChannelData } from './dto/channels';
-import { MessageData } from './dto/messages';
-import { WebRTCResult } from './hooks';
+import { ReactNode } from "react";
+import { ShortChannelData } from "./dto/Channels";
+import { MessageData } from "./dto/Messages";
+import { WebRTCResult } from "./Hooks";
 
 export interface MessageProps {
   message: MessageData
 }
-
-export interface ChatProps { }
-
-export interface MeetingPageProps { }
-
-export interface LoginPageProps { }
 
 export interface ToolsPanelProps {
   toggleChat: VoidFunction
@@ -31,15 +25,9 @@ export interface AudioProps {
   connectionId: string
 }
 
-export interface SigninFormProps { }
-
-export interface SignupFormProps { }
-
-export interface InputFieldProps { }
-
 export interface MeetingChatProps {
   open: boolean
- }
+}
 
 export interface VideoChatScreenProps {
   rtc: WebRTCResult

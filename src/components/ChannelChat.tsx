@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { Box, Button, Divider, InputAdornment, TextField, Typography } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
-import MicIcon from '@mui/icons-material/Mic';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import SendIcon from '@mui/icons-material/Send';
+import { Box, Button, Divider, InputAdornment, TextField, Typography } from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
+import MicIcon from "@mui/icons-material/Mic";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import SendIcon from "@mui/icons-material/Send";
 
-import ChannelChatMessage from './ChannelChatMessage';
+import ChannelChatMessage from "./ChannelChatMessage";
 
-import { MessageData, ShortChatData } from '../interfaces/dto';
-import { useChatHub } from '../hooks/useChatHub';
+import { MessageData, ShortChatData } from "../interfaces/dto";
+import { useChatHub } from "../hooks";
 
-import * as styles from '../styles';
+import * as styles from "../styles";
 
 
 interface ChatProps extends ShortChatData { }
@@ -63,7 +63,7 @@ const ChannelChat: React.FC<ChatProps> = ({ id, messages }) => {
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   return (
@@ -83,8 +83,8 @@ const ChannelChat: React.FC<ChatProps> = ({ id, messages }) => {
         }
         <div ref={messagesEndRef} style={
           {
-            float: "left",
-            clear: "both",
+            float: 'left',
+            clear: 'both',
             /* Margin top depends ChatChatMessage gap */ 
             marginTop: '-5px'
           }} />

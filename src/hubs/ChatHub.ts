@@ -2,7 +2,6 @@ import { HubConnectionState } from "@microsoft/signalr";
 import { MessageData } from "../interfaces/dto";
 import Hub from "./Hub";
 
-
 export default class ChatHub extends Hub {
   public async JoinChat(chatId: string) {
     if (this.Connection.state === HubConnectionState.Connected) {

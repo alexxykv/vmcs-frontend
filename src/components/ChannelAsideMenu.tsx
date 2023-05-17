@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { Avatar, Box, Divider, Typography } from '@mui/material';
-import AddIcCallIcon from '@mui/icons-material/AddIcCall';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
-import CreateMeetingDialog from './CreateMeetingDialog';
-import InviteParticipantDialog from './InviteParticipantDialog';
+import { Avatar, Box, Divider, Typography } from "@mui/material";
+import AddIcCallIcon from "@mui/icons-material/AddIcCall";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import AccessibleForwardIcon from "@mui/icons-material/AccessibleForward";
+import CreateMeetingDialog from "./CreateMeetingDialog";
+import InviteParticipantDialog from "./InviteParticipantDialog";
 
-import { Meetings, ChannelInvitations } from '../api';
+import { Meetings, ChannelInvitations } from "../api";
 import {
   ChannelData, ChannelInvitationRequestData, CreateMeetingData,
   ShortMeetingData, ShortUserData
-} from '../interfaces/dto';
-import { WithChildrenProps } from '../interfaces/props';
+} from "../interfaces/dto";
+import { WithChildrenProps } from "../interfaces/Props";
 
-import * as styles from '../styles';
+import * as styles from "../styles";
 
 
 interface ChannelAsideMenuProps {

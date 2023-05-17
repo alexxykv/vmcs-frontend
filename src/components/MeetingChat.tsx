@@ -1,14 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Message from './Message';
-import { Box, Button, IconButton, Input, List, Paper, TextField } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send'
-import { MeetingChatProps } from '../interfaces/props';
-
-import * as styles from '../styles';
-import { useChatHub } from '../hooks/useChatHub';
-import { MessageData } from '../interfaces/dto';
-import { useMeeting } from '../hooks/useMeeting';
-
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import Message from "./Message";
+import { Button, List, Paper, TextField } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send"
+import { MeetingChatProps } from "../interfaces/Props";
+import { useChatHub, useMeeting } from "../hooks";
+import { MessageData } from "../interfaces/dto";
 
 const MeetingChat: React.FC<MeetingChatProps> = ({ open }) => {
   const chatHub = useChatHub();
@@ -36,7 +32,7 @@ const MeetingChat: React.FC<MeetingChatProps> = ({ open }) => {
   }, [chatHub, meeting.chat.id]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   useEffect(() => {
@@ -94,8 +90,8 @@ const MeetingChat: React.FC<MeetingChatProps> = ({ open }) => {
         {messagesState.map(message => <Message key={message.id} message={message} />)}
         <div ref={messagesEndRef} style={
           {
-            float: "left",
-            clear: "both",
+            float: 'left',
+            clear: 'both',
           }} />
       </List>
       <Paper

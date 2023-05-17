@@ -1,15 +1,12 @@
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, Button, IconButton, InputAdornment, TextField } from '@mui/material';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { useAuth } from '../hooks/useAuth';
-import { LoginData } from '../interfaces/dto/auth';
-import { SigninFormProps } from '../interfaces/props';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Box, Button, IconButton, InputAdornment, TextField } from "@mui/material";
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { useAuth } from "../hooks";
+import { LoginData } from "../interfaces/dto";
+import * as styles from "../styles";
 
-import * as styles from '../styles';
-
-
-const SigninForm: React.FC<SigninFormProps> = () => {
+const SigninForm: React.FC = () => {
   // Авторизация
   const auth = useAuth();
   const navigate = useNavigate();

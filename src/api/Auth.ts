@@ -1,14 +1,8 @@
-import { api, deleteToken, setToken } from './Api';
-
-import { AuthStatusType, JWTData, LoginData, RegisterData } from '../interfaces/dto/auth';
-
-import ApiRoutes from '../enums/ApiRoutes';
-import CookieKeys from '../enums/CookieKeys';
-import LocalStorageKeys from '../enums/LocalStorageKeys';
-
-import Cookies from 'js-cookie';
-import path from 'path';
-
+import { api, deleteToken, setToken } from "./Api";
+import { AuthStatusType, JWTData, LoginData, RegisterData } from "../interfaces/dto";
+import { ApiRoutes, CookieKeys, LocalStorageKeys } from "../enums";
+import Cookies from "js-cookie";
+import path from "path";
 
 const ANONYMOUS: AuthStatusType = 'Anonymous';
 const AUTHORIZED: AuthStatusType = 'Authorized';
@@ -58,5 +52,7 @@ export default class Auth {
       Cookies.set(CookieKeys.AuthStatus, authStatus);
       return authStatus;
     }
+
+    throw new Error();
   }
 }

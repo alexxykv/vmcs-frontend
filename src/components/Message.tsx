@@ -1,10 +1,8 @@
-import { Avatar, Box, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
-import { MessageProps } from '../interfaces/props';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { Avatar, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material";
+import { MessageProps } from "../interfaces/Props";
 
-import * as styles from '../styles';
-import { useEffect, useState } from 'react';
-import { useUser } from '../hooks/useUser';
+import { useEffect, useState } from "react";
+import { useUser } from "../hooks/useUser";
 
 
 const Message: React.FC<MessageProps> = ({ message }) => {

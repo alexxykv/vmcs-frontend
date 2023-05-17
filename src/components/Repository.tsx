@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { Box, Typography, Paper } from '@mui/material';
-import Editor from './Editor';
-import { IDirectory, ITextFile } from '../hubs/CodeSharingHub';
-import RepositoryAside from './RepositoryAside';
+import React, { useState } from "react"
+import { Box, Typography } from "@mui/material";
+import { IDirectory, ITextFile } from "../interfaces/dto";
+import Editor from "./Editor";
+import RepositoryAside from "./RepositoryAside";
 
 
 interface RepositoryProps {

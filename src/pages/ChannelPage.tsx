@@ -1,36 +1,27 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider,
   IconButton, List, Link, ListItem, ListItemAvatar,
   ListItemButton, ListItemIcon, ListItemText, Paper, TextField, Typography
-} from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
-import GroupIcon from '@mui/icons-material/Group';
-import ChatIcon from '@mui/icons-material/Chat';
-import VideoChatIcon from '@mui/icons-material/VideoChat';
-import SendIcon from '@mui/icons-material/Send';
-import AddIcon from '@mui/icons-material/Add';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import StarIcon from '@mui/icons-material/Star';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import ImageIcon from '@mui/icons-material/Image';
+} from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
+import GroupIcon from "@mui/icons-material/Group";
+import ChatIcon from "@mui/icons-material/Chat";
+import VideoChatIcon from "@mui/icons-material/VideoChat";
+import SendIcon from "@mui/icons-material/Send";
+import AddIcon from "@mui/icons-material/Add";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import StarIcon from "@mui/icons-material/Star";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import ImageIcon from "@mui/icons-material/Image";
+import { ChannelInvitations, Channels, Meetings } from "../api";
+import { ChannelData, ChannelInvitationRequestData, CreateMeetingData, MessageData, ShortMeetingData, ShortUserData } from "../interfaces/dto";
 
-import Loading from '../components/Loading';
-// import ChannelAsideMenu from '../components/ChannelAsideMenu';
-// import ChannelChat from '../components/ChannelChat';
-
-import { ChannelInvitations, Channels, Meetings } from '../api';
-import { ChannelData, ChannelInvitationRequestData, CreateMeetingData, MessageData, ShortMeetingData, ShortUserData } from '../interfaces/dto';
-
-import { fakeAsync } from '../utils';
-// import * as styles from '../styles';
-import { useUser } from '../hooks/useUser';
-import { useChatHub } from '../hooks/useChatHub';
-import CreateMeetingDialog from '../components/CreateMeetingDialog';
-import InviteParticipantDialog from '../components/InviteParticipantDialog';
-// import { Link } from 'react-router-dom';
+import { fakeAsync } from "../utils";
+import { useChatHub, useUser } from "../hooks";
+import { CreateMeetingDialog, InviteParticipantDialog, Loading } from "../components";
 
 
 const ChannelPage: React.FC = () => {
@@ -153,7 +144,7 @@ const ChannelHeader: React.FC<ChannelHeaderProps> = ({ channel, setChannel }) =>
         <DialogTitle>Channel settings</DialogTitle>
         <DialogContent>
           <Button
-            component="label"
+            component='label'
             variant='contained'
             color='primary'
             startIcon={<ImageIcon />}
@@ -164,8 +155,8 @@ const ChannelHeader: React.FC<ChannelHeaderProps> = ({ channel, setChannel }) =>
             Change channel image
             <input
               hidden
-              accept="image/*"
-              type="file"
+              accept='image/*'
+              type='file'
               onChange={handleChangeImage}
             />
           </Button>
@@ -323,7 +314,7 @@ const Chat: React.FC<ChatProps> = ({ chatId, messages }) => {
   }, [chatHub, chatId]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   useEffect(() => {
@@ -398,8 +389,8 @@ const Chat: React.FC<ChatProps> = ({ chatId, messages }) => {
         {messagesState.map(message => <ChatMessage key={message.id} message={message} />)}
         <div ref={messagesEndRef} style={
           {
-            float: "left",
-            clear: "both",
+            float: 'left',
+            clear: 'both',
           }} />
       </List>
       <Paper

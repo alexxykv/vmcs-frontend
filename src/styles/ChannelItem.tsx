@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/material"
+import { SxProps } from '@mui/material'
 
 export const mainBox: React.CSSProperties | SxProps = {
   display: 'flex',

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Container } from '@mui/material';
-import { WithChildrenProps } from '../interfaces/props';
-import DrawerMenu from './DrawerMenu';
-import Main from './Main';
-import Header from './Header';
-import { useAuth } from '../hooks/useAuth';
+import React, { useState } from "react";
+import { Container } from "@mui/material";
+import { WithChildrenProps } from "../interfaces/Props";
+import DrawerMenu from "./DrawerMenu";
+import Main from "./Main";
+import Header from "./Header";
+import { useAuth } from "../hooks";
 
 
 const Layout: React.FC<WithChildrenProps> = ({ children }) => {

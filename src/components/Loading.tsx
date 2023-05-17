@@ -1,6 +1,6 @@
-import React from 'react';
-import { Paper, CircularProgress } from '@mui/material';
-// import * as styles from '../styles';
+import React from "react";
+import { Paper, CircularProgress } from "@mui/material";
+// import * as styles from "../styles";
 
 
 const Loading: React.FC = () => {

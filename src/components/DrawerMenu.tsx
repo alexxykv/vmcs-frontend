@@ -1,17 +1,16 @@
-import React from 'react';
-import { Avatar, Divider, Drawer, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from '@mui/material';
-// import Diversity1Icon from '@mui/icons-material/Diversity1';
-import Diversity2Icon from '@mui/icons-material/Diversity2';
-// import Diversity3Icon from '@mui/icons-material/Diversity3';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PublicIcon from '@mui/icons-material/Public';
-import CampaignIcon from '@mui/icons-material/Campaign';
-import LogoutIcon from '@mui/icons-material/Logout';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { useUser } from '../hooks/useUser';
-import { useAuth } from '../hooks/useAuth';
-import { useNavigate } from 'react-router';
+import React from "react";
+import { Avatar, Divider, Drawer, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from "@mui/material";
+// import Diversity1Icon from "@mui/icons-material/Diversity1";
+import Diversity2Icon from "@mui/icons-material/Diversity2";
+// import Diversity3Icon from "@mui/icons-material/Diversity3";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PublicIcon from "@mui/icons-material/Public";
+import CampaignIcon from "@mui/icons-material/Campaign";
+import LogoutIcon from "@mui/icons-material/Logout";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { useNavigate } from "react-router";
+import { useAuth, useUser } from "../hooks";
 
 
 interface DrawerMenuProps {
@@ -67,8 +66,8 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({ open }) => {
           width: 240
         }
       }}
-      variant="persistent"
-      anchor="left"
+      variant='persistent'
+      anchor='left'
     >
       <Toolbar disableGutters sx={{ minHeight: '64px', justifyContent: 'center' }}>
         <Link href='/' underline='none' variant='overline' sx={{

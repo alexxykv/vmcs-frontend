@@ -1,7 +1,7 @@
 import path from "path";
-import ApiRoutes from "../enums/ApiRoutes";
-import { ChannelData, CreateChannelData, ShortChannelData } from "../interfaces/dto/channels";
 import { api } from "./Api";
+import { ApiRoutes } from "../enums";
+import { ChannelData, CreateChannelData, ShortChannelData } from "../interfaces/dto";
 
 export default class Channels {
   public static async Get(id: string) {

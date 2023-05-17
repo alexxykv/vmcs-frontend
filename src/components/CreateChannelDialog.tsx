@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import React, { useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 
 
 interface CreateChannelDialogProps {
@@ -27,11 +27,11 @@ const CreateChannelDialog: React.FC<CreateChannelDialogProps> = ({ open, handleC
       <DialogContent>
         <TextField
           autoFocus
-          margin="dense"
-          label="Channel name"
-          type="text"
+          margin='dense'
+          label='Channel name'
+          type='text'
           fullWidth
-          variant="standard"
+          variant='standard'
           value={name}
           onChange={handleChangeName}
         />

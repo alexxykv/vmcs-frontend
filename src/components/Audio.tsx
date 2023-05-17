@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { AudioProps } from '../interfaces/props';
-
+import React, { useEffect, useRef } from "react";
+import { AudioProps } from "../interfaces/Props";
 
 const Audio: React.FC<AudioProps> = ({ stream, connectionId }) => {
   const audioRef = useRef<HTMLAudioElement>(null!);

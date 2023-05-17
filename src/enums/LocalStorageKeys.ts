@@ -1,5 +1,5 @@
 enum LocalStorageKeys {
-    TOKEN = 'JWT_TOKEN'
+  TOKEN = 'JWT_TOKEN'
 }
 
 export default LocalStorageKeys;

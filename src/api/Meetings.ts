@@ -1,7 +1,7 @@
 import path from "path";
-import ApiRoutes from "../enums/ApiRoutes";
-import { CreateMeetingData, MeetingData, ShortMeetingData } from "../interfaces/dto/meetings";
 import { api } from "./Api";
+import { ApiRoutes } from "../enums";
+import { CreateMeetingData, MeetingData, ShortMeetingData } from "../interfaces/dto";
 
 export default class Meetings {
   public static async Get(id: string) {

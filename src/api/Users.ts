@@ -1,10 +1,7 @@
 import path from "path";
-import ApiRoutes from "../enums/ApiRoutes";
-import { ChannelInvitationData } from "../interfaces/dto/channelInvitations";
-import { ShortChannelData } from "../interfaces/dto/channels";
-import { ChangeUserData, UserData } from "../interfaces/dto/users";
 import { api } from "./Api";
-
+import { ApiRoutes } from "../enums";
+import { ChangeUserData, ChannelInvitationData, ShortChannelData, UserData } from "../interfaces/dto";
 
 export default class Users {
   public static async Get() {
