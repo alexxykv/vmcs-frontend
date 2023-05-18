@@ -1,5 +1,6 @@
 import { receiveUpdates, sendableUpdates, getSyncedVersion } from '@codemirror/collab';
 import { pushUpdates, pullUpdates } from './socket';
+import { socket } from './socket';
 
 class CollabPlugin {
   constructor(view, repositoryId, fileId) {
@@ -34,8 +35,13 @@ class CollabPlugin {
   async pull() {
     while (!this.done) {
       let version = getSyncedVersion(this.view.state);
+      console.log('Version: ', version);
       let updates = await pullUpdates(version, this.repositoryId, this.fileId);
-      this.view.dispatch(receiveUpdates(this.view.state, updates));
+      console.log('Updates: ', updates);
+      // TODO: GOVNO ISPRAVITb
+      try {
+        this.view.dispatch(receiveUpdates(this.view.state, updates));
+      } catch (e) { }
     }
   }
 

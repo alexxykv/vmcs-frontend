@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Typography, Paper } from '@mui/material';
 import Editor from '../codeshare/Editor';
 import RepositoryAside from './RepositoryAside';
 import { IDirectory, ITextFile } from '../interfaces/dto';
-import { socket } from '../codeshare/socket';
+import { connectCodeshare, socket } from '../codeshare/socket';
 
 
 interface RepositoryProps {
@@ -13,6 +13,13 @@ interface RepositoryProps {
 const Repository: React.FC<RepositoryProps> = ({ repository }) => {
   const [selectedFile, setSelectedFile] = useState<ITextFile | null>(null);
   const [files, setFiles] = useState<Map<string, ITextFile>>(new Map());
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    connectCodeshare(repository).then(() => {
+      setConnected(true);
+    });
+  }, [repository]);
 
   const selectFile = (file: ITextFile) => {
     setSelectedFile(file);
@@ -27,6 +34,7 @@ const Repository: React.FC<RepositoryProps> = ({ repository }) => {
       file={selectedFile}
       setFiles={setFiles}
       files={files}
+      connected={connected}
     />;
   };
 

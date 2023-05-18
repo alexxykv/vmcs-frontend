@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import { ChangeSet } from '@codemirror/state';
 
-export const URL = 'ws://localhost:3001';
+export const URL = process.env.REACT_APP_CODE_URL;
 
 export const socket = io(URL, {
   autoConnect: true,
@@ -29,7 +29,8 @@ export const pullUpdates = (version, directoryId, fileId) => {
       resolve(updates.map(u => {
         return {
           changes: ChangeSet.fromJSON(u.changes),
-          clientID: u.clientID
+          clientID: u.clientID,
+          fileId
         }
       }));
     });

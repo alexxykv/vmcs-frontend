@@ -5,7 +5,6 @@ import RepositoryWelcome from './RepositoryWelcome';
 import { useCodeSharingHub, useMeeting } from '../hooks';
 import { CreateDirectoryData, IDirectory } from '../interfaces/dto';
 import { Directories } from '../api';
-import { connectCodeshare, socket } from '../codeshare/socket';
 
 
 const CodeShareScreen: React.FC = () => {
@@ -28,7 +27,6 @@ const CodeShareScreen: React.FC = () => {
     codeHub.onConnectToRepository(directory => {
       console.log(directory)
       setRepository(directory);
-      connectCodeshare(directory);
     });
   }, [codeHub]);
 
