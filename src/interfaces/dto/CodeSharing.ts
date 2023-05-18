@@ -42,8 +42,7 @@ export interface FolderReturnDTO {
 export interface ChangeDTO {
   directoryId: string
   fileId: number
-  change: Change
-  connectionId: string
+  text: string
 }
 
 export interface Change {

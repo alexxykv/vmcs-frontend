@@ -36,8 +36,8 @@ export default class CodeSharingHub extends Hub {
     });
   }
 
-  change(change: ChangeDTO) {
-    return this.Connection.invoke('Change', JSON.stringify(change));
+  change(directoryId: string, fileId: number, text: string) {
+    return this.Connection.invoke('Change', directoryId, fileId, text);
   }
 
   onChange(callback: (change: ChangeDTO) => void) {

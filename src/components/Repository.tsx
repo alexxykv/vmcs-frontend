@@ -1,21 +1,25 @@
-import React, { useState } from "react"
-import { Box, Typography } from "@mui/material";
-import { IDirectory, ITextFile } from "../interfaces/dto";
-import Editor from "./Editor";
-import RepositoryAside from "./RepositoryAside";
+import React, { useState, useEffect } from 'react'
+import { Box, Typography, Paper } from '@mui/material';
+import Editor from '../codeshare/Editor';
+import RepositoryAside from './RepositoryAside';
+import { IDirectory, ITextFile } from '../interfaces/dto';
+import { connectCodeshare, socket } from '../codeshare/socket';
 
 
 interface RepositoryProps {
-  repository: IDirectory,
-  fileVersionControl: Map<number, any[]>,
-  setFileVersionControl: React.Dispatch<React.SetStateAction<Map<number, any[]>>>
+  repository: IDirectory
 }
 
-const Repository: React.FC<RepositoryProps> = ({ repository, fileVersionControl, setFileVersionControl}) => {
+const Repository: React.FC<RepositoryProps> = ({ repository }) => {
   const [selectedFile, setSelectedFile] = useState<ITextFile | null>(null);
   const [files, setFiles] = useState<Map<string, ITextFile>>(new Map());
-  
+  const [connected, setConnected] = useState(false);
 
+  useEffect(() => {
+    connectCodeshare(repository).then(() => {
+      setConnected(true);
+    });
+  }, [repository]);
 
   const selectFile = (file: ITextFile) => {
     setSelectedFile(file);
@@ -30,7 +34,7 @@ const Repository: React.FC<RepositoryProps> = ({ repository, fileVersionControl,
       file={selectedFile}
       setFiles={setFiles}
       files={files}
-      fileVersionControl={fileVersionControl}
+      connected={connected}
     />;
   };
 
@@ -45,8 +49,6 @@ const Repository: React.FC<RepositoryProps> = ({ repository, fileVersionControl,
         selectFile={selectFile}
         setFiles={setFiles}
         files={files}
-        fileVersionControl={fileVersionControl}
-        setFileVersionControl={setFileVersionControl}
       />
       {renderFileEditor()}
     </Box>
