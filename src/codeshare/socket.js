@@ -25,14 +25,16 @@ export const pullUpdates = (version, directoryId, fileId) => {
   socket.emit('pullUpdates', version, directoryId, fileId);
 
   return new Promise((resolve, _) => {
-    socket.on('pullUpdates', updates => {
-      resolve(updates.map(u => {
-        return {
-          changes: ChangeSet.fromJSON(u.changes),
-          clientID: u.clientID,
-          fileId
-        }
-      }));
+    socket.on('pullUpdates', (updates, _directoryId, _fileId) => {
+      if (_directoryId === directoryId && _fileId === fileId) {
+        resolve(updates.map(u => {
+          return {
+            changes: ChangeSet.fromJSON(u.changes),
+            clientID: u.clientID,
+            fileId
+          }
+        }));
+      }
     });
   });
 }
