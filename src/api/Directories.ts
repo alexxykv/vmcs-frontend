@@ -23,4 +23,10 @@ export default class Directories {
     const response = await api.delete(url);
     return response.data;
   }
+
+  public static async Execute(directoryId: string) {
+    const url = path.join(ApiRoutes.Directories, directoryId, 'execute');
+    const response = await api.get(url);
+    return response.data as string;
+  }
 }

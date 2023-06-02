@@ -8,6 +8,7 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderZipIcon from '@mui/icons-material/FolderZip';
 import SaveIcon from '@mui/icons-material/Save';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 
 import { saveAs as saveZip } from 'file-saver';
 import { useNavigate } from "react-router-dom";
@@ -200,6 +201,14 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
     })
   }, []);
 
+  const handleClickRunCode = useCallback(() => {
+    codeHub.saveRepository(repository.id).then(() => {
+      Directories.Execute(repository.id).then(result => {
+        alert(result);
+      });
+    });
+  }, [repository.id, codeHub]);
+
   const renderTreeDirectory = (folder: IFolder) => {
     return (
       <TreeItem key={folder.id} nodeId={folder.id.toString()} label={folder.name}>
@@ -280,6 +289,11 @@ const RepositoryAside: React.FC<RepositoryAsideProps> = ({ repository, selectFil
           p: 1,
         }}>
         <ButtonGroup fullWidth orientation='vertical' variant='outlined' color='primary' size='small'>
+          <Button
+            onClick={handleClickRunCode}
+            startIcon={<PlayCircleFilledWhiteIcon />}>
+            Run code
+          </Button>
           <Button
             onClick={handleClickSaveRepository}
             startIcon={<SaveIcon />} >
